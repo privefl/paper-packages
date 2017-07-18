@@ -1,0 +1,60 @@
+\relax 
+\newlabel{^_1}{{}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\citation{Kane2013}
+\citation{Kane2013}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Approach}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Methods}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.1}}Memory-mapped files}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Conversion and Quality Control preprocessing functions available in package bigsnpr via system calls to PLINK.}}{2}}
+\newlabel{fig:qc}{{1}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.2}}Data management, preprocessing and imputation}{2}}
+\newlabel{sec:preprocess}{{{3.2}}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Imputation and reading functions available in package bigsnpr.}}{3}}
+\newlabel{fig:impute}{{2}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.3}}Population structure and SNP thinning based on Linkage Disequilibrium}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Functions available in packages bigstatsr and bigsnpr for the computation of a partial Singular Value Decomposition of a genotype array.}}{3}}
+\newlabel{fig:svd}{{3}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.4}}Association tests and Polygenic Risk Scores}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.5}}Data analyzed}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{4.1}}Overview}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{4.2}}Application}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Principal Components of the celiac cohort genotype matrix produced by package bigstatsr.}}{4}}
+\newlabel{fig:pca}{{4}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Manhattan plot of the celiac disease cohort produced by package bigsnpr. The y-axis has been cut in order to not see only the very strong effects on chromosome 6.}}{4}}
+\newlabel{fig:gwas}{{5}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{4.3}}Method Comparison}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The computation corresponds to 10 Principal Components and 93,083 SNPs which remain after thinning.}}{5}}
+\newlabel{fig:bench-pca}{{6}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Precision comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA) and package bigstatsr. It shows the squared correlation between approximated PCs and ``true'' PCs (given by the slow mode of SmartPCA) of the celiac disease dataset (whose individuals have been repeated 1, 5 and 10 times).}}{5}}
+\newlabel{fig:prec-pca}{{7}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $R^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}}{5}}
+\newlabel{fig:scores}{{8}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{4.4}}Automatic detection of long-range LD regions}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{4.5}}Imputation of missing values for genotyped SNPs}{5}}
+\bibstyle{natbib}
+\bibdata{document}
+\bibcite{Kane2013}{{1}{2013}{{Kane {\em  et~al.}}}{{Kane, Emerson, and Weston}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost (REF).}}{6}}
+\newlabel{fig:error-impute}{{9}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{6}}
+\global\@namedef{@lastpage@}{7}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{5.1}}Long-range LD regions}{7}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in (REF)Price et al. (2008).}}{7}}
+\newlabel{tab:lrldr-popres}{{1}{7}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in (REF)Price et al. (2008).}}{7}}
+\newlabel{tab:lrldr-celiac}{{2}{7}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{7}}
+\newlabel{tab:pc-popres}{{3}{7}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Correlation between scores of PCA for the Celiac dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{7}}
+\newlabel{tab:pc-popres}{{4}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{5.2}}Imputation}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Loadings of first 6 PCs of the celiac disease dataset plotted as hexbins (2-D histogram with hexagonal cells). On the left, without removing any long range LD region (only clumping at $R^2 > 0.2$). On the right, with the automatic detection and removal of long-range LD regions.}}{7}}
+\newlabel{fig:loadings}{{10}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Boxplots of 1000 bootstrapped Gini coefficients (measure of statistical dispersion) of squared loadings without removing any long range LD region (only clumping at $R^2 > 0.2$) and with the automatic detection and removal of long-range LD regions. The dashed line corresponds to the theoretical value for gaussian loadings.}}{7}}
+\newlabel{fig:gini}{{11}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Histogram of the minor allele frequencies of the POPRES dataset used for comparing imputation methods.}}{7}}
+\newlabel{fig:maf}{{12}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Histogram of the number of missing values by SNP. These numbers were generated using a Beta-binomial distribution.}}{8}}
+\newlabel{fig:NA}{{13}{8}}

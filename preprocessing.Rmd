@@ -1,0 +1,73 @@
+---
+title: "Preprocessing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Quality Control
+
+```{r}
+library(bigsnpr)
+
+NCORES <- parallel::detectCores() / 2
+plink <- "../plink_linux_x86_64/plink"
+
+popresQC.bed <- snp_plinkQC(
+  plink.path = plink,
+  prefix.in = "../POPRES_data/POPRES_allchr",
+  file.type = "--file", # ped/map
+  geno = 0.05,
+  mind = 0.05,
+  maf = 0.05,
+  hwe = 1e-10,
+  autosome.only = TRUE
+)
+
+popresQC2.bed <- snp_plinkIBDQC(plink, popresQC.bed, ncores = NCORES)
+```
+
+```{r}
+celiacQC.bed <- snp_plinkQC(
+  plink.path = plink,
+  prefix.in = "../thesis-celiac/Dubois2010_data/FinnuncorrNLITUK1UK3hap300",
+  geno = 0.05,
+  mind = 0.05,
+  maf = 0.05,
+  hwe = 1e-10,
+  autosome.only = TRUE
+)
+
+celiacQC2.bed <- snp_plinkIBDQC(plink, celiacQC.bed, ncores = NCORES)
+```
+
+## Transform PLINK files in big.matrix format
+
+```{r}
+popresQC.rds <- snp_readBed(popresQC2.bed, "popresQC")
+
+system.time(
+  celiacQC.rds <- snp_readBed(celiacQC2.bed, "celiacQC")
+)
+```
+
+## Imputation of Celiac dataset
+
+```{r}
+system.time(
+  celiac <- snp_attach(celiacQC.rds)
+)
+str(celiac, max.level = 2)
+```
+
+```{r}
+G <- celiac$genotypes
+big_counts(G, ind.col = 1:10)
+```
+
+```{r}
+
+```
+

@@ -1,0 +1,132 @@
+---
+title: "Imputation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Generate missing values
+
+```{r, results='hide'}
+library(bigsnpr)
+library(dplyr)
+library(ggplot2)
+
+NCORES <- parallel::detectCores() / 2
+```
+
+```{r}
+popres <- snp_attach("backingfiles/popresQC.rds")
+
+G <- popres$genotypes
+n <- nrow(G)
+m <- ncol(G)
+```
+
+```{r}
+# Compute minor allele frequencies
+maf <- snp_MAF(G)
+
+bigstatsr:::MY_THEME(ggplot(), coeff = 1.8) +
+  geom_histogram(aes(maf)) + 
+  labs(x = "Minor Allele Frequency")
+
+ggsave("figures/hist-maf.png", width = 1300, height = 900, scale = 1/75)
+```
+
+
+```{r}
+# Generate number of missing values by SNP with a Beta-Binomial distribution
+nbNA <- VGAM::rbetabinom.ab(m, size = n, shape1 = 0.6, shape2 = 20)
+
+sum(nbNA) / (n * m)
+
+bigstatsr:::MY_THEME(ggplot(), coeff = 1.8) +
+  geom_histogram(aes(nbNA), bins = 100) + 
+  labs(x = "Number of missing values")
+
+ggsave("hist-NA.png", width = 1300, height = 900, scale = 1/75)
+```
+
+```{r}
+# Generate indices of missing values
+indNA <- cbind(
+  lapply(nbNA, function(nb) {
+    `if`(nb > 0, sample(n, size = nb), NULL)
+  }) %>% unlist(), 
+  rep(cols_along(G), nbNA)
+)
+
+# Fill a copy of the matrix with NAs (coded as 03)
+X <- attach.BM(G)
+XNA <- as.BM.code(deepcopy(X), code = bigsnpr:::CODE_IMPUTE_PRED)
+XNA[indNA] <- as.raw(3)
+
+GNA <- describe(XNA)
+```
+
+## Imputation with our new method
+
+```{r}
+system.time(
+  test <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, ncores = NCORES)
+) # Latest timings: 42 / 48 minutes
+```
+
+```{r}
+# Errors
+mean(XNA[indNA] != X[indNA]) # 4.7 / 4.8 %
+table(XNA[indNA], X[indNA])
+
+# Plot the estimation of the errors of imputation
+data_frame(col = indNA[, 2], error = XNA[indNA] != X[indNA]) %>%
+  group_by(col) %>%
+  summarise(nb_err = sum(error)) %>%
+  mutate(nb_err_est = (test$pError * test$pNA * n)[col]) %>%
+  ggplot() %>%
+  bigstatsr:::MY_THEME(coeff = 1.8) + 
+  geom_abline(slope = 1, intercept = 0, col = "red") + 
+  geom_point(aes(nb_err, nb_err_est), alpha = 0.4) +
+  labs(x = "Number of errors", y = "Estimated number of errors")
+
+ggsave("error-impute.png", width = 1000, height = 1000, scale = 1/75)
+```
+
+
+
+## Imputation with BEAGLE
+
+```{r}
+# Cleaning from previous runs 
+file.remove(list.files("backingfiles", pattern = "tmp*", full.names = TRUE))
+```
+
+```{r}
+# Write a new bedfile
+popresNA <- popres
+popresNA$genotypes <- GNA
+bedfile <- snp_writeBed(popresNA, bedfile = "backingfiles/tmp.bed")
+```
+
+```{r}
+system.time(
+  bedfile2 <- snp_beagleImpute(beagle.path = "../../beagle.21Jan17.6cc.jar",
+                               plink.path = "../plink_linux_x86_64/plink",
+                               bedfile.in = "backingfiles/tmp.bed",
+                               memory.max = 30,
+                               ncores = NCORES)
+) # 14.6 / 14.2 hours
+```
+
+```{r}
+# Read bedfile into R and assess the errors of imputation
+popres.beagle <- snp_readBed(bedfile2, backingfile = "tmp_impute") %>%
+  snp_attach()
+X_beagle <- attach.BM(popres.beagle$genotypes)
+
+mean(X_beagle[indNA] != X[indNA]) # 3.1 / 4.8 %
+table(X_beagle[indNA], X[indNA])
+```
+

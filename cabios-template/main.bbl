@@ -178,6 +178,12 @@ Nielsen, J. and Mailund, T. (2008).
   association mapping and population genetics studies.}
 \newblock {\em BMC bioinformatics\/}, {\bf 9}(1), 526.
 
+\bibitem[Palmer and Pe'er(2016)Palmer and Pe'er]{Palmer2016}
+Palmer, C. and Pe'er, I. (2016).
+\newblock {Bias Characterization in Probabilistic Genotype Data and Improved
+  Signal Detection with Multiple Imputation}.
+\newblock {\em PLoS Genetics\/}, {\bf 12}(6), e1006091.
+
 \bibitem[Price {\em et~al.}(2006)Price, Patterson, Plenge, Weinblatt, Shadick,
   and Reich]{Price2006}
 Price, A.~L., Patterson, N.~J., Plenge, R.~M., Weinblatt, M.~E., Shadick,

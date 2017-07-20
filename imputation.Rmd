@@ -15,6 +15,8 @@ library(dplyr)
 library(ggplot2)
 
 NCORES <- parallel::detectCores() / 2
+PLINK <- "../plink_linux_x86_64/plink"
+BEAGLE <- "../../beagle.21Jan17.6cc.jar"
 ```
 
 ```{r}
@@ -71,7 +73,7 @@ GNA <- describe(XNA)
 
 ```{r}
 system.time(
-  test <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, ncores = NCORES)
+  infos <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, ncores = NCORES)
 ) # Latest timings: 42 / 48 minutes
 ```
 
@@ -84,9 +86,9 @@ table(XNA[indNA], X[indNA])
 data_frame(col = indNA[, 2], error = XNA[indNA] != X[indNA]) %>%
   group_by(col) %>%
   summarise(nb_err = sum(error)) %>%
-  mutate(nb_err_est = (test$pError * test$pNA * n)[col]) %>%
+  mutate(nb_err_est = (infos$pError * infos$pNA * n)[col]) %>%
   ggplot() %>%
-  bigstatsr:::MY_THEME(coeff = 1.8) + 
+  bigstatsr:::MY_THEME(coeff = 2) + 
   geom_abline(slope = 1, intercept = 0, col = "red") + 
   geom_point(aes(nb_err, nb_err_est), alpha = 0.4) +
   labs(x = "Number of errors", y = "Estimated number of errors")
@@ -112,8 +114,8 @@ bedfile <- snp_writeBed(popresNA, bedfile = "backingfiles/tmp.bed")
 
 ```{r}
 system.time(
-  bedfile2 <- snp_beagleImpute(beagle.path = "../../beagle.21Jan17.6cc.jar",
-                               plink.path = "../plink_linux_x86_64/plink",
+  bedfile2 <- snp_beagleImpute(beagle.path = BEAGLE,
+                               plink.path = PLINK,
                                bedfile.in = "backingfiles/tmp.bed",
                                memory.max = 30,
                                ncores = NCORES)

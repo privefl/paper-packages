@@ -11,7 +11,8 @@
 \citation{Marchini2010}
 \citation{Vilhjalmsson2015}
 \citation{Euesden2015}
-\newlabel{^_1}{{}{1}}
+\oddpage@label{1}{1}
+\providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
 \citation{Kane2013}
 \citation{Kane2013}
@@ -52,29 +53,33 @@
 \citation{Nelson2008}
 \citation{Purcell2007}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{3.5}}Data analyzed}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Principal Components of the celiac cohort genotype matrix produced by package bigstatsr.}}{4}}
-\newlabel{fig:pca}{{4}{4}}
+\newlabel{sec:rep}{{{3.5}}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.6}}Reproducibility}{4}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Results}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{4.1}}Overview}{4}}
+\newlabel{sec:overview}{{{4.1}}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{4.2}}Application}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Principal Components of the celiac cohort genotype matrix produced by package bigstatsr.}}{5}}
+\newlabel{fig:pca}{{4}{5}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Manhattan plot of the celiac disease cohort produced by package bigsnpr. The y-axis has been cut in order to not see only the very strong effects on chromosome 6.}}{5}}
 \newlabel{fig:gwas}{{5}{5}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Execution times with or without bigstatsr and bigsnpr for making a GWAS for the Celiac dataset. The first time is with the desktop computer and the second time is with the laptop computer (section\nobreakspace  {}{4.1}\hbox {}).}}{5}}
+\newlabel{tab:bench-gwas}{{1}{5}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Execution times with or without bigstatsr and bigsnpr for making a GWAS for the Celiac dataset. The first time is with the desktop computer and the second time is with the laptop computer (section\nobreakspace  {}{4.1}\hbox {}).}}{5}}
+\newlabel{tab:bench-prs}{{2}{5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{4.3}}Method Comparison}{5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{4.4}}Automatic detection of long-range LD regions}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The computation corresponds to 10 Principal Components and 93,083 SNPs which remain after thinning.}}{5}}
-\newlabel{fig:bench-pca}{{6}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Precision comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA) and package bigstatsr. It shows the squared correlation between approximated PCs and ``true'' PCs (given by the slow mode of SmartPCA) of the celiac disease dataset (whose individuals have been repeated 1, 5 and 10 times).}}{5}}
-\newlabel{fig:prec-pca}{{7}{5}}
+\citation{Chen2016}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The computation corresponds to 10 Principal Components and 93,083 SNPs which remain after thinning.}}{6}}
+\newlabel{fig:bench-pca}{{6}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Precision comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA) and package bigstatsr. It shows the squared correlation between approximated PCs and ``true'' PCs (given by the slow mode of SmartPCA) of the celiac disease dataset (whose individuals have been repeated 1, 5 and 10 times).}}{6}}
+\newlabel{fig:prec-pca}{{7}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{4.5}}Imputation of missing values for genotyped SNPs}{6}}
+\newlabel{sec:impute}{{{4.5}}{6}}
+\citation{Palmer2016}
 \bibstyle{natbib}
 \bibdata{document}
 \bibcite{Abdellaoui2013}{{1}{2013}{{Abdellaoui {\em  et~al.}}}{{Abdellaoui, Hottenga, {De Knijff}, Nivard, Xiao, Scheet, Brooks, Ehli, Hu, Davies, Hudziak, Sullivan, {Van Beijsterveldt}, Willemsen, {De Geus}, Penninx, and Boomsma}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $R^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}}{6}}
-\newlabel{fig:scores}{{8}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {{4.5}}Imputation of missing values for genotyped SNPs}{6}}
-\newlabel{sec:impute}{{{4.5}}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost (REF).}}{6}}
-\newlabel{fig:error-impute}{{9}{6}}
 \bibcite{Abraham2014a}{{2}{2014}{{Abraham and Inouye}}{{Abraham and Inouye}}}
 \bibcite{Abraham2016a}{{3}{2016}{{Abraham {\em  et~al.}}}{{Abraham, Qiu, and Inouye}}}
 \bibcite{Aulchenko2010}{{4}{2010}{{Aulchenko {\em  et~al.}}}{{Aulchenko, Struchalin, and van Duijn}}}
@@ -83,6 +88,9 @@
 \bibcite{Chen2016}{{7}{2016}{{Chen and Guestrin}}{{Chen and Guestrin}}}
 \bibcite{Danecek2011}{{8}{2011}{{Danecek {\em  et~al.}}}{{Danecek, Auton, Abecasis, Albers, Banks, DePristo, Handsaker, Lunter, Marth, Sherry, McVean, and Durbin}}}
 \bibcite{Dubois2010}{{9}{2010}{{Dubois {\em  et~al.}}}{{Dubois, Trynka, Franke, Hunt, Romanos, Curtotti, Zhernakova, Heap, Ad{\'{a}}ny, Aromaa, Bardella, van~den Berg, Bockett, de~la Concha, Dema, Fehrmann, Fern{\'{a}}ndez-Arquero, Fiatal, Grandone, Green, Groen, Gwilliam, Houwen, Hunt, Kaukinen, Kelleher, Korponay-Szabo, Kurppa, MacMathuna, M{\"{a}}ki, Mazzilli, McCann, Mearin, Mein, Mirza, Mistry, Mora, Morley, Mulder, Murray, N{\'{u}}{\~{n}}ez, Oosterom, Ophoff, Polanco, Peltonen, Platteel, Rybak, Salomaa, Schweizer, Sperandeo, Tack, Turner, Veldink, Verbeek, Weersma, Wolters, Urcelay, Cukrowska, Greco, Neuhausen, McManus, Barisani, Deloukas, Barrett, Saavalainen, Wijmenga, and van Heel}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost \cite  []{Chen2016}.}}{7}}
+\newlabel{fig:error-impute}{{8}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{7}}
 \bibcite{Dudbridge2013}{{10}{2013}{{Dudbridge}}{{Dudbridge}}}
 \bibcite{Eddelbuettel2011}{{11}{2011}{{Eddelbuettel and Fran{\c {c}}ois}}{{Eddelbuettel and Fran{\c {c}}ois}}}
 \bibcite{Euesden2015}{{12}{2015}{{Euesden {\em  et~al.}}}{{Euesden, Lewis, and O'Reilly}}}
@@ -97,33 +105,38 @@
 \bibcite{Marchini2010}{{21}{2010}{{Marchini and Howie}}{{Marchini and Howie}}}
 \bibcite{Nelson2008}{{22}{2008}{{Nelson {\em  et~al.}}}{{Nelson, Bryc, King, Indap, Boyko, Novembre, Briley, Maruyama, Waterworth, Waeber, Vollenweider, Oksenberg, Hauser, Stirnadel, Kooner, Chambers, Jones, Mooser, Bustamante, Roses, Burns, Ehm, and Lai}}}
 \bibcite{Nielsen2008}{{23}{2008}{{Nielsen and Mailund}}{{Nielsen and Mailund}}}
-\bibcite{Price2006}{{24}{2006}{{Price {\em  et~al.}}}{{Price, Patterson, Plenge, Weinblatt, Shadick, and Reich}}}
-\bibcite{Price2008}{{25}{2008}{{Price {\em  et~al.}}}{{Price, Weale, Patterson, Myers, Need, Shianna, Ge, Rotter, Torres, Taylor, Goldstein, and Reich}}}
-\bibcite{Purcell2007}{{26}{2007}{{Purcell {\em  et~al.}}}{{Purcell, Neale, Todd-Brown, Thomas, Ferreira, Bender, Maller, Sklar, de~Bakker, Daly, and Sham}}}
-\bibcite{RSpectra2016}{{27}{2016}{{Qiu and Mei}}{{Qiu and Mei}}}
-\bibcite{R2017}{{28}{2017}{{R Core Team}}{{R Core Team}}}
-\bibcite{Tibshirani1996}{{29}{1996}{{Tibshirani}}{{Tibshirani}}}
-\bibcite{Tibshirani2012}{{30}{2012}{{Tibshirani {\em  et~al.}}}{{Tibshirani, Bien, Friedman, Hastie, Simon, Taylor, and Tibshirani}}}
-\bibcite{Vilhjalmsson2015}{{31}{2015}{{Vilhj{\'{a}}lmsson {\em  et~al.}}}{{Vilhj{\'{a}}lmsson, Yang, Finucane, Gusev, Lindstr{\"{o}}m, Ripke, Genovese, Loh, Bhatia, Do, Hayeck, Won, Kathiresan, Pato, Pato, Tamimi, Stahl, Zaitlen, Pasaniuc, Belbin, Kenny, Schierup, {De Jager}, Patsopoulos, McCarroll, Daly, Purcell, Chasman, Neale, Goddard, Visscher, Kraft, Patterson, and Price}}}
-\bibcite{Zeng2017}{{32}{2017}{{Zeng and Breheny}}{{Zeng and Breheny}}}
-\bibcite{Zheng2012}{{33}{2012}{{Zheng {\em  et~al.}}}{{Zheng, Yang, Zhu, and Elston}}}
-\bibcite{Zou2005}{{34}{2005}{{Zou and Hastie}}{{Zou and Hastie}}}
-\global\@namedef{@lastpage@}{8}
-\@writefile{toc}{\contentsline {subsection}{\numberline {{5.1}}Long-range LD regions}{8}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in (REF)Price et al. (2008).}}{8}}
-\newlabel{tab:lrldr-popres}{{1}{8}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in (REF)Price et al. (2008).}}{8}}
-\newlabel{tab:lrldr-celiac}{{2}{8}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{8}}
-\newlabel{tab:pc-popres}{{3}{8}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Correlation between scores of PCA for the Celiac dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{8}}
-\newlabel{tab:pc-celiac}{{4}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {{5.2}}Imputation}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Loadings of first 6 PCs of the celiac disease dataset plotted as hexbins (2-D histogram with hexagonal cells). On the left, without removing any long range LD region (only clumping at $R^2 > 0.2$). On the right, with the automatic detection and removal of long-range LD regions.}}{8}}
-\newlabel{fig:loadings}{{10}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Boxplots of 1000 bootstrapped Gini coefficients (measure of statistical dispersion) of squared loadings without removing any long range LD region (only clumping at $R^2 > 0.2$) and with the automatic detection and removal of long-range LD regions. The dashed line corresponds to the theoretical value for gaussian loadings.}}{8}}
-\newlabel{fig:gini}{{11}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Histogram of the minor allele frequencies of the POPRES dataset used for comparing imputation methods.}}{8}}
-\newlabel{fig:maf}{{12}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Histogram of the number of missing values by SNP. These numbers were generated using a Beta-binomial distribution.}}{9}}
-\newlabel{fig:NA}{{13}{9}}
+\bibcite{Palmer2016}{{24}{2016}{{Palmer and Pe'er}}{{Palmer and Pe'er}}}
+\bibcite{Price2006}{{25}{2006}{{Price {\em  et~al.}}}{{Price, Patterson, Plenge, Weinblatt, Shadick, and Reich}}}
+\bibcite{Price2008}{{26}{2008}{{Price {\em  et~al.}}}{{Price, Weale, Patterson, Myers, Need, Shianna, Ge, Rotter, Torres, Taylor, Goldstein, and Reich}}}
+\bibcite{Purcell2007}{{27}{2007}{{Purcell {\em  et~al.}}}{{Purcell, Neale, Todd-Brown, Thomas, Ferreira, Bender, Maller, Sklar, de~Bakker, Daly, and Sham}}}
+\bibcite{RSpectra2016}{{28}{2016}{{Qiu and Mei}}{{Qiu and Mei}}}
+\bibcite{R2017}{{29}{2017}{{R Core Team}}{{R Core Team}}}
+\bibcite{Tibshirani1996}{{30}{1996}{{Tibshirani}}{{Tibshirani}}}
+\bibcite{Tibshirani2012}{{31}{2012}{{Tibshirani {\em  et~al.}}}{{Tibshirani, Bien, Friedman, Hastie, Simon, Taylor, and Tibshirani}}}
+\bibcite{Vilhjalmsson2015}{{32}{2015}{{Vilhj{\'{a}}lmsson {\em  et~al.}}}{{Vilhj{\'{a}}lmsson, Yang, Finucane, Gusev, Lindstr{\"{o}}m, Ripke, Genovese, Loh, Bhatia, Do, Hayeck, Won, Kathiresan, Pato, Pato, Tamimi, Stahl, Zaitlen, Pasaniuc, Belbin, Kenny, Schierup, {De Jager}, Patsopoulos, McCarroll, Daly, Purcell, Chasman, Neale, Goddard, Visscher, Kraft, Patterson, and Price}}}
+\bibcite{Zeng2017}{{33}{2017}{{Zeng and Breheny}}{{Zeng and Breheny}}}
+\bibcite{Zheng2012}{{34}{2012}{{Zheng {\em  et~al.}}}{{Zheng, Yang, Zhu, and Elston}}}
+\bibcite{Zou2005}{{35}{2005}{{Zou and Hastie}}{{Zou and Hastie}}}
+\citation{Price2008}
+\citation{Price2008}
+\global\@namedef{@lastpage@}{9}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in \cite  []{Price2008}.}}{9}}
+\newlabel{tab:lrldr-popres}{{3}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in \cite  []{Price2008}.}}{9}}
+\newlabel{tab:lrldr-celiac}{{4}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{9}}
+\newlabel{tab:pc-popres}{{5}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Correlation between scores of PCA for the Celiac dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{9}}
+\newlabel{tab:pc-celiac}{{6}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{5.1}}Long-range LD regions}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{5.2}}Imputation}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $R^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}}{9}}
+\newlabel{fig:scores}{{9}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Loadings of first 6 PCs of the celiac disease dataset plotted as hexbins (2-D histogram with hexagonal cells). On the left, without removing any long range LD region (only clumping at $R^2 > 0.2$). On the right, with the automatic detection and removal of long-range LD regions.}}{9}}
+\newlabel{fig:loadings}{{10}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Boxplots of 1000 bootstrapped Gini coefficients (measure of statistical dispersion) of squared loadings without removing any long range LD region (only clumping at $R^2 > 0.2$) and with the automatic detection and removal of long-range LD regions. The dashed line corresponds to the theoretical value for gaussian loadings.}}{9}}
+\newlabel{fig:gini}{{11}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Histogram of the minor allele frequencies of the POPRES dataset used for comparing imputation methods.}}{10}}
+\newlabel{fig:maf}{{12}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Histogram of the number of missing values by SNP. These numbers were generated using a Beta-binomial distribution.}}{10}}
+\newlabel{fig:NA}{{13}{10}}

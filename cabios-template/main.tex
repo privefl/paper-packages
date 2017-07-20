@@ -4,6 +4,8 @@
 \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Manuscript Category}
 
+\usepackage{adjustbox}
+\usepackage{multirow}
 \usepackage{graphicx}
 \graphicspath{{../figures/}}
 
@@ -38,9 +40,9 @@ online.}
 
 Genome-wide datasets produced for association studies have dramatically increased in size over the past years. A range of software and data formats have been developed to perform essential pre-processing steps and data analysis, often optimizing each of these steps within a dedicated implementation. This diverse and extremely rich software environment has been of tremendous benefit for the genetic community. However, it has two limitations: analysis pipelines become very complex and researchers have limited access to diverse analysis tools due to growing data sizes.
 
-Consider first the basic tools necessary to perform a standard genome-wide analysis. Conversions between standard file formats has become a field by itself with several tools such as VCFtools, BCFtools and PLINK available either independently or incorporated within large framework (\cite{Danecek2011,Li2011,Purcell2007}). Similarly, genome-wide analysis quality control software have been developed such as PLINK and Bioconductor GWASTools (\cite{Gogarten2012}). Regarding computation of principal components (PCs) of genotypes, commonly performed to account for population stratification in association studies, there are also several software available including different implementations of Principal Component Analysis (PCA) in EIGENSOFT (SmartPCA and FastPCA) and FlashPCA (\cite{Price2006,Galinsky2016,Abraham2014a,Abraham2016a}). Then, GWAS analysis itself depends on the genotype format, e.g. ProbABEL or SNPTEST for dosage data (\cite{Aulchenko2010,Marchini2010}.  Finally, there exists a range of tools for Polygenic Risk Scores (PRSs) such as LDpred and PRSice (\cite{Vilhjalmsson2015,Euesden2015}). As a result, one has to make extensive bash/perl/R/python scripts to link these software together and convert between multiple file formats, involving many file manipulations and conversions. Overall, this means that researchers are usually restricted on how they can manipulate and analyse the data they have access to. 
+Consider first the basic tools necessary to perform a standard genome-wide analysis. Conversions between standard file formats has become a field by itself with several tools such as VCFtools, BCFtools and PLINK available either independently or incorporated within large framework \cite[]{Danecek2011,Li2011,Purcell2007}. Similarly, genome-wide analysis quality control software have been developed such as PLINK and Bioconductor GWASTools \cite[]{Gogarten2012}. Regarding computation of principal components (PCs) of genotypes, commonly performed to account for population stratification in association studies, there are also several software available including different implementations of Principal Component Analysis (PCA) in EIGENSOFT (SmartPCA and FastPCA) and FlashPCA \cite[]{Price2006,Galinsky2016,Abraham2014a,Abraham2016a}. Then, GWAS analysis itself depends on the genotype format, e.g. ProbABEL or SNPTEST for dosage data \cite[]{Aulchenko2010,Marchini2010}.  Finally, there exists a range of tools for Polygenic Risk Scores (PRSs) such as LDpred and PRSice \cite[]{Vilhjalmsson2015,Euesden2015}. As a result, one has to make extensive bash/perl/R/python scripts to link these software together and convert between multiple file formats, involving many file manipulations and conversions. Overall, this means that researchers are usually restricted on how they can manipulate and analyse the data they have access to. 
 
-Secondly, increasing size of genetic datasets is the source of major computational challenges and many analytical tools would be restricted by the amount of memory (RAM) available on computers. This is particularly a burden for commonly used analysis languages such as R, Python and Perl. Solving the memory issues for these languages would give access to a broad range of tools for data analysis, already implemented by the scientific community. Hopefully, strategies have been developed to avoid loading large datasets in RAM. For storing and accessing matrices, memory-mapping is very attractive because it is seamless and usually much faster to use than direct read/write operations. Storing large matrices on disk and accessing them via memory-mapping is available in R through ``big.matrix'' objects implemented in the R package bigmemory (\cite{Kane2013}). Thanks to this matrix-like format, algorithms in R/C++ can be developed or adapted for large genotype data. 
+Secondly, increasing size of genetic datasets is the source of major computational challenges and many analytical tools would be restricted by the amount of memory (RAM) available on computers. This is particularly a burden for commonly used analysis languages such as R, Python and Perl. Solving the memory issues for these languages would give access to a broad range of tools for data analysis, already implemented by the scientific community. Hopefully, strategies have been developed to avoid loading large datasets in RAM. For storing and accessing matrices, memory-mapping is very attractive because it is seamless and usually much faster to use than direct read/write operations. Storing large matrices on disk and accessing them via memory-mapping is available in R through ``big.matrix'' objects implemented in the R package bigmemory \cite[]{Kane2013}. Thanks to this matrix-like format, algorithms in R/C++ can be developed or adapted for large genotype data. 
 
 
 \section{Approach}
@@ -51,15 +53,14 @@ We developed two R packages, bigstatsr and bigsnpr, that integrate the most effi
 We use both a real case-control genomic dataset for Celiac disease and large-scale simulated data to illustrate application of the two R packages, including association study and computation of Polygenic Risk Scores. We also compare results from the two R packages with those obtained when using PLINK and EIGENSOFT, and report execution times along with the code to perform major computational tasks.
 
 
-\begin{methods}
 \section{Methods}
 
 \subsection{Memory-mapped files}
 
-The two R packages don't use standard read operations on a file nor load the genotype matrix entirely in memory. They use what we could call an hybrid solution: memory-mapping. Memory-mapping is used to access data, possibly stored on disk, as if it were in memory. This solution is made available within R through an object called ``big.matrix'', available in R package bigmemory (\cite{Kane2013}).
+The two R packages don't use standard read operations on a file nor load the genotype matrix entirely in memory. They use what we could call an hybrid solution: memory-mapping. Memory-mapping is used to access data, possibly stored on disk, as if it were in memory. This solution is made available within R through an object called ``big.matrix'', available in R package bigmemory \cite[]{Kane2013}.
 
 
-We are aware of another work that used memory-mapped files to store and efficiently access genotype data, coded in C++ (\cite{Nielsen2008}). With the two packages we developed, we made this solution available in R and in C++ via package Rcpp (\cite{Eddelbuettel2011}). The major advantage of manipulating genotype data within R, almost as it were a standard matrix in memory, is the possibility of using most of the other tools that have been developed in R (\cite{R2017}. For example, we provide sparse multivariate linear models and an efficient algorithm for Principal Component Analysis (PCA) based on adaptations from R packages biglasso, sparseSVM and RSpectra (\cite{Zeng2017,RSpectra2016}).
+We are aware of another work that used memory-mapped files to store and efficiently access genotype data, coded in C++ \cite[]{Nielsen2008}. With the two packages we developed, we made this solution available in R and in C++ via package Rcpp \cite[]{Eddelbuettel2011}. The major advantage of manipulating genotype data within R, almost as it were a standard matrix in memory, is the possibility of using most of the other tools that have been developed in R \cite[]{R2017}. For example, we provide sparse multivariate linear models and an efficient algorithm for Principal Component Analysis (PCA) based on adaptations from R packages biglasso, sparseSVM and RSpectra \cite[]{Zeng2017,RSpectra2016}.
 
 Usually, memory-mapping provides seamless and faster access than standard read/write operations. When some element is needed, a small chunk of the genotype matrix, containing this element, is accessed in memory. When the system needs more memory, some chunks of the matrix are freed from the memory in order to make space for others. All this is managed by the Operating System so that it is seamless and efficient. It means that if you use chunks of data repeatedly, it will be very fast the second time you access it, the third time and so on. Of course, if the memory size of your computer is larger than the size of the dataset, the file could fit entirely in memory and every second access would be fast. 
 
@@ -75,7 +76,7 @@ Fast read/write operations from/to bed/bim/fam PLINK files are available. One sh
 
 We developed a special ``big.matrix'' object, called ``BM.code'', that can be used to seamlessly store up to 256 arbitrary different values, while having a relatively efficient storage (use of one byte per element, 8 times less disk storage space than double-precision numbers but 4 times more space than the binary PLINK format ``.bed''). With these 256 values, the matrix can store genotype calls and missing values (4 values), best guess genotypes (3 values) and genotype dosages (likelihoods) rounded to two decimal places (201 values).
 
-Because it is an important part of the preprocessing, we provide two functions for imputing missing values of genotyped SNPs (Figure~\ref{fig:impute}). The first function is a wrapper to PLINK and Beagle which takes PLINK files as input and return PLINK files without missing values, and should therefore be used before reading the data in R (\cite{Browning2009}). The second function is a new algorithm we developed in order to have a fast imputation method without losing much of imputation accuracy. This algorithm doesn't use phasing and is very fast. It only relies on some local XGBoost models. XGBoost is an optimized distributed gradient boosting library that can be used in R and provides some of the best results in machine learning competitions (\cite{Chen2016}). XGBoost builds decision trees that can detect nonlinear interactions, partially reconstructing phase so that it seems well suited for imputing genotype matrices. For each SNP, we provide an estimation of imputation error by separating non-missing data into training/test sets. The training set is used to build a model for predicting missing data. The prediction model is then evaluated on the test set for which we know the true genotype values, which gives an unbiased estimator of the number of individuals that have been wrongly imputed for that particular SNP.
+Because it is an important part of the preprocessing, we provide two functions for imputing missing values of genotyped SNPs (Figure~\ref{fig:impute}). The first function is a wrapper to PLINK and Beagle which takes PLINK files as input and return PLINK files without missing values, and should therefore be used before reading the data in R \cite[]{Browning2009}. The second function is a new algorithm we developed in order to have a fast imputation method without losing much of imputation accuracy. This algorithm doesn't use phasing and is very fast. It only relies on some local XGBoost models. XGBoost is an optimized distributed gradient boosting library that can be used in R and provides some of the best results in machine learning competitions \cite[]{Chen2016}. XGBoost builds decision trees that can detect nonlinear interactions, partially reconstructing phase so that it seems well suited for imputing genotype matrices. For each SNP, we provide an estimation of imputation error by separating non-missing data into training/test sets. The training set is used to build a model for predicting missing data. The prediction model is then evaluated on the test set for which we know the true genotype values, which gives an unbiased estimator of the number of individuals that have been wrongly imputed for that particular SNP.
 
 \begin{figure}[!tpb]
 \centerline{\includegraphics[width=235pt]{imputation.pdf}}
@@ -90,20 +91,20 @@ Because it is an important part of the preprocessing, we provide two functions f
 \caption{Functions available in packages bigstatsr and bigsnpr for the computation of a partial Singular Value Decomposition of a genotype array.}\label{fig:svd}
 \end{figure}
 
-For computing Principal Components (PCs) of a large-scale genotype matrix, we provide several functions related to SNP thinning and two functions for the computation of a partial Singular Value Decomposition (SVD), one based on eigenvalue decomposition and the other on randomized projections (Figure 2).
+For computing Principal Components (PCs) of a large-scale genotype matrix, we provide several functions related to SNP thinning and two functions for the computation of a partial Singular Value Decomposition (SVD), one based on eigenvalue decomposition and the other on randomized projections (Figure~\ref{fig:svd}).
 
-The function based on randomized projections runs in linear time in all dimensions (\cite{Lehoucq1996}). FlashPCA2 and bigstatsr use the same PCA algorithm called Implicitly Restarted Arnoldi Method (IRAM), which is implemented in R package RSpectra. The main difference between the two implementations is that FlashPCA2 computes vector-matrix multiplications with the genotype matrix based on the binary PLINK file whereas bigstatsr computes the multiplication based on the ``big.matrix'' format, which enables parallel computations. 
+The function based on randomized projections runs in linear time in all dimensions \cite[]{Lehoucq1996}. FlashPCA2 and bigstatsr use the same PCA algorithm called Implicitly Restarted Arnoldi Method (IRAM), which is implemented in R package RSpectra. The main difference between the two implementations is that FlashPCA2 computes vector-matrix multiplications with the genotype matrix based on the binary PLINK file whereas bigstatsr computes the multiplication based on the ``big.matrix'' format, which enables parallel computations. 
  
-Fast algorithms for thinning SNPs  similar to algorithms provided in PLINK have been developed. For instance, thinning is mandatory when computing PCs of a genotype matrix (\cite{Abdellaoui2013}). There are different options to thin SNPs based on Linkage Disequilibrium. The first option is known as pruning, which is an algorithm that sequentially scan the genome for nearby SNPs in LD, performing pairwise thinning.
+Fast algorithms for thinning SNPs  similar to algorithms provided in PLINK have been developed. For instance, thinning is mandatory when computing PCs of a genotype matrix \cite[]{Abdellaoui2013}. There are different options to thin SNPs based on Linkage Disequilibrium. The first option is known as pruning, which is an algorithm that sequentially scan the genome for nearby SNPs in LD, performing pairwise thinning.
 
 A variant of pruning is clumping. Clumping is useful if a statistic is available to sort the SNPs by importance (e.g. association with a phenotype) and for discarding SNPs in LD with a more associated SNP relatively to the phenotype of interest. Furthermore, we advise to always use clumping instead of pruning (by using the minor allele frequency as the statistic of importance, which is the default) because, in some particular cases, pruning can leave regions of the genome without any representative SNP at all\footnote{https://goo.gl/T5SJqM}.
 
-The third option that is generally combined with pruning or clumping consists of removing SNPs in long-range LD regions (\cite{Price2008}). Long-range LD regions for the human genome are available as an online table that our packages can use to discard SNPs in these regions while computing PCs\footnote{https://goo.gl/8TngVE}. However, such table is human specific and could also be population specific, so we developed an algorithm that automatically detects these regions and removes them. This algorithm consists in the following steps: first, PCA is performed using a subset of SNP remaining after clumping, then outliers SNPs are detected using Mahalanobis distance as implemented in the R package pcadapt (\cite{Luu2017}). Finally, the algorithm keeps only consecutive outlier SNPs which is considered as the sign of long-range LD regions by the algorithm. Indeed, a long-range LD region would cause SNPs in this region to have strong weights (loadings) in the PCA and we can differentiate these from true outliers because they are consecutive. This algorithm is implemented in function snp\_autoSVD and will be referred by this name in the rest of the paper.
+The third option that is generally combined with pruning or clumping consists of removing SNPs in long-range LD regions \cite[]{Price2008}. Long-range LD regions for the human genome are available as an online table that our packages can use to discard SNPs in these regions while computing PCs\footnote{https://goo.gl/8TngVE}. However, such table is human specific and could also be population specific, so we developed an algorithm that automatically detects these regions and removes them. This algorithm consists in the following steps: first, PCA is performed using a subset of SNP remaining after clumping, then outliers SNPs are detected using Mahalanobis distance as implemented in the R package pcadapt \cite[]{Luu2017}. Finally, the algorithm keeps only consecutive outlier SNPs which is considered as the sign of long-range LD regions by the algorithm. Indeed, a long-range LD region would cause SNPs in this region to have strong weights (loadings) in the PCA and we can differentiate these from true outliers because they are consecutive. This algorithm is implemented in function snp\_autoSVD and will be referred by this name in the rest of the paper.
 
 
 \subsection{Association tests and Polygenic Risk Scores}
 
-For association purposes, statistical tests based on linear and logistic regressions are available. Any test statistic that is based on counts could be easily implemented because we provide fast counting summaries. Among these tests, the Armitage trend test and the MAX3 test statistic are already provided for binary outcome (\cite{Zheng2012}). 
+For association purposes, statistical tests based on linear and logistic regressions are available. Any test statistic that is based on counts could be easily implemented because we provide fast counting summaries. Among these tests, the Armitage trend test and the MAX3 test statistic are already provided for binary outcome \cite[]{Zheng2012}. 
 
 $\forall j \in \{1, \dots, m\}$, 
 \itemize{
@@ -114,31 +115,35 @@ The hypothesis that is tested is $\beta^{(j)} = 0$ against the alternative $\bet
 
 The R packages also implement functions to compute Polygenic Risk Scores. 
 
-First, they implement the widely-used Pruning + Thresholding (P+T) model based on univariate GWAS summary statistics as described in previous equations. Under the P+T model, a coefficient of regression is learned independently for each SNP along with a corresponding p-value. The SNPs are first clumped (P) so that there remains only SNPs that are weakly correlated with each other. Thresholding (T) consists in removing SNPs that are under a certain level of significance (P-value threshold to be determined). Finally, a polygenic risk score is defined as the sum of allele counts of the remaining SNPs weighted by the corresponding regression coefficients (\cite{Dudbridge2013,Chatterjee2013,Golan2014}). 
+First, they implement the widely-used Pruning + Thresholding (P+T) model based on univariate GWAS summary statistics as described in previous equations. Under the P+T model, a coefficient of regression is learned independently for each SNP along with a corresponding p-value. The SNPs are first clumped (P) so that there remains only SNPs that are weakly correlated with each other. Thresholding (T) consists in removing SNPs that are under a certain level of significance (P-value threshold to be determined). Finally, a polygenic risk score is defined as the sum of allele counts of the remaining SNPs weighted by the corresponding regression coefficients \cite[]{Dudbridge2013,Chatterjee2013,Golan2014}. 
 
-Secondly, the two R packages also implement multivariate models to compute risk scores that do not use univariate summary statistics but instead train a model on all the SNPs and covariables at once, optimally accounting for correlation between predictors. The currently available models are linear and logistic regressions and Support Vector Machine (SVM). These models include lasso and elastic-net regularizations, which reduce the number of  predictors (SNPs) included in the predictive models (\cite{Tibshirani1996,Zou2005,Friedman2010}). Package bigstatsr provides a fast implementation of these models by using efficient rules to discard most of the predictors (\cite{Tibshirani2012}). The implementation of these algorithms is based on modified versions of functions available in the R packages sparseSVM and biglasso (\cite{Zeng2017}). These modifications allow to include covariates in the models and to use these algorithms on the special type of ``big.matrix'' called ``BM.code'' used in bigsnpr (see section~\ref{sec:preprocess}).
+Secondly, the two R packages also implement multivariate models to compute risk scores that do not use univariate summary statistics but instead train a model on all the SNPs and covariables at once, optimally accounting for correlation between predictors. The currently available models are linear and logistic regressions and Support Vector Machine (SVM). These models include lasso and elastic-net regularizations, which reduce the number of  predictors (SNPs) included in the predictive models \cite[]{Tibshirani1996,Zou2005,Friedman2010}. Package bigstatsr provides a fast implementation of these models by using efficient rules to discard most of the predictors \cite[]{Tibshirani2012}. The implementation of these algorithms is based on modified versions of functions available in the R packages sparseSVM and biglasso \cite[]{Zeng2017}. These modifications allow to include covariates in the models and to use these algorithms on the special type of ``big.matrix'' called ``BM.code'' used in bigsnpr (see section~\ref{sec:preprocess}).
 
 \subsection{Data analyzed}
 
-In this paper, we use two real datasets: the celiac disease cohort and the POPRES datasets (\cite{Dubois2010,Nelson2008}). The Celiac dataset is composed of 15,283 individuals of European ancestry genotyped on 295,453 SNPs. The POPRES dataset is composed of 1385 individuals of European ancestry genotyped on 447,245 SNPs.
+In this paper, we use two real datasets: the celiac disease cohort and the POPRES datasets \cite[]{Dubois2010,Nelson2008}. The Celiac dataset is composed of 15,283 individuals of European ancestry genotyped on 295,453 SNPs. The POPRES dataset is composed of 1385 individuals of European ancestry genotyped on 447,245 SNPs.
 
-For computation timing purposes only, we replicated all the individuals in the Celiac dataset 5 and 10 times in order to have larger datasets while keeping the same structure of Linkage Disequilibrium and Population Structure as the original dataset. To assess scalibility of our algorithms for a biobank-scale genotype dataset, we formed another dataset of 500,000 individuals and 1 million SNPs, also by replicating the Celiac dataset.
+For computation timing purposes only, we replicated all the individuals in the Celiac dataset 5 and 10 times in order to have larger datasets while keeping the same structure of Linkage Disequilibrium and Population Structure as the original dataset. To assess scalibility of our algorithms for a biobank-scale genotype dataset, we formed another dataset of 500,000 individuals and 1 million SNPs, also by replicating the Celiac dataset. \label{sec:rep}
 
-\end{methods}
+\subsection{Reproducibility}
+
+All the code used in this paper along with results, such as execution times and figures, are available as HTML notebooks in the Supplementary Data.
 
 \section{Results}
 
-\subsection{Overview}
+\subsection{Overview}\label{sec:overview}
 
 We present the results for three different analyses. First, we illustrate the application of R packages bigstatsr and bigsnpr. Secondly, we compared the performance of the packages against standard software. Thirdly, we present results of the two new methods implemented in these packages, one method for the automatic detection and removal of long-range LD regions in PCA and another for the imputation of missing genotypes. We use three types of data: Celiac, a real case-control cohort, POPRES, a general population cohort and simulated datasets using real genotypes from the Celiac cohort. We compare the performance on two computers, a desktop computer with 64GB of RAM and 12 cores, and a laptop with only 8GB of RAM and 4 cores. For the functions that enable parallelism, we use half of the cores available on the corresponding computer.
 
 \subsection{Application}
  
-We performed an association study and computed a polygenic risk score for the Celiac cohort. The data was preprocessed following steps from figure~\ref{fig:qc}, removing individuals and SNPs which had more than 5\% of missing values, non-autosomal SNPs, SNPs with a minor allele frequency lower than 0.05 or a p-value for the Hardy-Weinberg exact test lower than $1^{-10}$, and finally, removing one individual in each pair of individuals with a proportion of alleles shared IBD greater than 0.08 (\cite{Purcell2007}). 
-For the POPRES dataset, this resulted in 1382 individuals and 344,614 SNPs with no missing value.
-For the Celiac dataset, this resulted in 15,155 individuals and 281,122 SNPs with an overall genotyping rate of 99.96\% that we imputed with our new method (see section~\ref{sec:impute}). We note that if we used a standard R matrix to store the genotypes, it would take 32GB of memory. On the disk, the ``.bed'' file takes 1GB and the ``.bk'' file (storing the ``big.matrix'') takes 4GB. 
+We performed an association study and computed a polygenic risk score for the Celiac cohort. 
 
-We used bigstatsr and bigsnpr R functions to get the first Principal Components (PCs) of a genotype matrix and to visualize them (Figure 3). We then performed a Genome-Wide Association Study (GWAS) investigating how Single Nucleotide Polymorphisms (SNPs) are associated with the celiac disease, while accounting for population structure with PCs, and plotted the results as a Manhattan plot (Figure 4). As illustrated in the supplementary data, the whole pipeline is user-friendly and takes only 20 lines of code.
+The data was preprocessed following steps from figure~\ref{fig:qc}, removing individuals and SNPs which had more than 5\% of missing values, non-autosomal SNPs, SNPs with a minor allele frequency lower than 0.05 or a p-value for the Hardy-Weinberg exact test lower than $1^{-10}$, and finally, removing one individual in each pair of individuals with a proportion of alleles shared IBD greater than 0.08 \cite[]{Purcell2007}. 
+For the POPRES dataset, this resulted in 1382 individuals and 344,614 SNPs with no missing value.
+For the Celiac dataset, this resulted in 15,155 individuals and 281,122 SNPs with an overall genotyping rate of 99.96\% that was then imputed with our new method (see section~\ref{sec:impute}). We note that if we used a standard R matrix to store the genotypes, this data would take 32GB of memory. On the disk, the ``.bed'' file takes 1GB and the ``.bk'' file (storing the ``big.matrix'') takes 4GB. 
+
+We used bigstatsr and bigsnpr R functions to get the first Principal Components (PCs) of a genotype matrix and to visualize them (Figure~\ref{fig:pca}). We then performed a Genome-Wide Association Study (GWAS) investigating how Single Nucleotide Polymorphisms (SNPs) are associated with the celiac disease, while accounting for population structure with PCs, and plotted the results as a Manhattan plot (Figure~\ref{fig:gwas}). As illustrated in the supplementary data, the whole pipeline is user-friendly and takes only 20 lines of code.
 
 
 \begin{figure}[!tpb]
@@ -155,13 +160,52 @@ The Celiac dataset is relatively small as compared to modern genetic cohorts. To
 
 \subsection{Method Comparison}
 
-We first compared the GWAS and PRS computations with the package against PLINK and EIGENSOFT.
+We first compared the GWAS and PRS computations with the R packages against PLINK 1.9 and EIGENSOFT 6.1.4.
 
-(TABLEAU GWAS (feuille 1) et PRS (feuille 2))
+\begin{table}[!tpb]
+\centering
+\begin{adjustbox}{max width=235pt}
+\begin{tabular}{|c|cc|cc|}
+\hline
+Operation & Functions involved (without packages) & Execution time & Execution time & Functions involved (with packages) \\ 
+\hline
+Reading PLINK files & n/a & n/a & 5 / 20 sec & snp\_readBed \\
+Pruning & plink -{}-exclude -{}-range -{}-indep-pairwise & 4 / 6 sec & 13 / 46 sec & snp\_indLRLDR \& snp\_pruning \\
+\multirow{2}{*}{Computing 10 PCs} & plink -{}-extract -{}-make-bed & 2 sec & \multirow{2}{*}{45 / 136 sec} & \multirow{2}{*}{big\_randomSVD} \\
+& flashpcaR::flashpca (FlashPCA2) & 6 / 7 min &  &  \\
+GWAS (binary phenotype) & plink -{}-logistic -{}-covar & 5 min & 5 / 14.5 min & big\_univLogReg \\
+\hline
+Total & PLINK and flashpcaR & 11 / 12 min & 6 / 18 min & bigsnpr and bigstatsr \\
+\hline
+\end{tabular} 
+\end{adjustbox}
+\caption{Execution times with or without bigstatsr and bigsnpr for making a GWAS for the Celiac dataset. The first time is with the desktop computer and the second time is with the laptop computer (section~\ref{sec:overview}).} 
+\label{tab:bench-gwas}
+\end{table}
 
-For most functions, multithreading is not available yet in PLINK, nevertheless, PLINK-specific algorithms that use bitwise parallelism (e.g. pruning) are still faster than the parallel algorithms reimplemented in package bigsnpr (Table 1). Overall, the computations with our two R packages for an association study and a polygenic risk score are of the same of order of magnitude as when using PLINK and EIGENSOFT (Table x). However, the whole analysis pipeline make use of R calls only; there is no need to write temporary files and functions have parameters which enable subsetting of the genotype matrix without having to copy it. The code used for these two comparisons is available as Supplementary Material, as long as the code for the following comparisons.
+\begin{table}[!tpb]
+\centering
+\begin{adjustbox}{max width=235pt}
+\begin{tabular}{|c|cc|cc|}
+\hline
+Operation & Functions involved (without packages) & Execution time & Execution time & Functions involved (with packages) \\
+\hline
+GWAS (binary phenotype) & plink -{}-keep -{}-logistic -{}-covar & 4 / min & 3 / min & big\_univLogReg \\
+Clumping & plink -{}-keep -{}-clump -{}-clump-p1
+-{}-clump-p2 -{}-clump-r2 & 49 / sec & 9 / sec & snp\_clumping \\
+PRS & plink -{}-keep -{}-extract -{}-score -{}-q-score-range & 9 / sec & 4 / sec & snp\_PRS \\
+\hline
+Total & PLINK & 5 / min & 3 / min & bigsnpr and bigstatsr \\
+\hline
+\end{tabular} 
+\end{adjustbox}
+\caption{Execution times with or without bigstatsr and bigsnpr for making a GWAS for the Celiac dataset. The first time is with the desktop computer and the second time is with the laptop computer (section~\ref{sec:overview}).} 
+\label{tab:bench-prs}
+\end{table}
 
-On our desktop computer, we compared the computation times between FlashPCA2 and the similar function implemented in bigstatsr, big\_randomSVD. For each comparison, we used the 93,083 SNPs which were remaining after pruning and we computed 10 PCs. We replicated the individuals of the celiac disease cohort in order to have three datasets of growing sizes: 15,250, 76,250 and 152,500 individuals. Overall, our function big\_randomSVD showed to be twice as fast as FastPCA and FlashPCA2 and almost 10 times as fast when using parallelism with 6 cores (Figure 5). We also compared results in terms of precision by comparing squared correlation between approximated PCs and ``true'' PCs provided by an exact singular value decomposition (e.g. SmartPCA). FastPCA, FlashPCA2 and bigstatsr infer the true first 6 PCs but the squared correlation between true PCs and approximated ones decreases for larger PCs when using FastPCA whereas it remains larger than 99.9\% when using FlashPCA2 or bigstatsr (Figure 25).   
+For most functions, multithreading is not available yet in PLINK, nevertheless, PLINK-specific algorithms that use bitwise parallelism (e.g. pruning) are still faster than the parallel algorithms reimplemented in package bigsnpr (Table~\ref{tab:bench-gwas}). Overall, the computations with our two R packages for an association study and a polygenic risk score are of the same order of magnitude as when using PLINK and EIGENSOFT (Tables~\ref{tab:bench-gwas} and~\ref{tab:bench-prs}). However, the whole analysis pipeline makes use of R calls only; there is no need to write temporary files and functions have parameters which enable subsetting of the genotype matrix without having to copy it. 
+
+On our desktop computer, we compared the computation times of FastPCA, FlashPCA2 and the similar function implemented in bigstatsr, big\_randomSVD. For each comparison, we used the 93,083 SNPs which were remaining after pruning and we computed 10 PCs. We used the datasets of growing size simulated from the Celiac dataset (Section~\ref{sec:rep}). Overall, our function big\_randomSVD showed to be twice as fast as FastPCA and FlashPCA2 and almost 10 times as fast when using parallelism with 6 cores (Figure~\ref{fig:bench-pca}). We also compared results in terms of precision by comparing squared correlation between approximated PCs and ``true'' PCs provided by an exact singular value decomposition (e.g. SmartPCA). FastPCA, FlashPCA2 and bigstatsr infer the true first 6 PCs but the squared correlation between true PCs and approximated ones decreases for larger PCs when using FastPCA whereas it remains larger than 0.999 when using FlashPCA2 or bigstatsr (Figure~\ref{fig:prec-pca}).   
 
 \begin{figure}[!tpb]
 \centerline{\includegraphics[width=200pt]{benchmark-pca}}
@@ -175,31 +219,26 @@ On our desktop computer, we compared the computation times between FlashPCA2 and
 
 \subsection{Automatic detection of long-range LD regions}
 
-For the detection of long-range LD regions during the computation of PCA, we tested the function snp\_autoSVD on both the celiac and POPRES datasets (REFs). For the POPRES dataset, the algorithm converged in two iterations. The first iterations found 3 long-range LD regions in chromosomes 2, 6 and 8 (Table SA). We compared the scores (PCs) obtained by this method with the ones obtained by removing pre-determined long-range LD regions (URL) and found a mean correlation of 89.6\% between PCs mainly due to a rotation of PC7 and PC8 (Table SA2). For the celiac dataset, we found 5 long-range LD regions and a mean correlation of 98.6\% between PCs obtained with snp\_autoSVD and the ones obtained by clumping followed by the removing of predetermined long-range LD regions (Table SB and SB2).
+For the detection of long-range LD regions during the computation of PCA, we tested the function snp\_autoSVD on both the Celiac and POPRES datasets. For the POPRES dataset, the algorithm converged in two iterations. The first iterations found 3 long-range LD regions in chromosomes 2, 6 and 8 (Table~\ref{tab:lrldr-popres}). We compared the scores (PCs) obtained by this method with the ones obtained by removing pre-determined long-range LD regions\footnote{https://goo.gl/8TngVE} and found a mean correlation of 89.6\% between PCs, mainly due to a rotation of PC7 and PC8 (Table~\ref{tab:pc-popres}). For the Celiac dataset, we found 5 long-range LD regions and a mean correlation of 98.6\% between PCs obtained with snp\_autoSVD and the ones obtained by clumping with removing of predetermined long-range LD regions (Table~\ref{tab:pc-celiac}).
 
-For the celiac dataset, we compare results of PCA obtained when using snp\_autoSVD and when computing PCA without removing any long range LD region (only clumping at $R^2 > 0.2$). When not removing any long range LD region, we show that PC4 and PC5 corresponds to a long-range LD region in chromosome 8 (Figures E and SE). When automatically removing some long-range LD regions with snp\_autoSVD, we show that PC4 and PC5 are now only reflecting population structure (Figure E). Moreover, loadings are more equally distributed among SNPs (Figure SE) which is confirmed by Gini coefficients (measure of dispersion) of each squared loadings reported in Figure SF, which are all around the theoretical value of $2 / pi$ (for gaussian loadings) and significantly smaller when computing SVD with snp\_autoSVD than when no long-range LD region is removed.
-
-\begin{figure}[!tpb]
-\centerline{\includegraphics[width=235pt]{scores}}
-\caption{PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $R^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}\label{fig:scores}
-\end{figure}
+For the Celiac dataset, we compared results of PCA obtained when using snp\_autoSVD and when computing PCA without removing any long range LD region (only clumping at $R^2 > 0.2$). When not removing any long range LD region, we show that PC4 and PC5 corresponds to a long-range LD region in chromosome 8 (Figures~\ref{fig:scores} and~\ref{fig:loadings}). When automatically removing some long-range LD regions with snp\_autoSVD, we show that PC4 and PC5 are now only reflecting population structure (Figure~\ref{fig:scores}). Moreover, loadings are more equally distributed among SNPs (Figure~\ref{fig:loadings}) which is confirmed by Gini coefficients (measure of dispersion) of each squared loadings reported in Figure~\ref{fig:gini}, which are all around the theoretical value of $2 / pi$ (for gaussian loadings) and significantly smaller when computing SVD with snp\_autoSVD than when no long-range LD region is removed.
 
 \subsection{Imputation of missing values for genotyped SNPs}\label{sec:impute}
 
-For the fast imputation method based on XGBoost, we compared on the POPRES dataset (REF) composed of 1382 individuals and 344,614 SNPs in both terms of imputation accuracy and computation times. The minor allele frequencies (MAFs) are approximately uniformly distributed between 0.05 and 0.5 (Figure S1). We introduced missing values using a Beta-binomial distribution with a mean of 3\% of missing values. Imputation was compared between function snp\_fastImpute of package bigsnpr and Beagle (v21Jan17). Overall, our method made 4.7\% of imputation errors whereas Beagle made only 3.1\% but it took Beagle 14.6h to complete while our method only took 42 minutes (20 times less). For the Celiac disease dataset, our method took less than 6 hours to complete whereas Beagle didn't finish imputing chromosome 1 in 48h. We also show that our method's estimation of the number of imputation errors is accurate (Figure X).
+For the fast imputation method based on XGBoost, we compared  the imputation accuracy and computation times on the POPRES dataset. The minor allele frequencies (MAFs) are approximately uniformly distributed between 0.05 and 0.5 (Figure~\ref{fig:maf}). We introduced missing values using a Beta-binomial distribution resulting in approximately 3\% of missing values. Imputation was compared between function snp\_fastImpute of package bigsnpr and Beagle (v21Jan17). Overall, our method made 4.7\% of imputation errors whereas Beagle made only 3.1\% but it took Beagle 14.6 hours to complete while our method only took 42 minutes (20 times less). For the Celiac dataset, our method took less than 6 hours to complete whereas Beagle didn't finish imputing chromosome 1 in 48 hours. We also show that our method's estimation of the number of imputation errors is accurate (Figure~\ref{fig:error-impute}).
 
 \begin{figure}[!tpb]
 \centerline{\includegraphics[width=200pt]{error-impute}}
-\caption{Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost (REF).}\label{fig:error-impute}
+\caption{Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost \cite[]{Chen2016}.}\label{fig:error-impute}
 \end{figure}
 
 \section{Discussion}
 
-We have developed two R packages, bigstatsr and bigsnpr, which enable multiple analyses of large-scale genotype datasets in a single comprehensive framework. Linkage Disequilibrium pruning, Principal Component Analysis, association tests and computations of polygenic risk scores are made available in this software. Implemented algorithms are both fast and memory-efficient, allowing the use of laptops or desktop computers to make genome-wide analyses. Technically, bigstatsr and bigsnpr could handle any size of datasets. However, if accesses demand the OS to often swap between the file and the memory, this would slow your analysis down. For example, the Principal Component Analysis (PCA) algorithm in bigstatsr is iterative so that the matrix has to be sequentially accessed over a hundred times. If the number of samples times the number of SNP remaining after pruning is larger than the available memory, this slowdown would happen. For instance, a 32GB computer would be slow when computing PCs on more than 100K samples and 300K SNPs remaining after LD pruning.
+We have developed two R packages, bigstatsr and bigsnpr, which enable multiple analyses of large-scale genotype datasets in a single comprehensive framework. Linkage Disequilibrium pruning, Principal Component Analysis, association tests and computations of polygenic risk scores are made available in this software. Implemented algorithms are both fast and memory-efficient, allowing the use of laptops or desktop computers to make genome-wide analyses. Technically, bigstatsr and bigsnpr could handle any size of datasets. However, if accesses demand the OS to often swap between the file and the memory, this would slow your analysis down. For example, the Principal Component Analysis (PCA) algorithm in bigstatsr is iterative so that the matrix has to be sequentially accessed over a hundred times. If the number of samples times the number of SNPs remaining after pruning is larger than the available memory, this slowdown would happen. For instance, a 32GB computer would be slow when computing PCs on more than 100K samples and 300K SNPs remaining after LD thinning.
 
 The two R packages don't use some specific file format nor load the entire matrix in memory but rather use a special type of matrix. Using a matrix-like format makes it easy to develop new functions in order to experiment and develop new ideas. Integration in R makes it possible to take advantage of all what R has to offer, for example using the excellent machine learning algorithm XGBoost to easily make a fast yet accurate imputation algorithm for genotyped SNPs. Other functions, not presented here, are also available and all the functions available within the package bigstatsr are not specific to SNP arrays, so that they could be used for other omic data or in completely different fields of research.
 
-We think that the two R packages and the corresponding data format could help researchers to develop new ideas and algorithms to analyze genome-wide data. For example, we wish to use these packages to train much more accurate predictive models than the standard P+T model currently in use (REF P+T). As a second example, multiple imputation has been shown to be a very promising method for increasing statistical power of a GWAS, and it could be implemented with the data format ``BM.code'', without having to write multiple files (REF).
+We think that the two R packages and the corresponding data format could help researchers to develop new ideas and algorithms to analyze genome-wide data. For example, we wish to use these packages to train much more accurate predictive models than the standard P+T model currently in use. As a second example, multiple imputation has been shown to be a very promising method for increasing statistical power of a GWAS, and it could be implemented with the data format ``BM.code'', without having to write multiple files \cite[]{Palmer2016}.
 
 
 
@@ -215,12 +254,12 @@ This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
 \bibliography{document}
 
 \newpage
-\section*{Supplementary results}
+\section*{Supplementary Data}
 
 \subsection{Long-range LD regions}
 
 
-\begin{table}[ht]
+\begin{table}[!tpb]
 \centering
 \begin{tabular}{lccc}
   \hline
@@ -231,13 +270,13 @@ This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
   3 &  8 & 6.6 (8) & 13.2 (12) \\ 
    \hline
 \end{tabular}
-\caption{Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in (REF)Price et al. (2008).} 
+\caption{Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in \cite[]{Price2008}.}
 \label{tab:lrldr-popres}
 \end{table}
 
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jul 18 15:59:51 2017
-\begin{table}[ht]
+\begin{table}[!tpb]
 \centering
 \begin{tabular}{lccc}
   \hline
@@ -250,13 +289,13 @@ This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
   5 & 14 & 46.6 (n/a) & 47.5 (n/a) \\ 
    \hline
 \end{tabular}
-\caption{Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in (REF)Price et al. (2008).} 
+\caption{Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in \cite[]{Price2008}.}
 \label{tab:lrldr-celiac}
 \end{table}
 
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jun 13 11:29:13 2017
-\begin{table}[ht]
+\begin{table}[!tpb]
 \centering
 \begin{tabular}{l|cccccccccc}
   \hline
@@ -280,7 +319,7 @@ PC1 & 100.0 & -0.1 & -0.0 & 0.1 & -0.1 & 0.0 & 0.0 & 0.0 & -0.0 & -0.0 \\
 
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jun 13 11:25:56 2017
-\begin{table}[ht]
+\begin{table}[!tpb]
 \centering
 \begin{tabular}{l|cccccccccc}
   \hline
@@ -301,6 +340,11 @@ PC1 & 100.0 & -0.1 & -0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
 \caption{Correlation between scores of PCA for the Celiac dataset  when automatically removing long-range LD regions and when removing them based on a predefined table.}
 \label{tab:pc-celiac}
 \end{table}
+
+\begin{figure}[!tpb]
+\centerline{\includegraphics[width=235pt]{scores}}
+\caption{PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $R^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}\label{fig:scores}
+\end{figure}
 
 \begin{figure}[!tpb]
 \centerline{\includegraphics[width=220pt]{loadings}}

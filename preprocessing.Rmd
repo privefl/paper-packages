@@ -68,6 +68,28 @@ big_counts(G, ind.col = 1:10)
 ```
 
 ```{r}
-
+# Fast imputation
+system.time(
+  infos <- snp_fastImpute(G, celiac$map$chromosome, ncores = NCORES)
+)
 ```
 
+```{r}
+plot(subset(infos, pNA > 0.001), pch = 19, cex = 0.5)
+pvals <- c(0.01, 0.005, 0.002, 0.001); colvals <- 2:5
+idc <- lapply(seq_along(pvals), function(i) {
+  curve(pvals[i] / x, from = 0, lwd = 2, 
+        col = colvals[i], add = TRUE)
+})
+legend("topright", legend = pvals, title = "p(NA & Error)",
+       col = colvals, lty = 1, lwd = 2)
+```
+
+```{r}
+big_counts(G, ind.col = 1:10)
+```
+
+```{r}
+{{G@code <- bigsnpr:::CODE_IMPUTE_PRED}}
+big_counts(G, ind.col = 1:10)
+```

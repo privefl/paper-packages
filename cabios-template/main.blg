@@ -5,45 +5,45 @@ The style file: natbib.bst
 Database file #1: document.bib
 Warning--can't use both volume and number fields in Luu2017
 Warning--empty journal in Zeng2017
-You've used 34 entries,
+You've used 35 entries,
             2378 wiz_defined-function locations,
-            770 strings with 13974 characters,
-and the built_in function-call counts, 21081 in all, are:
-= -- 1660
-> -- 1933
-< -- 17
-+ -- 601
-- -- 601
-* -- 2253
-:= -- 3888
-add.period$ -- 151
-call.type$ -- 34
-change.case$ -- 212
-chr.to.int$ -- 34
-cite$ -- 36
-duplicate$ -- 647
-empty$ -- 1062
-format.name$ -- 657
-if$ -- 3966
+            778 strings with 14178 characters,
+and the built_in function-call counts, 21565 in all, are:
+= -- 1709
+> -- 1955
+< -- 18
++ -- 607
+- -- 607
+* -- 2297
+:= -- 3969
+add.period$ -- 155
+call.type$ -- 35
+change.case$ -- 219
+chr.to.int$ -- 35
+cite$ -- 37
+duplicate$ -- 665
+empty$ -- 1096
+format.name$ -- 666
+if$ -- 4064
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 31
-newline$ -- 170
-num.names$ -- 136
-pop$ -- 207
+missing$ -- 32
+newline$ -- 175
+num.names$ -- 140
+pop$ -- 212
 preamble$ -- 1
-purify$ -- 215
+purify$ -- 222
 quote$ -- 0
-skip$ -- 440
+skip$ -- 454
 stack$ -- 0
-substring$ -- 1101
-swap$ -- 127
+substring$ -- 1138
+swap$ -- 130
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 303
+type$ -- 312
 warning$ -- 2
-while$ -- 156
+while$ -- 160
 width$ -- 0
-write$ -- 436
+write$ -- 449
 (There were 2 warnings)

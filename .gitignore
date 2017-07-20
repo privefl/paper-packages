@@ -33,4 +33,12 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 
+# data
 backingfiles
+# latex
+main.aux
+main.bbl
+main.blg
+cabios-template/main.log
+main.out
+main.synctex.gz

@@ -4,12 +4,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center", fig.width = 15)
 ```
 
 ## Generate missing values
 
-```{r, results='hide'}
+```{r, message=FALSE}
 library(bigsnpr)
 library(dplyr)
 library(ggplot2)
@@ -31,7 +31,7 @@ m <- ncol(G)
 # Compute minor allele frequencies
 maf <- snp_MAF(G)
 
-bigstatsr:::MY_THEME(ggplot(), coeff = 1.8) +
+bigstatsr:::MY_THEME(ggplot(), coeff = 2) +
   geom_histogram(aes(maf)) + 
   labs(x = "Minor Allele Frequency")
 
@@ -45,7 +45,7 @@ nbNA <- VGAM::rbetabinom.ab(m, size = n, shape1 = 0.6, shape2 = 20)
 
 sum(nbNA) / (n * m)
 
-bigstatsr:::MY_THEME(ggplot(), coeff = 1.8) +
+bigstatsr:::MY_THEME(ggplot(), coeff = 2) +
   geom_histogram(aes(nbNA), bins = 100) + 
   labs(x = "Number of missing values")
 
@@ -69,17 +69,17 @@ XNA[indNA] <- as.raw(3)
 GNA <- describe(XNA)
 ```
 
-## Imputation with our new method
+## Imputation with the new method based on XGBoost
 
 ```{r}
 system.time(
   infos <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, ncores = NCORES)
-) # Latest timings: 42 / 48 minutes
+) # Previous runs: 42 / 48 / 48 minutes
 ```
 
 ```{r}
 # Errors
-mean(XNA[indNA] != X[indNA]) # 4.7 / 4.8 %
+mean(XNA[indNA] != X[indNA]) # 4.7 / 4.8 / 4.8 %
 table(XNA[indNA], X[indNA])
 
 # Plot the estimation of the errors of imputation
@@ -98,7 +98,7 @@ ggsave("error-impute.png", width = 1000, height = 1000, scale = 1/75)
 
 
 
-## Imputation with BEAGLE
+## Imputation with BEAGLE (called via bigsnpr)
 
 ```{r}
 # Cleaning from previous runs 
@@ -119,7 +119,7 @@ system.time(
                                bedfile.in = "backingfiles/tmp.bed",
                                memory.max = 30,
                                ncores = NCORES)
-) # 14.6 / 14.2 hours
+) # 14.6 / 14.2 / 14.0 hours
 ```
 
 ```{r}
@@ -128,7 +128,7 @@ popres.beagle <- snp_readBed(bedfile2, backingfile = "tmp_impute") %>%
   snp_attach()
 X_beagle <- attach.BM(popres.beagle$genotypes)
 
-mean(X_beagle[indNA] != X[indNA]) # 3.1 / 4.8 %
+mean(X_beagle[indNA] != X[indNA]) # 3.1 / 4.8 / 4.8 %
 table(X_beagle[indNA], X[indNA])
 ```
 

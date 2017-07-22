@@ -49,7 +49,7 @@ bigstatsr:::MY_THEME(ggplot(), coeff = 2) +
   geom_histogram(aes(nbNA), bins = 100) + 
   labs(x = "Number of missing values")
 
-ggsave("hist-NA.png", width = 1300, height = 900, scale = 1/75)
+ggsave("figures/hist-NA.png", width = 1300, height = 900, scale = 1/75)
 ```
 
 ```{r}
@@ -68,6 +68,42 @@ XNA[indNA] <- as.raw(3)
 
 GNA <- describe(XNA)
 ```
+
+
+## Imputation with BEAGLE (called via bigsnpr)
+
+```{r}
+# Cleaning from previous runs 
+file.remove(list.files("backingfiles", pattern = "tmp*", full.names = TRUE))
+```
+
+```{r}
+# Write a new bedfile
+popresNA <- popres
+popresNA$genotypes <- GNA
+bedfile <- snp_writeBed(popresNA, bedfile = "backingfiles/tmp.bed")
+```
+
+```{r}
+system.time(
+  bedfile2 <- snp_beagleImpute(beagle.path = BEAGLE,
+                               plink.path = PLINK,
+                               bedfile.in = bedfile,
+                               memory.max = 30,
+                               ncores = NCORES)
+) # 14.6 / 14.2 / 14.0 hours
+```
+
+```{r}
+# Read bedfile into R and assess the errors of imputation
+popres.beagle <- snp_readBed(bedfile2, backingfile = "tmp_impute") %>%
+  snp_attach()
+X_beagle <- attach.BM(popres.beagle$genotypes)
+
+mean(X_beagle[indNA] != X[indNA]) # 3.1 / 4.8 / 4.8 %
+table(X_beagle[indNA], X[indNA])
+```
+
 
 ## Imputation with the new method based on XGBoost
 
@@ -93,42 +129,5 @@ data_frame(col = indNA[, 2], error = XNA[indNA] != X[indNA]) %>%
   geom_point(aes(nb_err, nb_err_est), alpha = 0.4) +
   labs(x = "Number of errors", y = "Estimated number of errors")
 
-ggsave("error-impute.png", width = 1000, height = 1000, scale = 1/75)
+ggsave("figures/error-impute.png", width = 1000, height = 1000, scale = 1/75)
 ```
-
-
-
-## Imputation with BEAGLE (called via bigsnpr)
-
-```{r}
-# Cleaning from previous runs 
-file.remove(list.files("backingfiles", pattern = "tmp*", full.names = TRUE))
-```
-
-```{r}
-# Write a new bedfile
-popresNA <- popres
-popresNA$genotypes <- GNA
-bedfile <- snp_writeBed(popresNA, bedfile = "backingfiles/tmp.bed")
-```
-
-```{r}
-system.time(
-  bedfile2 <- snp_beagleImpute(beagle.path = BEAGLE,
-                               plink.path = PLINK,
-                               bedfile.in = "backingfiles/tmp.bed",
-                               memory.max = 30,
-                               ncores = NCORES)
-) # 14.6 / 14.2 / 14.0 hours
-```
-
-```{r}
-# Read bedfile into R and assess the errors of imputation
-popres.beagle <- snp_readBed(bedfile2, backingfile = "tmp_impute") %>%
-  snp_attach()
-X_beagle <- attach.BM(popres.beagle$genotypes)
-
-mean(X_beagle[indNA] != X[indNA]) # 3.1 / 4.8 / 4.8 %
-table(X_beagle[indNA], X[indNA])
-```
-

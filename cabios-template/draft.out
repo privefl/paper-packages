@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Approach}{}% 2
+\BOOKMARK [1][-]{section.3}{Methods}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Memory-mapped files}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Data management, preprocessing and imputation}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Population structure and SNP thinning based on Linkage Disequilibrium}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{Association tests and Polygenic Risk Scores}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.5}{Data analyzed}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.6}{Reproducibility}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{Results}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Overview}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Application}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.3}{Method Comparison}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.4}{Automatic detection of long-range LD regions}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.5}{Imputation of missing values for genotyped SNPs}{section.4}% 15
+\BOOKMARK [1][-]{section.5}{Discussion}{}% 16
+\BOOKMARK [2][-]{subsection.5.1}{Long-range LD regions}{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.2}{Imputation}{section.5}% 18

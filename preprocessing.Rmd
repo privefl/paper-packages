@@ -90,6 +90,14 @@ big_counts(G, ind.col = 1:10)
 ```
 
 ```{r}
-{{G@code <- bigsnpr:::CODE_IMPUTE_PRED}}
+# You need to change the code of G
+G@code <- bigsnpr:::CODE_IMPUTE_PRED
 big_counts(G, ind.col = 1:10)
 ```
+
+```{r}
+# To make this permanent, you need to save (modify) the file on disk
+celiac$genotypes@code <- bigsnpr:::CODE_IMPUTE_PRED
+saveRDS(celiac, "backingfiles/celiacQC.rds")
+```
+

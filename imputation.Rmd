@@ -4,12 +4,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.align = "center", fig.width = 15)
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center", fig.width = 15, fig.asp = 0.7)
 ```
 
 ## Generate missing values
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(bigsnpr)
 library(dplyr)
 library(ggplot2)
@@ -91,7 +91,7 @@ system.time(
                                bedfile.in = bedfile,
                                memory.max = 30,
                                ncores = NCORES)
-) # 14.6 / 14.2 / 14.0 hours
+) # 14.6 / 14.8 /  hours
 ```
 
 ```{r}
@@ -100,7 +100,7 @@ popres.beagle <- snp_readBed(bedfile2, backingfile = "tmp_impute") %>%
   snp_attach()
 X_beagle <- attach.BM(popres.beagle$genotypes)
 
-mean(X_beagle[indNA] != X[indNA]) # 3.1 / 4.8 / 4.8 %
+mean(X_beagle[indNA] != X[indNA]) # 3.1 / 3.1 / %
 table(X_beagle[indNA], X[indNA])
 ```
 
@@ -110,12 +110,12 @@ table(X_beagle[indNA], X[indNA])
 ```{r}
 system.time(
   infos <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, ncores = NCORES)
-) # Previous runs: 42 / 48 / 48 minutes
+) # Previous runs: 42 / 47 /  minutes
 ```
 
-```{r}
+```{r, fig.asp=1}
 # Errors
-mean(XNA[indNA] != X[indNA]) # 4.7 / 4.8 / 4.8 %
+mean(XNA[indNA] != X[indNA]) # 4.7 / 4.8 /  %
 table(XNA[indNA], X[indNA])
 
 # Plot the estimation of the errors of imputation

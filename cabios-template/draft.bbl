@@ -16,6 +16,13 @@ Abraham, G. and Inouye, M. (2014).
 \newblock {Fast principal component analysis of large-scale genome-wide data}.
 \newblock {\em PLoS ONE\/}, {\bf 9}(4), e93766.
 
+\bibitem[Abraham {\em et~al.}(2012)Abraham, Kowalczyk, Zobel, and
+  Inouye]{Abraham2012}
+Abraham, G., Kowalczyk, A., Zobel, J., and Inouye, M. (2012).
+\newblock {SparSNP: Fast and memory-efficient analysis of all SNPs for
+  phenotype prediction}.
+\newblock {\em BMC Bioinformatics\/}, {\bf 13}(1), 88.
+
 \bibitem[Abraham {\em et~al.}(2016)Abraham, Qiu, and Inouye]{Abraham2016a}
 Abraham, G., Qiu, Y., and Inouye, M. (2016).
 \newblock {FlashPCA2 : principal component analysis of biobank-scale genotype
@@ -247,6 +254,13 @@ Vilhj{\'{a}}lmsson, B.~J., Yang, J., Finucane, H.~K., Gusev, A.,
   Scores}.
 \newblock {\em The American Journal of Human Genetics\/}, {\bf 97}(4),
   576--592.
+
+\bibitem[Wang {\em et~al.}(2012)Wang, Cai, Stothard, Moore, Goebel, Wang, and
+  Lin]{Wang2012}
+Wang, Y., Cai, Z., Stothard, P., Moore, S., Goebel, R., Wang, L., and Lin, G.
+  (2012).
+\newblock {Fast accurate missing SNP genotype local imputation.}
+\newblock {\em BMC research notes\/}, {\bf 5}(1), 404.
 
 \bibitem[Zeng and Breheny(2017)Zeng and Breheny]{Zeng2017}
 Zeng, Y. and Breheny, P. (2017).

@@ -1,0 +1,101 @@
+---
+title: "Imputation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
+                      fig.width = 15, fig.asp = 0.7)
+```
+
+## Form a larger dataset
+
+```{r}
+library(bigsnpr)
+
+celiac <- snp_attach("backingfiles/celiacQC.rds") 
+G <- celiac$genotypes
+
+system.time(
+  bedfile <- snp_writeBed(celiac, bedfile = "backingfiles/tmp_biobank.bed", 
+                          ind.row = sort(rep_len(rows_along(G), 500e3)),
+                          ind.col = sort(rep_len(cols_along(G), 1e6)))
+)
+
+# Size if the ".bed" file in GB
+file.size(bedfile) / 1024^3
+```
+
+## Make a GWAS on this dataset
+
+### Read the dataset in bigSNP format
+
+```{r}
+system.time(
+  rdsfile <- snp_readBed(bedfile, backingfile = "tmp_biobank")
+) # 1.6h
+```
+
+```{r}
+bkfile <- sub("\\.rds$", ".bk", rdsfile)
+# Size if the ".bk" file in GB
+file.size(bkfile) / 1024^3
+```
+
+```{r}
+system.time(
+  biobank <- snp_attach(rdsfile)
+)
+```
+
+### Clumping with MAF before PCA
+
+```{r}
+NCORES <- parallel::detectCores() / 2
+# Get SNPs in long-range LD regions
+system.time(
+  ind.excl <- snp_indLRLDR(biobank$map$chromosome,
+                           biobank$map$physical.pos)
+)
+# No parallelization for this huge dataset
+system.time(
+  ind.keep <- snp_clumping(biobank$genotypes, 
+                           infos.chr = biobank$map$chromosome,
+                           exclude = ind.excl,
+                           ncores = 1)
+) # 6.3h
+```
+
+### Computation of first 10 PCs
+
+```{r}
+# Parallelization is OK for PCA because 
+# only a subset of this huge dataset is used 
+system.time(
+  obj.svd <- big_randomSVD(biobank$genotypes, 
+                           fun.scaling = snp_scaleBinom(),
+                           ind.col = ind.keep,
+                           ncores = NCORES)
+) # 2.4h
+```
+
+### GWAS on a continuous variable
+
+```{r}
+# Simulate some continous phenotype
+y <- rnorm(nrow(biobank$genotypes))
+
+# No parallelization for this huge dataset
+system.time(
+  gwas <- big_univLinReg(biobank$genotypes,
+                         y.train = y,
+                         covar.train = obj.svd$u, 
+                         ncores = 1)
+) # 3h
+```
+
+```{r}
+snp_manhattan(gwas, biobank$map$chromosome, biobank$map$physical.pos,
+              npoints = 50e3, coeff = 2)
+```
+

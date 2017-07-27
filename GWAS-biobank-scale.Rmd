@@ -1,5 +1,5 @@
 ---
-title: "Imputation"
+title: "GWAS on a biobank-scale dataset"
 output: html_document
 ---
 
@@ -33,7 +33,7 @@ file.size(bedfile) / 1024^3
 ```{r}
 system.time(
   rdsfile <- snp_readBed(bedfile, backingfile = "tmp_biobank")
-) # 1.6h
+) # 1.6h / 1h
 ```
 
 ```{r}
@@ -63,7 +63,7 @@ system.time(
                            infos.chr = biobank$map$chromosome,
                            exclude = ind.excl,
                            ncores = 1)
-) # 6.3h
+) # 6.3h / 5.4h
 ```
 
 ### Computation of first 10 PCs
@@ -76,7 +76,7 @@ system.time(
                            fun.scaling = snp_scaleBinom(),
                            ind.col = ind.keep,
                            ncores = NCORES)
-) # 2.4h
+) # 2.4h / 1.9h
 ```
 
 ### GWAS on a continuous variable

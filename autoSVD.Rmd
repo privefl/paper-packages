@@ -1,0 +1,181 @@
+---
+title: "Auto SVD"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
+                      fig.width = 16, fig.asp = 0.7, error = TRUE)
+options(width = 85)
+```
+
+## Get the data
+
+```{r}
+suppressMessages({
+  library(bigsnpr)
+  library(tidyverse)
+  library(foreach)
+})
+
+celiac <- snp_attach("backingfiles/celiacQC.rds")
+G <- celiac$genotypes
+CHR <- celiac$map$chromosome
+POS <- celiac$map$physical.pos
+NCORES <- parallel::detectCores() / 2
+```
+
+## Without removing long-range LD regions
+
+```{r}
+system.time(
+  ind.keep <- snp_clumping(G, CHR, ncores = NCORES)
+)
+system.time(
+  obj.svd <- big_randomSVD(G, snp_scaleBinom(), 
+                           ind.col = ind.keep,
+                           ncores = NCORES)
+)
+```
+
+```{r, fig.asp=1}
+(plot_loadingsA <- plot(obj.svd, type = "loadings", loadings = 1:6, coeff = 1))
+```
+
+
+
+```{r}
+oneSNP <- which.max(abs(obj.svd$v[, 4]))
+(plot_scoresA <- plot(obj.svd, type = "scores", scores = 4:5, coeff = 2) +
+    aes(color = as.factor(attach.BM(G)[, ind.keep[oneSNP]])) + 
+    labs(title = NULL, color = "Genotype") +
+    theme(legend.position = c(0.15, 0.15)) +
+    guides(color = guide_legend(override.aes = list(size = 4))))
+```
+
+## Automatically removing long-range LD regions
+
+```{r}
+system.time(
+  test <- snp_autoSVD(G, CHR, POS, ncores = NCORES)
+)
+htmlTable::htmlTable(attr(test, "lrldr"), rnames = FALSE,
+                     css.table = "margin-top: 1em; 
+                                  margin-bottom: 1em;   
+                                  margin-left: auto;
+                                  margin-right: auto",
+                     css.cell = "padding: 5px 5px 5px 5px")
+```
+
+```{r, comment=""}
+attr(test, "lrldr") %>%
+  transmute(
+    Chromosome = Chr,
+    `Start (Mb)` = Start / 1e6,
+    `Stop (Mb)` = Stop / 1e6
+  ) %>%
+  xtable::xtable(digits = 1, caption = "", label = "", auto = TRUE)
+```
+
+
+```{r, fig.asp=1}
+(plot_loadingsB <- plot(test, type = "loadings", loadings = 1:6, coeff = 1))
+```
+
+```{r}
+# Get population from external files
+pop.files <- list.files(path = "../thesis-celiac/Dubois2010_data/",
+                        pattern = "cluster_*",
+                        full.names = TRUE)
+pop <- snp_getSampleInfos(celiac, pop.files)[[1]]
+pop.names <- c("Netherlands", "Italy", "UK1", "UK2", "Finland")
+
+(plot_scoresB <- plot(test, type = "scores", scores = 4:5, coeff = 2) +
+    aes(color = pop.names[pop]) + 
+    labs(title = NULL, color = "Population") +
+    theme(legend.position = c(0.2, 0.75)) +
+    guides(color = guide_legend(override.aes = list(size = 4))))
+```
+
+```{r}
+# save plots for paper
+p <- cowplot::plot_grid(plot_loadingsA, plot_loadingsB, align = "hv", 
+                        ncol = 2, labels = c("A", "B"), label_size = 30)
+ggsave("figures/loadings.png", width = 1620, height = 920, scale = 1/75)
+
+p <- cowplot::plot_grid(plot_scoresA, plot_scoresB, align = "hv", 
+                        ncol = 2, labels = c("A", "B"), label_size = 30)
+ggsave("figures/scores.png", width = 1640, height = 750, scale = 1/75)
+```
+
+```{r, fig.asp=0.7, fig.width=18}
+doParallel::registerDoParallel(NCORES)
+
+nBoot <- 500
+
+tribble(
+  ~name,                                               ~svd,
+  "When automatically removing long-range LD regions", test, 
+  "When keeping long-range LD regions",                obj.svd
+) %>%
+  apply(1, function(method) {
+    V <- method[["svd"]][["v"]]^2
+    m <- nrow(V)
+    foreach(ic = seq_len(nBoot), .combine = 'rbind') %dopar% {
+      ind <- sort(sample(m, replace = TRUE))
+      apply(V[ind, ], 2, ineq::Gini)
+    } %>%
+      reshape2::melt() %>%
+      cbind(method = method[["name"]])
+  }) %>%
+  Reduce(f = 'rbind') %>%
+  ggplot(aes(as.factor(Var2), value)) %>%
+  bigstatsr:::MY_THEME(coeff = 2) +
+  geom_hline(yintercept = 2 / pi, lty = 2) +
+  geom_boxplot(aes(color = method), lwd = 1.5) +
+  labs(y = "Gini coefficient of squared loadings", 
+       x = "Principal Component", color = "") +
+  theme(legend.position = "top") +
+  guides(color = guide_legend(ncol = 1)) 
+
+doParallel::stopImplicitCluster()
+
+ggsave("figures/gini.png", width = 1341, height = 865, scale = 1/75)
+```
+
+
+## Removing long-range LD regions based on predefined table
+
+```{r}
+ind.excl0 <- snp_indLRLDR(CHR, POS)
+ind.keep0 <- snp_clumping(G, CHR, exclude = ind.excl0, ncores = NCORES)
+obj.svd0 <- big_randomSVD(G, snp_scaleBinom(), 
+                          ind.col = ind.keep0,
+                          ncores = NCORES)
+```
+
+```{r}
+corr <- cor(test$u, obj.svd0$u)
+rownames(corr) <- colnames(corr) <- paste0("PC", 1:10)
+htmlTable::htmlTable(round(100 * corr, 2), 
+                     align = paste(c("|", rep("c", 10)), collapse = ""),
+                     css.table = "margin-top: 1em; 
+                                  margin-bottom: 1em;   
+                                  margin-left: auto;
+                                  margin-right: auto",
+                     css.cell = "padding: 5px 5px 5px 5px")
+```
+
+```{r}
+mean(diag(abs(corr)))
+```
+
+```{r, include=FALSE}
+library(gmailr)
+send_message(
+  mime(To = "florian.prive.21@gmail.com",
+       From = "florian.prive.21@gmail.com",
+       Subject = sprintf("Knitting of %s has finished",
+                         knitr::current_input()))
+)
+```

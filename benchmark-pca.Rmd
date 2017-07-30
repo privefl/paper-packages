@@ -8,7 +8,7 @@ In this notebook, we will benchmark three different methods for computing first 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
                       fig.width = 16, fig.asp = 0.7, error = TRUE)
-options(width = 80)
+options(width = 85)
 ```
 
 ## Get the data
@@ -37,8 +37,8 @@ ind.excl <- snp_indLRLDR(celiac$map$chromosome,
                          celiac$map$physical.pos)
 length(
   ind.keep <- snp_clumping(celiac$genotypes, celiac$map$chromosome,
-                         exclude = ind.excl, 
-                         ncores = NCORES)
+                           exclude = ind.excl, 
+                           ncores = NCORES)
 )
 ```
 
@@ -179,7 +179,10 @@ ggsave("figures/benchmark-pca.png", width = 1271, height = 945, scale = 1/75)
 ## Comparing precision of results
 
 ```{r}
-true <- fastpca("backingfiles/celiacQC_keep1", fast = FALSE)
+# SmartPCA
+smartpca <- fastpca("backingfiles/celiacQC_keep1", fast = FALSE)
+true <- smartpca[[2]]
+cat(sprintf("Standard PCA takes forever: %.2gh.", smartpca[[1]] / 3600))
 ```
 
 ```{r}
@@ -214,4 +217,14 @@ preci %>%
   coord_cartesian(ylim = c(0, 1))
 
 ggsave("figures/precision-pca.png", width = 1200, height = 900, scale = 1/75)
+```
+
+```{r, include=FALSE}
+library(gmailr)
+send_message(
+  mime(To = "florian.prive.21@gmail.com",
+       From = "florian.prive.21@gmail.com",
+       Subject = sprintf("Knitting of %s has finished",
+                         knitr::current_input()))
+)
 ```

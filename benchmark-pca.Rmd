@@ -1,0 +1,217 @@
+---
+title: "Benchmarking Principal Component Analysis software"
+output: html_document
+---
+
+In this notebook, we will benchmark three different methods for computing first Principal Components (PCs) of a large genotype matrix.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
+                      fig.width = 16, fig.asp = 0.7, error = TRUE)
+options(width = 80)
+```
+
+## Get the data
+
+```{r}
+suppressMessages({
+  # devtools::install_github("privefl/bigsnpr")
+  library(bigsnpr)   
+  # devtools::install_github("gabraham/flashpca", subdir = "flashpcaR")
+  library(flashpcaR)
+  # install.packages("tidyverse")
+  library(tidyverse)
+  # install.packages("glue")
+  library(glue)   
+})
+# FastPCA: https://data.broadinstitute.org/alkesgroup/EIGENSOFT/EIG-6.1.4.tar.gz
+smartpca <- "../EIG-6.1.4/bin/smartpca"
+   
+NCORES <- parallel::detectCores() / 2
+
+celiac <- snp_attach("backingfiles/celiacQC.rds")
+G <- celiac$genotypes
+
+# Thinning of SNPs
+ind.excl <- snp_indLRLDR(celiac$map$chromosome,
+                         celiac$map$physical.pos)
+length(
+  ind.keep <- snp_clumping(celiac$genotypes, celiac$map$chromosome,
+                         exclude = ind.excl, 
+                         ncores = NCORES)
+)
+```
+
+```{r, include=FALSE}
+# Some cleaning
+file.remove(list.files(path = "backingfiles/", 
+                       pattern = "celiacQC_keep*", 
+                       full.names = TRUE))
+```
+
+```{r}
+# Write new bed files keeping only a subset of SNPs and replicating individuals
+snp_writeBed(celiac, "backingfiles/celiacQC_keep1.bed",
+             ind.col = ind.keep)
+snp_readBed("backingfiles/celiacQC_keep1.bed", "celiacQC_keep1")
+
+snp_writeBed(celiac, "backingfiles/celiacQC_keep5.bed",
+             ind.row = rep(rows_along(G), each = 5),
+             ind.col = ind.keep)
+snp_readBed("backingfiles/celiacQC_keep5.bed", "celiacQC_keep5")
+
+snp_writeBed(celiac, "backingfiles/celiacQC_keep10.bed",
+             ind.row = rep(rows_along(G), each = 10),
+             ind.col = ind.keep)
+snp_readBed("backingfiles/celiacQC_keep10.bed", "celiacQC_keep10")
+```
+
+## Functions for computing PCs
+
+```{r}
+# FlashPCA2: devtools::install_github("gabraham/flashpca", subdir = "flashpcaR")
+flashpca <- function(prefix) {
+  time <- system.time(
+    svd <- flashpcaR::flashpca(prefix)
+  )
+  list(time[3], svd$vectors)
+}
+
+fastpca <- function(prefix, fast = TRUE) {
+  parfile <- glue("{prefix}.pca.par")
+  
+  ## Renaming so that Eigensoft can recognize file type
+  system(glue("cp {prefix}.bim {prefix}.pedsnp"))  
+  ## Renaming so that Eigensoft can recognize file type
+  system(glue("cp {prefix}.fam {prefix}.pedind"))  
+  writeLines(glue(
+    "genotypename: {prefix}.bed
+    snpname: {prefix}.pedsnp
+    indivname: {prefix}.pedind
+    evecoutname: {prefix}.pca.evec
+    evaloutname: {prefix}.eval
+    altnormstyle: NO
+    numoutevec: 10
+    numoutlieriter: 0
+    numoutlierevec: 10
+    outliersigmathresh: 6
+    qtmode: 0
+    fastmode: {as.integer(fast)}"
+  ), con = parfile)
+  ## PCA
+  time <- system.time(
+    system(glue("{smartpca} -p {parfile}"), ignore.stdout = TRUE)
+  ) 
+  ## removing temp files
+  system(glue("rm {prefix}.pedsnp")) 
+  system(glue("rm {prefix}.pedind"))
+  system(glue("rm {parfile}"))
+  
+  evec <- data.table::fread(glue("{prefix}.pca.evec"), 
+                            data.table = FALSE, skip = 1)
+  
+  list(time[3], as.matrix(evec[, 2:11]))
+}
+
+# bigstatsr::big_randomSVD
+mypca <- function(prefix, ncores = 1) {
+  rdsfile <- paste0(prefix, ".rds")
+  bigsnp <- snp_attach(rdsfile)
+  
+  time <- system.time(
+    svd <- big_randomSVD(bigsnp$genotypes, 
+                         fun.scaling = snp_scaleBinom(),
+                         ncores = ncores)
+  )
+  
+  list(time[3], svd$u)
+}
+```
+
+## Evaluating all models
+
+```{r}
+# Preparing a dataset for the results
+models <- tribble(
+  ~method,               ~fun,     ~params,
+  "FastPCA/EIGENSOFT",   fastpca,  list(),
+  "FlashPCA2",           flashpca, list(),
+  "bigstatsr - 1 core",  mypca,    list(),
+  "bigstatsr - 6 cores", mypca,    list(ncores = NCORES)
+) %>%
+  mutate(size = list(c(1, 5, 10))) %>%
+  unnest(size, .drop = FALSE) %>%
+  mutate(time = NA, pcs = list(NA))
+
+# Filling this data frame with time and PC scores for each method and dataset
+for (i in rows_along(models)) { 
+  size <- models$size[[i]]
+  prefix <- glue("backingfiles/celiacQC_keep{size}")
+  fun <- models$fun[[i]]
+  params <- c(prefix, models$params[[i]])
+  res <- do.call(fun, args = params)
+  models[["time"]][[i]] <- res[[1]]
+  models[["pcs"]][[i]] <- res[[2]]
+}
+```
+
+## Plotting benchmark
+
+```{r}
+(models <- mutate(models, size = size * nrow(G)))
+```
+
+```{r}
+models %>%
+  ggplot(aes(size / 1000, time / 60, color = method)) %>%
+  bigstatsr:::MY_THEME(coeff = 2.5) + 
+  geom_point(aes(shape = method), cex = 8) +
+  geom_line(aes(linetype = method), lwd = 3) + 
+  theme(legend.position = c(0.25, 0.75),
+        legend.key.width = unit(8, "line")) + 
+  labs(x = "Number of individuals (x1000)", y = "Time (in minutes)", 
+       color = "Methods:", linetype = "Methods:", shape = "Methods:")
+
+ggsave("figures/benchmark-pca.png", width = 1271, height = 945, scale = 1/75)
+```
+
+
+## Comparing precision of results
+
+```{r}
+true <- fastpca("backingfiles/celiacQC_keep1", fast = FALSE)
+```
+
+```{r}
+# Tidy and plot results
+(preci <- models %>% 
+  mutate(
+    size = as.factor(size),
+    cor = lapply(pcs, function(x) {
+      N <- nrow(x) / nrow(true)
+      if (N == 1) {
+        diag(cor(x, true))
+      } else {
+        diag(cor(x[c(TRUE, rep(FALSE, N - 1)), ], true))
+      }
+    }),
+    PC = list(as.factor(1:10))
+  ) %>%
+  select(-c(fun, params, time, pcs)))
+
+preci %>%
+  unnest(cor, PC) %>%
+  ggplot(aes(PC, cor^2, color = size, shape = size)) %>%
+  bigstatsr:::MY_THEME(coeff = 2) +
+  geom_point(cex = 5) +
+  geom_line(aes(group = size, linetype = size), lwd = 2) +
+  facet_wrap(~method, nrow = 2) +
+  labs(x = "Principal Component", y = "Squared correlation between estimated and true PCs",
+       color = "Number of individuals", shape = "Number of individuals", linetype = "Number of individuals") + 
+  theme(legend.position = c(0.8, 0.15),
+        strip.text.x = element_text(size = rel(3)),
+        legend.key.width = unit(4.5, "line")) + 
+  coord_cartesian(ylim = c(0, 1))
+
+ggsave("figures/precision-pca.png", width = 1200, height = 900, scale = 1/75)
+```

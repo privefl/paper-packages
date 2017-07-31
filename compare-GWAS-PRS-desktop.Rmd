@@ -298,6 +298,6 @@ bigstatsr:::MY_THEME(qplot(nb.pred, aucs, color = "A", log = "x",
 
 ```{r}
 # Cleaning
-file.remove(list.files(pattern = "plink*|*.txt"))
+file.remove(c(list.files(pattern = "plink*|*.txt"), "keep.in"))
 ```
 

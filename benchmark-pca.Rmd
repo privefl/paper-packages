@@ -27,7 +27,7 @@ suppressMessages({
 # FastPCA: https://data.broadinstitute.org/alkesgroup/EIGENSOFT/EIG-6.1.4.tar.gz
 smartpca <- "../EIG-6.1.4/bin/smartpca"
    
-NCORES <- parallel::detectCores() / 2
+NCORES <- nb_cores()
 
 celiac <- snp_attach("backingfiles/celiacQC.rds")
 G <- celiac$genotypes
@@ -53,17 +53,17 @@ file.remove(list.files(path = "backingfiles/",
 # Write new bed files keeping only a subset of SNPs and replicating individuals
 snp_writeBed(celiac, "backingfiles/celiacQC_keep1.bed",
              ind.col = ind.keep)
-snp_readBed("backingfiles/celiacQC_keep1.bed", "celiacQC_keep1")
+snp_readBed("backingfiles/celiacQC_keep1.bed", "backingfiles/celiacQC_keep1")
 
 snp_writeBed(celiac, "backingfiles/celiacQC_keep5.bed",
              ind.row = rep(rows_along(G), each = 5),
              ind.col = ind.keep)
-snp_readBed("backingfiles/celiacQC_keep5.bed", "celiacQC_keep5")
+snp_readBed("backingfiles/celiacQC_keep5.bed", "backingfiles/celiacQC_keep5")
 
 snp_writeBed(celiac, "backingfiles/celiacQC_keep10.bed",
              ind.row = rep(rows_along(G), each = 10),
              ind.col = ind.keep)
-snp_readBed("backingfiles/celiacQC_keep10.bed", "celiacQC_keep10")
+snp_readBed("backingfiles/celiacQC_keep10.bed", "backingfiles/celiacQC_keep10")
 ```
 
 ## Functions for computing PCs
@@ -218,6 +218,7 @@ preci %>%
 
 ggsave("figures/precision-pca.png", width = 1200, height = 900, scale = 1/75)
 ```
+
 
 ```{r, include=FALSE}
 library(gmailr)

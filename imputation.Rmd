@@ -15,9 +15,7 @@ library(bigsnpr)
 library(dplyr)
 library(ggplot2)
 
-NCORES <- parallel::detectCores() / 2
-PLINK <- "../plink_linux_x86_64/plink"
-BEAGLE <- "../../beagle.21Jan17.6cc.jar"
+NCORES <- nb_cores()
 ```
 
 ```{r}
@@ -63,33 +61,23 @@ indNA <- cbind(
 )
 
 # Fill a copy of the matrix with NAs (coded as 03)
-X <- attach.BM(G)
-XNA <- as.BM.code(deepcopy(X), code = bigsnpr:::CODE_IMPUTE_PRED)
-XNA[indNA] <- as.raw(3)
-
-GNA <- describe(XNA)
+GNA <- big_copy(G)
+GNA[indNA] <- as.raw(3)
 ```
 
 
 ## Imputation with BEAGLE (called via bigsnpr)
 
 ```{r}
-# Cleaning from previous runs 
-file.remove(list.files("backingfiles", pattern = "tmp*", full.names = TRUE))
-```
-
-```{r}
 # Write a new bedfile
 popresNA <- popres
 popresNA$genotypes <- GNA
-bedfile <- snp_writeBed(popresNA, bedfile = "backingfiles/tmp.bed")
+bedfile <- snp_writeBed(popresNA, bedfile = tempfile(fileext = ".bed"))
 ```
 
 ```{r}
 system.time(
-  bedfile2 <- snp_beagleImpute(beagle.path = BEAGLE,
-                               plink.path = PLINK,
-                               bedfile.in = bedfile,
+  bedfile2 <- snp_beagleImpute(bedfile.in = bedfile,
                                memory.max = 30,
                                ncores = NCORES)
 ) # 14.6 / 14.8 / 14.8 hours
@@ -97,12 +85,12 @@ system.time(
 
 ```{r}
 # Read bedfile into R and assess the errors of imputation
-popres.beagle <- snp_readBed(bedfile2, backingfile = "tmp_impute") %>%
+popres.beagle <- snp_readBed(bedfile2, backingfile = tempfile()) %>%
   snp_attach()
-X_beagle <- attach.BM(popres.beagle$genotypes)
+G.beagle <- popres.beagle$genotypes
 
-mean(X_beagle[indNA] != X[indNA]) # 3.1 / 3.1 / 3.1 %
-table(X_beagle[indNA], X[indNA])
+mean(G.beagle[indNA] != G[indNA]) # 3.1 / 3.1 / 3.1 %
+table(G.beagle[indNA], G[indNA])
 ```
 
 
@@ -110,17 +98,19 @@ table(X_beagle[indNA], X[indNA])
 
 ```{r}
 system.time(
-  infos <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, ncores = NCORES)
+  infos <- snp_fastImpute(GNA, infos.chr = popres$map$chromosome, 
+                          ncores = NCORES)
 ) # Previous runs: 42 / 47 / 47 minutes
 ```
 
 ```{r, fig.asp=1}
 # Errors
-mean(XNA[indNA] != X[indNA]) # 4.7 / 4.8 / 4.8 %
-table(XNA[indNA], X[indNA])
+GNA$code256 <- bigsnpr:::CODE_IMPUTE_PRED
+mean(GNA[indNA] != G[indNA]) # 4.7 / 4.8 / 4.8 %
+table(GNA[indNA], G[indNA])
 
 # Plot the estimation of the errors of imputation
-data_frame(col = indNA[, 2], error = XNA[indNA] != X[indNA]) %>%
+data_frame(col = indNA[, 2], error = GNA[indNA] != G[indNA]) %>%
   group_by(col) %>%
   summarise(nb_err = sum(error)) %>%
   mutate(nb_err_est = (infos$pError * infos$pNA * n)[col]) %>%

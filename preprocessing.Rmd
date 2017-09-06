@@ -12,11 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(bigsnpr)
 
-NCORES <- parallel::detectCores() / 2
-plink <- "../plink_linux_x86_64/plink"
+NCORES <- nb_cores()
 
 popresQC.bed <- snp_plinkQC(
-  plink.path = plink,
   prefix.in = "../POPRES_data/POPRES_allchr",
   file.type = "--file", # ped/map
   geno = 0.05,
@@ -26,12 +24,11 @@ popresQC.bed <- snp_plinkQC(
   autosome.only = TRUE
 )
 
-popresQC2.bed <- snp_plinkIBDQC(plink, popresQC.bed, ncores = NCORES)
+popresQC2.bed <- snp_plinkIBDQC(popresQC.bed, ncores = NCORES)
 ```
 
 ```{r}
 celiacQC.bed <- snp_plinkQC(
-  plink.path = plink,
   prefix.in = "../thesis-celiac/Dubois2010_data/FinnuncorrNLITUK1UK3hap300",
   geno = 0.05,
   mind = 0.05,
@@ -40,16 +37,16 @@ celiacQC.bed <- snp_plinkQC(
   autosome.only = TRUE
 )
 
-celiacQC2.bed <- snp_plinkIBDQC(plink, celiacQC.bed, ncores = NCORES)
+celiacQC2.bed <- snp_plinkIBDQC(celiacQC.bed, ncores = NCORES)
 ```
 
-## Transform PLINK files in big.matrix format
+## Transform PLINK files in bigSNP format
 
 ```{r}
-popresQC.rds <- snp_readBed(popresQC2.bed, "popresQC")
+popresQC.rds <- snp_readBed(popresQC2.bed, "backingfiles/popresQC")
 
 system.time(
-  celiacQC.rds <- snp_readBed(celiacQC2.bed, "celiacQC")
+  celiacQC.rds <- snp_readBed(celiacQC2.bed, "backingfiles/celiacQC")
 )
 ```
 
@@ -91,13 +88,23 @@ big_counts(G, ind.col = 1:10)
 
 ```{r}
 # You need to change the code of G
-G@code <- bigsnpr:::CODE_IMPUTE_PRED
+G$code256 <- bigsnpr:::CODE_IMPUTE_PRED
 big_counts(G, ind.col = 1:10)
 ```
 
 ```{r}
 # To make this permanent, you need to save (modify) the file on disk
-celiac$genotypes@code <- bigsnpr:::CODE_IMPUTE_PRED
+celiac$genotypes$code256 <- bigsnpr:::CODE_IMPUTE_PRED
 saveRDS(celiac, "backingfiles/celiacQC.rds")
 ```
 
+
+```{r, include=FALSE}
+library(gmailr)
+send_message(
+  mime(To = "florian.prive.21@gmail.com",
+       From = "florian.prive.21@gmail.com",
+       Subject = sprintf("Knitting of %s has finished",
+                         knitr::current_input()))
+)
+```

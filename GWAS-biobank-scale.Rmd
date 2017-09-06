@@ -32,7 +32,7 @@ file.size(bedfile) / 1024^3
 
 ```{r}
 system.time(
-  rdsfile <- snp_readBed(bedfile, backingfile = "tmp_biobank")
+  rdsfile <- snp_readBed(bedfile, backingfile = "backingfiles/tmp_biobank")
 ) # 1.6h / 1h
 ```
 
@@ -51,7 +51,7 @@ system.time(
 ### Clumping with MAF before PCA
 
 ```{r}
-NCORES <- parallel::detectCores() / 2
+NCORES <- nb_cores()
 # Get SNPs in long-range LD regions
 system.time(
   ind.excl <- snp_indLRLDR(biobank$map$chromosome,
@@ -99,3 +99,13 @@ snp_manhattan(gwas, biobank$map$chromosome, biobank$map$physical.pos,
               npoints = 50e3, coeff = 2)
 ```
 
+
+```{r, include=FALSE}
+library(gmailr)
+send_message(
+  mime(To = "florian.prive.21@gmail.com",
+       From = "florian.prive.21@gmail.com",
+       Subject = sprintf("Knitting of %s has finished",
+                         knitr::current_input()))
+)
+```

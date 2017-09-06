@@ -11,7 +11,7 @@ options(width = 85)
 
 ## Prerequisites
 
-Here, we suppose that the data have been pre-processed (quality control and imputation), and is available as a PLINK binary file containing 15,250 individuals and 281,122 SNPs.
+Here, we suppose that the data have been pre-processed (quality control and imputation), and is available as a PLINK binary file.
 
 ```{r}
 suppressMessages({
@@ -24,12 +24,12 @@ suppressMessages({
 })
 # FastPCA: https://data.broadinstitute.org/alkesgroup/EIGENSOFT/EIG-6.1.4.tar.gz
 smartpca <- "../EIG-6.1.4/bin/smartpca"
+plink <- download_plink()
 
 write.table2 <- bigsnpr:::write.table2
 fread2 <- function(...) data.table::fread(data.table = FALSE, ...)
 
-NCORES <- parallel::detectCores() / 2
-plink <- "../plink_linux_x86_64/plink"
+NCORES <- nb_cores()
 ```
 
 
@@ -173,7 +173,7 @@ system.time(
 )
 
 gwas2 <- fread2("plink.assoc.logistic")
-all.equal(gwas2$P, 10^predict(gwas)) 
+all.equal(gwas2$P, predict(gwas, log10 = FALSE)) 
 ```
 
 ## Example of Polygenic Risk Scores (PRS)
@@ -213,10 +213,10 @@ system.time(
 (thrs <- c(0, exp(seq(log(0.2), log(550), length.out = 50))))
 lpS <- -predict(gwas.train)
 system.time(
-  prs <- snp_PRS(G, betas = gwas.train$estim,
+  prs <- snp_PRS(G, betas.keep = gwas.train$estim[ind.keep],
                  ind.test = ind.test,
                  ind.keep = ind.keep,
-                 lpS = lpS, 
+                 lpS.keep = lpS[ind.keep], 
                  thr.list = thrs)
 )
 

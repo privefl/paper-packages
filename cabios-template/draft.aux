@@ -25,10 +25,10 @@
 \citation{Li2011}
 \citation{Purcell2007}
 \citation{Gogarten2012}
-\citation{Price2006}
-\citation{Galinsky2016}
 \citation{Abraham2014a}
 \citation{Abraham2016a}
+\citation{Galinsky2016}
+\citation{Price2006}
 \citation{Aulchenko2010}
 \citation{Marchini2010}
 \citation{Vilhjalmsson2015}
@@ -55,21 +55,21 @@
 \citation{Price2008}
 \citation{Luu2017}
 \citation{Zheng2012}
-\citation{Dudbridge2013}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Association tests and Polygenic Risk Scores}{8}{subsection.3.4}}
 \citation{Chatterjee2013}
+\citation{Dudbridge2013}
 \citation{Golan2014}
 \citation{Abraham2012}
+\citation{Friedman2010}
 \citation{Tibshirani1996}
 \citation{Zou2005}
-\citation{Friedman2010}
 \citation{Tibshirani2012}
 \citation{Zeng2017}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Association tests and Polygenic Risk Scores}{8}{subsection.3.4}}
 \citation{Dubois2010}
 \citation{Nelson2008}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Data analyzed}{9}{subsection.3.5}}
-\newlabel{sec:rep}{{3.5}{9}{Data analyzed}{subsection.3.5}{}}
 \citation{Purcell2007}
+\newlabel{sec:rep}{{3.5}{10}{Data analyzed}{subsection.3.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Reproducibility}{10}{subsection.3.6}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Results}{10}{section.4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Overview}{10}{subsection.4.1}}
@@ -89,14 +89,14 @@
 \newlabel{fig:svd}{{3}{17}{Functions available in packages bigstatsr and bigsnpr for the computation of a partial Singular Value Decomposition of a genotype array, with 3 different methods for thinning SNPs}{figure.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Principal Components of the celiac cohort genotype matrix produced by package bigstatsr.}}{18}{figure.4}}
 \newlabel{fig:pca}{{4}{18}{Principal Components of the celiac cohort genotype matrix produced by package bigstatsr}{figure.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Manhattan plot of the celiac disease cohort produced by package bigsnpr. Some SNPs in chromosome 6 have p-values smaller than the $10^{-10}$ threshold used for vizualisation purposes.}}{19}{figure.5}}
-\newlabel{fig:gwas}{{5}{19}{Manhattan plot of the celiac disease cohort produced by package bigsnpr. Some SNPs in chromosome 6 have p-values smaller than the $10^{-10}$ threshold used for vizualisation purposes}{figure.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a GWAS for the Celiac dataset. The first time is with a desktop computer and the second time is with a laptop computer.}}{20}{table.1}}
-\newlabel{tab:bench-gwas}{{1}{20}{Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a GWAS for the Celiac dataset. The first time is with a desktop computer and the second time is with a laptop computer}{table.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a PRS for the Celiac dataset. The first time is with a desktop computer and the second time is with a laptop computer.}}{21}{table.2}}
-\newlabel{tab:bench-prs}{{2}{21}{Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a PRS for the Celiac dataset. The first time is with a desktop computer and the second time is with a laptop computer}{table.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The computation corresponds to 10 Principal Components and 93,083 SNPs which remain after thinning.}}{22}{figure.6}}
-\newlabel{fig:bench-pca}{{6}{22}{Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The computation corresponds to 10 Principal Components and 93,083 SNPs which remain after thinning}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Manhattan plot of the celiac disease cohort produced by package bigsnpr. Some SNPs in chromosome 6 have p-values smaller than the $10^{-30}$ threshold used for vizualisation purposes.}}{19}{figure.5}}
+\newlabel{fig:gwas}{{5}{19}{Manhattan plot of the celiac disease cohort produced by package bigsnpr. Some SNPs in chromosome 6 have p-values smaller than the $10^{-30}$ threshold used for vizualisation purposes}{figure.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a GWAS for the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop computer (2 cores used and 8GB of RAM).}}{20}{table.1}}
+\newlabel{tab:bench-gwas}{{1}{20}{Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a GWAS for the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop computer (2 cores used and 8GB of RAM)}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a PRS for a training set of 80\% of the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop computer (2 cores used and 8GB of RAM).}}{21}{table.2}}
+\newlabel{tab:bench-prs}{{2}{21}{Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a PRS for a training set of 80\% of the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop computer (2 cores used and 8GB of RAM)}{table.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The first 10 principal components have been computed based on the 93,083 SNPs which remained after thinning.}}{22}{figure.6}}
+\newlabel{fig:bench-pca}{{6}{22}{Benchmark comparisons between randomized Partial Singular Value Decomposition available in FlashPCA2, FastPCA (fast mode of SmartPCA/EIGENSOFT) and package bigstatsr. It shows the computation time in minutes as a function of the number of samples. The first 10 principal components have been computed based on the 93,083 SNPs which remained after thinning}{figure.6}{}}
 \bibstyle{natbib}
 \bibdata{document}
 \bibcite{Abdellaoui2013}{{1}{2013}{{Abdellaoui {\em  et~al.}}}{{Abdellaoui, Hottenga, {De Knijff}, Nivard, Xiao, Scheet, Brooks, Ehli, Hu, Davies, Hudziak, Sullivan, {Van Beijsterveldt}, Willemsen, {De Geus}, Penninx, and Boomsma}}}
@@ -143,12 +143,12 @@
 \citation{Price2008}
 \citation{Price2008}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Long-range LD regions}{27}{subsection.5.1}}
-\@writefile{lot}{\contentsline {table}{\numberline {S1}{\ignorespaces Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in \cite  []{Price2008}.}}{27}{table.1}}
-\newlabel{tab:lrldr-popres}{{S1}{27}{Regions found by snp\_autoSVD for the POPRES dataset. In parentheses are regions referenced in \cite []{Price2008}}{table.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {S2}{\ignorespaces Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in \cite  []{Price2008}.}}{27}{table.2}}
-\newlabel{tab:lrldr-celiac}{{S2}{27}{Regions found by snp\_autoSVD for the celiac dataset. In parentheses are regions referenced in \cite []{Price2008}}{table.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {S3}{\ignorespaces Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{27}{table.3}}
-\newlabel{tab:pc-popres}{{S3}{27}{Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {S1}{\ignorespaces Regions found by snp\_autoSVD for the POPRES dataset. Numbers in parentheses correspond to regions referenced in \cite  {Price2008}.}}{27}{table.1}}
+\newlabel{tab:lrldr-popres}{{S1}{27}{Regions found by snp\_autoSVD for the POPRES dataset. Numbers in parentheses correspond to regions referenced in \cite {Price2008}}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {S2}{\ignorespaces Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{27}{table.2}}
+\newlabel{tab:pc-popres}{{S2}{27}{Correlation between scores of PCA for the POPRES dataset when automatically removing long-range LD regions and when removing them based on a predefined table}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {S3}{\ignorespaces Regions found by snp\_autoSVD for the celiac dataset. Numbers in parentheses correspond to regions referenced in \cite  {Price2008}.}}{27}{table.3}}
+\newlabel{tab:lrldr-celiac}{{S3}{27}{Regions found by snp\_autoSVD for the celiac dataset. Numbers in parentheses correspond to regions referenced in \cite {Price2008}}{table.3}{}}
 \citation{Chen2016}
 \citation{Chen2016}
 \@writefile{lot}{\contentsline {table}{\numberline {S4}{\ignorespaces Correlation between scores of PCA for the Celiac dataset when automatically removing long-range LD regions and when removing them based on a predefined table.}}{28}{table.4}}

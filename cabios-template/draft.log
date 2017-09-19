@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.10.19)  11 SEP 2017 11:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.10.19)  19 SEP 2017 14:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -547,7 +547,7 @@ Overfull \vbox (0.13474pt too high) has occurred while \output is active []
 
 
 [8] [9] [10] [11]
-Overfull \hbox (11.21178pt too wide) in paragraph at lines 189--193
+Overfull \hbox (11.21178pt too wide) in paragraph at lines 191--195
 []\T1/ptm/m/n/10.95 For the Celiac dataset, we fur-ther com-pared re-sults of P
 CA ob-tained when us-ing snp_autoSVD
  []
@@ -556,35 +556,35 @@ CA ob-tained when us-ing snp_autoSVD
 File: ../figures/conversion+QC.pdf Graphic file (type pdf)
 
 <use ../figures/conversion+QC.pdf>
-Package pdftex.def Info: ../figures/conversion+QC.pdf used on input line 214.
+Package pdftex.def Info: ../figures/conversion+QC.pdf used on input line 216.
 (pdftex.def)             Requested size: 472.03123pt x 389.62177pt.
  [15 <../figures/conversion+QC.pdf>]
 <../figures/imputation.pdf, id=348, 619.31375pt x 549.05125pt>
 File: ../figures/imputation.pdf Graphic file (type pdf)
 
 <use ../figures/imputation.pdf>
-Package pdftex.def Info: ../figures/imputation.pdf used on input line 220.
+Package pdftex.def Info: ../figures/imputation.pdf used on input line 222.
 (pdftex.def)             Requested size: 472.03123pt x 418.49808pt.
  [16 <../figures/imputation.pdf>]
 <../figures/svd.pdf, id=378, 772.8875pt x 745.78625pt>
 File: ../figures/svd.pdf Graphic file (type pdf)
 
 <use ../figures/svd.pdf>
-Package pdftex.def Info: ../figures/svd.pdf used on input line 226.
+Package pdftex.def Info: ../figures/svd.pdf used on input line 228.
 (pdftex.def)             Requested size: 472.03123pt x 455.47519pt.
  [17 <../figures/svd.pdf>]
 <../figures/celiac-pca.png, id=415, 1083.0864pt x 910.602pt>
 File: ../figures/celiac-pca.png Graphic file (type png)
 
 <use ../figures/celiac-pca.png>
-Package pdftex.def Info: ../figures/celiac-pca.png used on input line 232.
+Package pdftex.def Info: ../figures/celiac-pca.png used on input line 234.
 (pdftex.def)             Requested size: 472.03123pt x 396.85898pt.
  [18 <../figures/celiac-pca.png (PNG copy)>]
 <../figures/celiac-gwas-cut.png, id=420, 1421.31pt x 759.3168pt>
 File: ../figures/celiac-gwas-cut.png Graphic file (type png)
 
 <use ../figures/celiac-gwas-cut.png>
-Package pdftex.def Info: ../figures/celiac-gwas-cut.png used on input line 238.
+Package pdftex.def Info: ../figures/celiac-gwas-cut.png used on input line 240.
 
 (pdftex.def)             Requested size: 472.03123pt x 252.17422pt.
  [19 <../figures/celiac-gwas-cut.png (PNG copy)>] [20] [21]
@@ -592,14 +592,14 @@ Package pdftex.def Info: ../figures/celiac-gwas-cut.png used on input line 238.
 File: ../figures/benchmark-pca.png Graphic file (type png)
 
 <use ../figures/benchmark-pca.png>
-Package pdftex.def Info: ../figures/benchmark-pca.png used on input line 289.
+Package pdftex.def Info: ../figures/benchmark-pca.png used on input line 291.
 (pdftex.def)             Requested size: 472.03123pt x 350.95107pt.
 
 <../figures/precision-pca.png, id=437, 1156.32pt x 867.24pt>
 File: ../figures/precision-pca.png Graphic file (type png)
 
 <use ../figures/precision-pca.png>
-Package pdftex.def Info: ../figures/precision-pca.png used on input line 294.
+Package pdftex.def Info: ../figures/precision-pca.png used on input line 296.
 (pdftex.def)             Requested size: 472.03123pt x 354.02245pt.
 
 
@@ -613,25 +613,25 @@ ext4): destination with the same identifier (name{table.1}) has been already us
 ed, duplicate ignored
 <to be read again> 
                    \relax 
-l.330 ... regions referenced in \cite{Price2008}.}
+l.332 ... regions referenced in \cite{Price2008}.}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{table.1}) has been already used, duplicate
  ignored
 <to be read again> 
                    \relax 
-l.330 ... regions referenced in \cite{Price2008}.}
+l.332 ... regions referenced in \cite{Price2008}.}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{table.2}) has been already used, duplicate
  ignored
 <to be read again> 
                    \relax 
-l.354 ...moving them based on a predefined table.}
+l.356 ...moving them based on a predefined table.}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{table.2}) has been already used, duplicate
  ignored
 <to be read again> 
                    \relax 
-l.354 ...moving them based on a predefined table.}
+l.356 ...moving them based on a predefined table.}
                                                   
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -640,19 +640,19 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ../figures/scores.png Graphic file (type png)
 
 <use ../figures/scores.png>
-Package pdftex.def Info: ../figures/scores.png used on input line 402.
+Package pdftex.def Info: ../figures/scores.png used on input line 404.
 (pdftex.def)             Requested size: 472.03123pt x 215.8633pt.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.403 ...according to their population of origin.}
+l.405 ...according to their population of origin.}
                                                   \label{fig:scores}pdfTeX warn
 ing (ext4): destination with the same identifier (name{figure.1}) has been alre
 ady used, duplicate ignored
 <to be read again> 
                    \relax 
-l.403 ...according to their population of origin.}
+l.405 ...according to their population of origin.}
                                                   \label{fig:scores}
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -661,19 +661,19 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ../figures/loadings.png Graphic file (type png)
 
 <use ../figures/loadings.png>
-Package pdftex.def Info: ../figures/loadings.png used on input line 407.
+Package pdftex.def Info: ../figures/loadings.png used on input line 409.
 (pdftex.def)             Requested size: 472.03123pt x 268.06587pt.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.408 ...on and removal of long-range LD regions.}
+l.410 ...on and removal of long-range LD regions.}
                                                   \label{fig:loadings}pdfTeX wa
 rning (ext4): destination with the same identifier (name{figure.2}) has been al
 ready used, duplicate ignored
 <to be read again> 
                    \relax 
-l.408 ...on and removal of long-range LD regions.}
+l.410 ...on and removal of long-range LD regions.}
                                                   \label{fig:loadings}
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -682,19 +682,19 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ../figures/gini.png Graphic file (type png)
 
 <use ../figures/gini.png>
-Package pdftex.def Info: ../figures/gini.png used on input line 412.
+Package pdftex.def Info: ../figures/gini.png used on input line 414.
 (pdftex.def)             Requested size: 472.03123pt x 304.47809pt.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.413 ...theoretical value for gaussian loadings.}
+l.415 ...theoretical value for gaussian loadings.}
                                                   \label{fig:gini}pdfTeX warnin
 g (ext4): destination with the same identifier (name{figure.3}) has been alread
 y used, duplicate ignored
 <to be read again> 
                    \relax 
-l.413 ...theoretical value for gaussian loadings.}
+l.415 ...theoretical value for gaussian loadings.}
                                                   \label{fig:gini}
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -703,19 +703,19 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ../figures/hist-maf.png Graphic file (type png)
 
 <use ../figures/hist-maf.png>
-Package pdftex.def Info: ../figures/hist-maf.png used on input line 420.
+Package pdftex.def Info: ../figures/hist-maf.png used on input line 422.
 (pdftex.def)             Requested size: 472.03123pt x 326.78893pt.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.421 ...t used for comparing imputation methods.}
+l.423 ...t used for comparing imputation methods.}
                                                   \label{fig:maf}pdfTeX warning
  (ext4): destination with the same identifier (name{figure.4}) has been already
  used, duplicate ignored
 <to be read again> 
                    \relax 
-l.421 ...t used for comparing imputation methods.}
+l.423 ...t used for comparing imputation methods.}
                                                   \label{fig:maf}
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -724,19 +724,19 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ../figures/hist-NA.png Graphic file (type png)
 
 <use ../figures/hist-NA.png>
-Package pdftex.def Info: ../figures/hist-NA.png used on input line 425.
+Package pdftex.def Info: ../figures/hist-NA.png used on input line 427.
 (pdftex.def)             Requested size: 472.03123pt x 326.78893pt.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.426 ...ated using a Beta-binomial distribution.}
+l.428 ...ated using a Beta-binomial distribution.}
                                                   \label{fig:NA}pdfTeX warning 
 (ext4): destination with the same identifier (name{figure.5}) has been already 
 used, duplicate ignored
 <to be read again> 
                    \relax 
-l.426 ...ated using a Beta-binomial distribution.}
+l.428 ...ated using a Beta-binomial distribution.}
                                                   \label{fig:NA}
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -745,44 +745,40 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ../figures/error-impute.png Graphic file (type png)
 
 <use ../figures/error-impute.png>
-Package pdftex.def Info: ../figures/error-impute.png used on input line 430.
+Package pdftex.def Info: ../figures/error-impute.png used on input line 432.
 (pdftex.def)             Requested size: 472.03123pt x 472.0211pt.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.431 ...h is based on XGBoost \cite[]{Chen2016}.}
+l.433 ...h is based on XGBoost \cite[]{Chen2016}.}
                                                   \label{fig:error-impute}pdfTe
 X warning (ext4): destination with the same identifier (name{figure.6}) has bee
 n already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.431 ...h is based on XGBoost \cite[]{Chen2016}.}
+l.433 ...h is based on XGBoost \cite[]{Chen2016}.}
                                                   \label{fig:error-impute}
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 434.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 436.
 [28 <../figures/scores.png (PNG copy)>] [29 <../figures/loadings.png (PNG copy)
 >] [30 <../figures/gini.png (PNG copy)>] [31 <../figures/hist-maf.png>]
 [32 <../figures/hist-NA.png>] [33 <../figures/error-impute.png (PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 434.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 436.
 
 (./draft.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 434.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 434.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 436.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 436.
 Package rerunfilecheck Info: File `draft.out' has not changed.
 (rerunfilecheck)             Checksum: A5D0370EC396E27F2DCAB13BA961DA05;1227.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 434.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 436.
  ) 
 Here is how much of TeX's memory you used:
  8828 strings out of 493013
  126763 string characters out of 6133327
- 242563 words of memory out of 5000000
+ 242599 words of memory out of 5000000
  12068 multiletter control sequences out of 15000+600000
  63455 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -801,7 +797,7 @@ xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/201
 -dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/font
 s/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/ur
 w/times/utmri8a.pfb>
-Output written on draft.pdf (33 pages, 6852249 bytes).
+Output written on draft.pdf (33 pages, 6852430 bytes).
 PDF statistics:
  580 PDF objects out of 1000 (max. 8388607)
  488 compressed objects within 5 object streams

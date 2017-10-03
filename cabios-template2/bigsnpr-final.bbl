@@ -1,0 +1,281 @@
+\begin{thebibliography}{}
+
+\bibitem[Abdellaoui {\em et~al.}(2013)Abdellaoui, Hottenga, {De Knijff},
+  Nivard, Xiao, Scheet, Brooks, Ehli, Hu, Davies, Hudziak, Sullivan, {Van
+  Beijsterveldt}, Willemsen, {De Geus}, Penninx, and Boomsma]{Abdellaoui2013}
+Abdellaoui, A., Hottenga, J.-J., {De Knijff}, P., Nivard, M.~G., Xiao, X.,
+  Scheet, P., Brooks, A., Ehli, E.~A., Hu, Y., Davies, G.~E., Hudziak, J.~J.,
+  Sullivan, P.~F., {Van Beijsterveldt}, T., Willemsen, G., {De Geus}, E.~J.,
+  Penninx, B.~W., and Boomsma, D.~I. (2013).
+\newblock {Population structure, migration, and diversifying selection in the
+  Netherlands}.
+\newblock {\em European Journal of Human Genetics\/}, {\bf 21}(10), 1277--1285.
+
+\bibitem[Abraham and Inouye(2014)Abraham and Inouye]{Abraham2014a}
+Abraham, G. and Inouye, M. (2014).
+\newblock {Fast principal component analysis of large-scale genome-wide data}.
+\newblock {\em PLoS ONE\/}, {\bf 9}(4), e93766.
+
+\bibitem[Abraham {\em et~al.}(2012)Abraham, Kowalczyk, Zobel, and
+  Inouye]{Abraham2012}
+Abraham, G., Kowalczyk, A., Zobel, J., and Inouye, M. (2012).
+\newblock {SparSNP: Fast and memory-efficient analysis of all SNPs for
+  phenotype prediction}.
+\newblock {\em BMC Bioinformatics\/}, {\bf 13}(1), 88.
+
+\bibitem[Abraham {\em et~al.}(2016)Abraham, Qiu, and Inouye]{Abraham2016a}
+Abraham, G., Qiu, Y., and Inouye, M. (2016).
+\newblock {FlashPCA2 : principal component analysis of biobank-scale genotype
+  datasets}.
+\newblock {\em bioRxiv\/}, {\bf 12}, 2014--2017.
+
+\bibitem[Aulchenko {\em et~al.}(2010)Aulchenko, Struchalin, and van
+  Duijn]{Aulchenko2010}
+Aulchenko, Y.~S., Struchalin, M.~V., and van Duijn, C.~M. (2010).
+\newblock {ProbABEL package for genome-wide association analysis of imputed
+  data}.
+\newblock {\em BMC Bioinformatics\/}, {\bf 11}(1), 134.
+
+\bibitem[Browning and Browning(2008)Browning and Browning]{Browning2009}
+Browning, B.~L. and Browning, S.~R. (2008).
+\newblock {A unified approach to genotype imputation and haplotype-phase
+  inference for large data sets of trios and unrelated individuals}.
+\newblock {\em American Journal of Human Genetics\/}, {\bf 84}(2), 210--223.
+
+\bibitem[Chatterjee {\em et~al.}(2013)Chatterjee, Wheeler, Sampson, Hartge,
+  Chanock, and Park]{Chatterjee2013}
+Chatterjee, N., Wheeler, B., Sampson, J., Hartge, P., Chanock, S.~J., and Park,
+  J.-H. (2013).
+\newblock {Projecting the performance of risk prediction based on polygenic
+  analyses of genome-wide association studies.}
+\newblock {\em Nature genetics\/}, {\bf 45}(4), 400--5, 405e1--3.
+
+\bibitem[Chen and Guestrin(2016)Chen and Guestrin]{Chen2016}
+Chen, T. and Guestrin, C. (2016).
+\newblock {XGBoost : Reliable Large-scale Tree Boosting System}.
+\newblock {\em arXiv\/}, pages 1--6.
+
+\bibitem[Danecek {\em et~al.}(2011)Danecek, Auton, Abecasis, Albers, Banks,
+  DePristo, Handsaker, Lunter, Marth, Sherry, McVean, and Durbin]{Danecek2011}
+Danecek, P., Auton, A., Abecasis, G., Albers, C.~A., Banks, E., DePristo,
+  M.~A., Handsaker, R.~E., Lunter, G., Marth, G.~T., Sherry, S.~T., McVean, G.,
+  and Durbin, R. (2011).
+\newblock {The variant call format and VCFtools}.
+\newblock {\em Bioinformatics\/}, {\bf 27}(15), 2156--2158.
+
+\bibitem[Dubois {\em et~al.}(2010)Dubois, Trynka, Franke, Hunt, Romanos,
+  Curtotti, Zhernakova, Heap, Ad{\'{a}}ny, Aromaa, Bardella, van~den Berg,
+  Bockett, de~la Concha, Dema, Fehrmann, Fern{\'{a}}ndez-Arquero, Fiatal,
+  Grandone, Green, Groen, Gwilliam, Houwen, Hunt, Kaukinen, Kelleher,
+  Korponay-Szabo, Kurppa, MacMathuna, M{\"{a}}ki, Mazzilli, McCann, Mearin,
+  Mein, Mirza, Mistry, Mora, Morley, Mulder, Murray, N{\'{u}}{\~{n}}ez,
+  Oosterom, Ophoff, Polanco, Peltonen, Platteel, Rybak, Salomaa, Schweizer,
+  Sperandeo, Tack, Turner, Veldink, Verbeek, Weersma, Wolters, Urcelay,
+  Cukrowska, Greco, Neuhausen, McManus, Barisani, Deloukas, Barrett,
+  Saavalainen, Wijmenga, and van Heel]{Dubois2010}
+Dubois, P. C.~A., Trynka, G., Franke, L., Hunt, K.~A., Romanos, J., Curtotti,
+  A., Zhernakova, A., Heap, G. A.~R., Ad{\'{a}}ny, R., Aromaa, A., Bardella,
+  M.~T., van~den Berg, L.~H., Bockett, N.~A., de~la Concha, E.~G., Dema, B.,
+  Fehrmann, R. S.~N., Fern{\'{a}}ndez-Arquero, M., Fiatal, S., Grandone, E.,
+  Green, P.~M., Groen, H. J.~M., Gwilliam, R., Houwen, R. H.~J., Hunt, S.~E.,
+  Kaukinen, K., Kelleher, D., Korponay-Szabo, I., Kurppa, K., MacMathuna, P.,
+  M{\"{a}}ki, M., Mazzilli, M.~C., McCann, O.~T., Mearin, M.~L., Mein, C.~A.,
+  Mirza, M.~M., Mistry, V., Mora, B., Morley, K.~I., Mulder, C.~J., Murray,
+  J.~A., N{\'{u}}{\~{n}}ez, C., Oosterom, E., Ophoff, R.~A., Polanco, I.,
+  Peltonen, L., Platteel, M., Rybak, A., Salomaa, V., Schweizer, J.~J.,
+  Sperandeo, M.~P., Tack, G.~J., Turner, G., Veldink, J.~H., Verbeek, W. H.~M.,
+  Weersma, R.~K., Wolters, V.~M., Urcelay, E., Cukrowska, B., Greco, L.,
+  Neuhausen, S.~L., McManus, R., Barisani, D., Deloukas, P., Barrett, J.~C.,
+  Saavalainen, P., Wijmenga, C., and van Heel, D.~A. (2010).
+\newblock {Multiple common variants for celiac disease influencing immune gene
+  expression.}
+\newblock {\em Nature genetics\/}, {\bf 42}(4), 295--302.
+
+\bibitem[Dudbridge(2013)Dudbridge]{Dudbridge2013}
+Dudbridge, F. (2013).
+\newblock {Power and Predictive Accuracy of Polygenic Risk Scores}.
+\newblock {\em PLoS Genetics\/}, {\bf 9}(3).
+
+\bibitem[Eddelbuettel and Fran{\c{c}}ois(2011)Eddelbuettel and
+  Fran{\c{c}}ois]{Eddelbuettel2011}
+Eddelbuettel, D. and Fran{\c{c}}ois, R. (2011).
+\newblock {Rcpp : Seamless R and C ++ Integration}.
+\newblock {\em Journal Of Statistical Software\/}, {\bf 40}, 1--18.
+
+\bibitem[Euesden {\em et~al.}(2015)Euesden, Lewis, and O'Reilly]{Euesden2015}
+Euesden, J., Lewis, C.~M., and O'Reilly, P.~F. (2015).
+\newblock {PRSice: Polygenic Risk Score software}.
+\newblock {\em Bioinformatics\/}, {\bf 31}(9), 1466--1468.
+
+\bibitem[Friedman {\em et~al.}(2010)Friedman, Hastie, and
+  Tibshirani]{Friedman2010}
+Friedman, J., Hastie, T., and Tibshirani, R. (2010).
+\newblock {Regularization Paths for Generalized Linear Models via Coordinate
+  Descent.}
+\newblock {\em Journal of Statistical Software\/}, {\bf 33}(1), 1--22.
+
+\bibitem[Galinsky {\em et~al.}(2016)Galinsky, Bhatia, Loh, Georgiev, Mukherjee,
+  Patterson, and Price]{Galinsky2016}
+Galinsky, K.~J., Bhatia, G., Loh, P.~R., Georgiev, S., Mukherjee, S.,
+  Patterson, N.~J., and Price, A.~L. (2016).
+\newblock {Fast Principal-Component Analysis Reveals Convergent Evolution of
+  ADH1B in Europe and East Asia}.
+\newblock {\em American Journal of Human Genetics\/}, {\bf 98}(3), 456--472.
+
+\bibitem[Gogarten {\em et~al.}(2012)Gogarten, Bhangale, Conomos, Laurie,
+  McHugh, Painter, Zheng, Crosslin, Levine, Lumley, Nelson, Rice, Shen,
+  Swarnkar, Weir, and Laurie]{Gogarten2012}
+Gogarten, S.~M., Bhangale, T., Conomos, M.~P., Laurie, C.~A., McHugh, C.~P.,
+  Painter, I., Zheng, X., Crosslin, D.~R., Levine, D., Lumley, T., Nelson,
+  S.~C., Rice, K., Shen, J., Swarnkar, R., Weir, B.~S., and Laurie, C.~C.
+  (2012).
+\newblock {GWASTools: An R/Bioconductor package for quality control and
+  analysis of genome-wide association studies}.
+\newblock {\em Bioinformatics\/}, {\bf 28}(24), 3329--3331.
+
+\bibitem[Golan and Rosset(2014)Golan and Rosset]{Golan2014}
+Golan, D. and Rosset, S. (2014).
+\newblock {Effective genetic-risk prediction using mixed models}.
+\newblock {\em American Journal of Human Genetics\/}, {\bf 95}(4), 383--393.
+
+\bibitem[Kane {\em et~al.}(2013)Kane, Emerson, and Weston]{Kane2013}
+Kane, M.~J., Emerson, J.~W., and Weston, S. (2013).
+\newblock {Scalable Strategies for Computing with Massive Data}.
+\newblock {\em Journal of Statistical Software\/}, {\bf 55}(14), 1--19.
+
+\bibitem[Lehoucq and Sorensen(1996)Lehoucq and Sorensen]{Lehoucq1996}
+Lehoucq, R.~B. and Sorensen, D.~C. (1996).
+\newblock {Deflation Techniques for an Implicitly Restarted Arnoldi Iteration}.
+\newblock {\em SIAM Journal on Matrix Analysis and Applications\/}, {\bf
+  17}(4), 789--821.
+
+\bibitem[Li {\em et~al.}(2011)Li, Rakitsch, and Borgwardt]{Li2011}
+Li, L., Rakitsch, B., and Borgwardt, K. (2011).
+\newblock {ccSVM: correcting Support Vector Machines for confounding factors in
+  biological data classification.}
+\newblock {\em Bioinformatics (Oxford, England)\/}, {\bf 27}(13), i342--8.
+
+\bibitem[Luu {\em et~al.}(2017)Luu, Bazin, and Blum]{Luu2017}
+Luu, K., Bazin, E., and Blum, M. G.~B. (2017).
+\newblock {pcadapt: an R package to perform genome scans for selection based on
+  principal component analysis}.
+\newblock In {\em Molecular Ecology Resources\/}, volume~17, pages 67--77.
+
+\bibitem[Marchini and Howie(2010)Marchini and Howie]{Marchini2010}
+Marchini, J. and Howie, B. (2010).
+\newblock {Genotype imputation for genome-wide association studies}.
+\newblock {\em Nature Reviews. Genetics\/}, {\bf 11}(7), 499--511.
+
+\bibitem[Nelson {\em et~al.}(2008)Nelson, Bryc, King, Indap, Boyko, Novembre,
+  Briley, Maruyama, Waterworth, Waeber, Vollenweider, Oksenberg, Hauser,
+  Stirnadel, Kooner, Chambers, Jones, Mooser, Bustamante, Roses, Burns, Ehm,
+  and Lai]{Nelson2008}
+Nelson, M.~R., Bryc, K., King, K.~S., Indap, A., Boyko, A.~R., Novembre, J.,
+  Briley, L.~P., Maruyama, Y., Waterworth, D.~M., Waeber, G., Vollenweider, P.,
+  Oksenberg, J.~R., Hauser, S.~L., Stirnadel, H.~A., Kooner, J.~S., Chambers,
+  J.~C., Jones, B., Mooser, V., Bustamante, C.~D., Roses, A.~D., Burns, D.~K.,
+  Ehm, M.~G., and Lai, E.~H. (2008).
+\newblock {The Population Reference Sample, POPRES: A Resource for Population,
+  Disease, and Pharmacological Genetics Research}.
+\newblock {\em American Journal of Human Genetics\/}, {\bf 83}(3), 347--358.
+
+\bibitem[Nielsen and Mailund(2008)Nielsen and Mailund]{Nielsen2008}
+Nielsen, J. and Mailund, T. (2008).
+\newblock {SNPFile--a software library and file format for large scale
+  association mapping and population genetics studies.}
+\newblock {\em BMC bioinformatics\/}, {\bf 9}(1), 526.
+
+\bibitem[Palmer and Pe'er(2016)Palmer and Pe'er]{Palmer2016}
+Palmer, C. and Pe'er, I. (2016).
+\newblock {Bias Characterization in Probabilistic Genotype Data and Improved
+  Signal Detection with Multiple Imputation}.
+\newblock {\em PLoS Genetics\/}, {\bf 12}(6), e1006091.
+
+\bibitem[Price {\em et~al.}(2006)Price, Patterson, Plenge, Weinblatt, Shadick,
+  and Reich]{Price2006}
+Price, A.~L., Patterson, N.~J., Plenge, R.~M., Weinblatt, M.~E., Shadick,
+  N.~A., and Reich, D. (2006).
+\newblock {Principal components analysis corrects for stratification in
+  genome-wide association studies.}
+\newblock {\em Nature genetics\/}, {\bf 38}(8), 904--9.
+
+\bibitem[Price {\em et~al.}(2008)Price, Weale, Patterson, Myers, Need, Shianna,
+  Ge, Rotter, Torres, Taylor, Goldstein, and Reich]{Price2008}
+Price, A.~L., Weale, M.~E., Patterson, N., Myers, S.~R., Need, A.~C., Shianna,
+  K.~V., Ge, D., Rotter, J.~I., Torres, E., Taylor, K. D.~D., Goldstein, D.~B.,
+  and Reich, D. (2008).
+\newblock {Long-Range LD Can Confound Genome Scans in Admixed Populations}.
+
+\bibitem[Purcell {\em et~al.}(2007)Purcell, Neale, Todd-Brown, Thomas,
+  Ferreira, Bender, Maller, Sklar, de~Bakker, Daly, and Sham]{Purcell2007}
+Purcell, S., Neale, B., Todd-Brown, K., Thomas, L., Ferreira, M. A.~R., Bender,
+  D., Maller, J., Sklar, P., de~Bakker, P. I.~W., Daly, M.~J., and Sham, P.~C.
+  (2007).
+\newblock {PLINK: a tool set for whole-genome association and population-based
+  linkage analyses.}
+\newblock {\em American journal of human genetics\/}, {\bf 81}(3), 559--75.
+
+\bibitem[Qiu and Mei(2016)Qiu and Mei]{RSpectra2016}
+Qiu, Y. and Mei, J. (2016).
+\newblock {\em RSpectra: Solvers for Large Scale Eigenvalue and SVD
+  Problems\/}.
+\newblock R package version 0.12-0.
+
+\bibitem[{R Core Team}(2017){R Core Team}]{R2017}
+{R Core Team} (2017).
+\newblock {\em R: A Language and Environment for Statistical Computing\/}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+
+\bibitem[Tibshirani(1996)Tibshirani]{Tibshirani1996}
+Tibshirani, R. (1996).
+\newblock {Regression Selection and Shrinkage via the Lasso}.
+
+\bibitem[Tibshirani {\em et~al.}(2012)Tibshirani, Bien, Friedman, Hastie,
+  Simon, Taylor, and Tibshirani]{Tibshirani2012}
+Tibshirani, R., Bien, J., Friedman, J., Hastie, T., Simon, N., Taylor, J., and
+  Tibshirani, R.~J. (2012).
+\newblock {Strong rules for discarding predictors in lasso-type problems.}
+\newblock {\em Journal of the Royal Statistical Society. Series B, Statistical
+  methodology\/}, {\bf 74}(2), 245--266.
+
+\bibitem[Vilhj{\'{a}}lmsson {\em et~al.}(2015)Vilhj{\'{a}}lmsson, Yang,
+  Finucane, Gusev, Lindstr{\"{o}}m, Ripke, Genovese, Loh, Bhatia, Do, Hayeck,
+  Won, Kathiresan, Pato, Pato, Tamimi, Stahl, Zaitlen, Pasaniuc, Belbin, Kenny,
+  Schierup, {De Jager}, Patsopoulos, McCarroll, Daly, Purcell, Chasman, Neale,
+  Goddard, Visscher, Kraft, Patterson, and Price]{Vilhjalmsson2015}
+Vilhj{\'{a}}lmsson, B.~J., Yang, J., Finucane, H.~K., Gusev, A.,
+  Lindstr{\"{o}}m, S., Ripke, S., Genovese, G., Loh, P.-R., Bhatia, G., Do, R.,
+  Hayeck, T., Won, H.-H., Kathiresan, S., Pato, M., Pato, C., Tamimi, R.,
+  Stahl, E., Zaitlen, N., Pasaniuc, B., Belbin, G., Kenny, E.~E., Schierup,
+  M.~H., {De Jager}, P., Patsopoulos, N.~A., McCarroll, S., Daly, M., Purcell,
+  S., Chasman, D., Neale, B., Goddard, M., Visscher, P.~M., Kraft, P.,
+  Patterson, N., and Price, A.~L. (2015).
+\newblock {Modeling Linkage Disequilibrium Increases Accuracy of Polygenic Risk
+  Scores}.
+\newblock {\em The American Journal of Human Genetics\/}, {\bf 97}(4),
+  576--592.
+
+\bibitem[Wang {\em et~al.}(2012)Wang, Cai, Stothard, Moore, Goebel, Wang, and
+  Lin]{Wang2012}
+Wang, Y., Cai, Z., Stothard, P., Moore, S., Goebel, R., Wang, L., and Lin, G.
+  (2012).
+\newblock {Fast accurate missing SNP genotype local imputation.}
+\newblock {\em BMC research notes\/}, {\bf 5}(1), 404.
+
+\bibitem[Zeng and Breheny(2017)Zeng and Breheny]{Zeng2017}
+Zeng, Y. and Breheny, P. (2017).
+\newblock {The biglasso Package: A Memory- and Computation-Efficient Solver for
+  Lasso Model Fitting with Big Data in R}.
+
+\bibitem[Zheng {\em et~al.}(2012)Zheng, Yang, Zhu, and Elston]{Zheng2012}
+Zheng, G., Yang, Y., Zhu, X., and Elston, R.~C. (2012).
+\newblock {\em {Analysis of Genetic Association Studies}\/}.
+\newblock Statistics for Biology and Health. Springer US, Boston, MA.
+
+\bibitem[Zou and Hastie(2005)Zou and Hastie]{Zou2005}
+Zou, H. and Hastie, T. (2005).
+\newblock {Regularization and variable selection via the elastic net}.
+\newblock {\em Journal of the Royal Statistical Society. Series B: Statistical
+  Methodology\/}, {\bf 67}(2), 301--320.
+
+\end{thebibliography}

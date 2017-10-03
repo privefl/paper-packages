@@ -1,0 +1,15 @@
+\begin{thebibliography}{}
+
+\bibitem[Chen and Guestrin(2016)Chen and Guestrin]{Chen2016}
+Chen, T. and Guestrin, C. (2016).
+\newblock {XGBoost : Reliable Large-scale Tree Boosting System}.
+\newblock {\em arXiv\/}, pages 1--6.
+
+\bibitem[Price {\em et~al.}(2008)Price, Weale, Patterson, Myers, Need, Shianna,
+  Ge, Rotter, Torres, Taylor, Goldstein, and Reich]{Price2008}
+Price, A.~L., Weale, M.~E., Patterson, N., Myers, S.~R., Need, A.~C., Shianna,
+  K.~V., Ge, D., Rotter, J.~I., Torres, E., Taylor, K. D.~D., Goldstein, D.~B.,
+  and Reich, D. (2008).
+\newblock {Long-Range LD Can Confound Genome Scans in Admixed Populations}.
+
+\end{thebibliography}

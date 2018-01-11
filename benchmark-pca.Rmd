@@ -17,7 +17,7 @@ options(width = 85)
 suppressMessages({
   # devtools::install_github("privefl/bigsnpr")
   library(bigsnpr)   
-  # devtools::install_github("gabraham/flashpca", subdir = "flashpcaR")
+  # devtools::install_github("gabraham/flashpca/flashpcaR")
   library(flashpcaR)
   # install.packages("tidyverse")
   library(tidyverse)
@@ -26,6 +26,9 @@ suppressMessages({
 })
 # FastPCA: https://data.broadinstitute.org/alkesgroup/EIGENSOFT/EIG-6.1.4.tar.gz
 smartpca <- "../EIG-6.1.4/bin/smartpca"
+
+# PLINK 2.0: https://www.cog-genomics.org/plink/2.0/
+plink2 <- "./plink2"
    
 NCORES <- nb_cores()
 
@@ -113,6 +116,20 @@ fastpca <- function(prefix, fast = TRUE) {
   list(time[3], as.matrix(evec[, 2:11]))
 }
 
+plink2pca <- function(prefix, fast = TRUE, parallel = TRUE) {
+  
+  time <- system.time(
+    system(glue("{plink2} --bfile {prefix} --out {prefix}",
+                " --pca {`if`(fast, 'approx 10', '10')}",
+                "{`if`(!parallel, ' --threads 1', '')}"))
+  )
+  
+  evec <- data.table::fread(glue("{prefix}.eigenvec"), 
+                            select = paste0("PC", 1:10))
+  
+  list(time[3], as.matrix(evec))
+}
+
 # bigstatsr::big_randomSVD
 mypca <- function(prefix, ncores = 1) {
   rdsfile <- paste0(prefix, ".rds")
@@ -133,11 +150,13 @@ mypca <- function(prefix, ncores = 1) {
 ```{r}
 # Preparing a dataset for the results
 models <- tribble(
-  ~method,               ~fun,     ~params,
-  "FastPCA/EIGENSOFT",   fastpca,  list(),
-  "FlashPCA2",           flashpca, list(),
-  "bigstatsr - 1 core",  mypca,    list(),
-  "bigstatsr - 6 cores", mypca,    list(ncores = NCORES)
+  ~method,               ~fun,       ~params,
+  "FastPCA/EIGENSOFT",    fastpca,   list(),
+  "FlashPCA2",            flashpca,  list(),
+  "bigstatsr - 1 core",   mypca,     list(),
+  "bigstatsr - 6 cores",  mypca,     list(ncores = NCORES),
+  "PLINK 2.0 - 1 core",   plink2pca, list(parallel = FALSE),
+  "PLINK 2.0 - 11 cores", plink2pca, list()
 ) %>%
   mutate(size = list(c(1, 5, 10))) %>%
   unnest(size, .drop = FALSE) %>%
@@ -151,7 +170,7 @@ for (i in rows_along(models)) {
   params <- c(prefix, models$params[[i]])
   res <- do.call(fun, args = params)
   models[["time"]][[i]] <- res[[1]]
-  models[["pcs"]][[i]] <- res[[2]]
+  models[["pcs"]][[i]]  <- res[[2]]
 }
 ```
 
@@ -179,28 +198,34 @@ ggsave("figures/benchmark-pca.png", width = 1271, height = 945, scale = 1/75)
 ## Comparing precision of results
 
 ```{r}
-# SmartPCA
-smartpca <- fastpca("backingfiles/celiacQC_keep1", fast = FALSE)
-true <- smartpca[[2]]
-cat(sprintf("Standard PCA takes forever: %.2gh.", smartpca[[1]] / 3600))
+# Exact PCA
+true <- plink2pca("backingfiles/celiacQC_keep1", fast = FALSE)[[2]]
 ```
 
 ```{r}
 # Tidy and plot results
-(preci <- models %>% 
-  mutate(
-    size = as.factor(size),
-    cor = lapply(pcs, function(x) {
-      N <- nrow(x) / nrow(true)
-      if (N == 1) {
-        diag(cor(x, true))
-      } else {
-        diag(cor(x[c(TRUE, rep(FALSE, N - 1)), ], true))
-      }
-    }),
-    PC = list(as.factor(1:10))
-  ) %>%
-  select(-c(fun, params, time, pcs)))
+(preci <- models %>%
+    mutate(method = forcats::fct_recode(
+      method, 
+      `bigstatsr` = "bigstatsr - 1 core",
+      `PLINK 2.0` = "PLINK 2.0 - 1 core", 
+      NULL = "bigstatsr - 6 cores", 
+      NULL = "PLINK 2.0 - 11 cores"
+    )) %>%
+    filter(!is.na(method)) %>%
+    mutate(
+      size = as.factor(size),
+      cor = lapply(pcs, function(x) {
+        N <- nrow(x) / nrow(true)
+        if (N == 1) {
+          diag(cor(x, true))
+        } else {
+          diag(cor(x[c(TRUE, rep(FALSE, N - 1)), ], true))
+        }
+      }),
+      PC = list(as.factor(1:10))
+    ) %>%
+    select(-c(fun, params, time, pcs)))
 
 preci %>%
   unnest(cor, PC) %>%
@@ -211,7 +236,7 @@ preci %>%
   facet_wrap(~method, nrow = 2) +
   labs(x = "Principal Component", y = "Squared correlation between estimated and true PCs",
        color = "Number of individuals", shape = "Number of individuals", linetype = "Number of individuals") + 
-  theme(legend.position = c(0.8, 0.15),
+  theme(legend.position = c(0.25, 0.15),
         strip.text.x = element_text(size = rel(3)),
         legend.key.width = unit(4.5, "line")) + 
   coord_cartesian(ylim = c(0, 1))
@@ -220,7 +245,7 @@ ggsave("figures/precision-pca.png", width = 1200, height = 900, scale = 1/75)
 ```
 
 
-```{r, include=FALSE}
+```{r, include=FALSE, error=TRUE}
 library(gmailr)
 send_message(
   mime(To = "florian.prive.21@gmail.com",

@@ -30,15 +30,19 @@ lpS <- -log10(pval)
 
 path <- "PRSice_linux.bugfix.20171116/"
 prefix <- "../thesis-celiac/Dubois2010_data/FinnuncorrNLITUK1UK3hap300_QC_norel"
+tmp <- tempfile()
 
 system.time(
   system(glue::glue("Rscript {path}PRSice.R",
                     " --prsice {path}PRSice_linux",
                     " --base sumstats-height.txt",
                     " --target {prefix}",
+                    " --out {tmp}",
                     " --thread 6",
                     # " --full",
                     # " --fastscore",
+                    # " --cov-file covar.txt",
+                    # " --quantile 20",
                     " --pvalue p",
                     " --stat b",
                     " --beta T",
@@ -55,6 +59,7 @@ thrs <- -log10(data.table::fread("PRSice.prsice", select = "Threshold")[["Thresh
 
 system.time(
   ind.keep <- snp_clumping(G, infos.chr = CHR, S = lpS, thr.r2 = 0.1,
+                           ind.row = which(y01 == 0),
                            size = 250, is.size.in.bp = TRUE, infos.pos = POS,
                            exclude = which(is.na(same) | (lpS < min(thrs))), 
                            ncores = NCORES)
@@ -76,12 +81,25 @@ y01 <- celiac$fam$affection - 1
 # })
 cor.pval2 <- prs %>%
   big_copy() %>%
-  big_univLogReg(y01) %>%
+  big_univLogReg(y01, covar.train = obj.svd$u) %>%
   predict(log10 = FALSE)
 # plot(cor.pval, cor.pval2)
 # all.equal(cor.pval, cor.pval2)
 all.equal(cor.pval2, cor.pval0)
 plot(cor.pval2, cor.pval0, log = "xy"); abline(0, 1, col = "red")
-
+cor(log10(cor.pval2), log10(cor.pval0))
 
 CHR[lpS > 10]
+plot(10^(-thrs), -log10(cor.pval2))
+
+
+# obj.svd <- snp_autoSVD(G, CHR, POS, ncores = NCORES)
+# write.table(cbind(celiac$fam[, 1:2], obj.svd$u), "covar.txt", 
+#             quote = FALSE, row.names = FALSE)
+# cor.pval2 <- prs %>%
+#   big_copy() %>%
+#   big_univLogReg(y01, covar.train = obj.svd$u) %>%
+#   predict(log10 = FALSE)
+# plot(10^(-thrs), -log10(cor.pval2))
+
+summary(glm(y01 ~ prs[, 1] + obj.svd$u, family = "binomial"))

@@ -37,3 +37,15 @@ hapgen2_x86_64*
 CEU.0908.impute.files.tgz
 HM3.tgz
 HM3
+Reviews_08_01_2017.docx
+comments.docx
+plink*
+PRSice*
+cabios-template2/*.pdf
+cabios-template2/*.aux
+cabios-template2/*.bbl
+cabios-template2/*.blg
+cabios-template2/*.log
+cabios-template2/*.synctex.gz
+lib
+sumstats-height.txt

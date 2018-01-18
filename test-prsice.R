@@ -29,16 +29,17 @@ lpS <- -log10(pval)
 
 
 path <- "PRSice_linux.bugfix.20171116/"
-prefix <- "../thesis-celiac/Dubois2010_data/FinnuncorrNLITUK1UK3hap300_QC_norel"
+# prefix <- "../Dubois2010_data/FinnuncorrNLITUK1UK3hap300_QC_norel"
 tmp <- tempfile()
+snp_writeBed(celiac, paste0(tmp, ".bed"))
 
 system.time(
   system(glue::glue("Rscript {path}PRSice.R",
                     " --prsice {path}PRSice_linux",
                     " --base sumstats-height.txt",
-                    " --target {prefix}",
+                    " --target {tmp}",
                     " --out {tmp}",
-                    " --thread 6",
+                    " --thread {NCORES}",
                     # " --full",
                     # " --fastscore",
                     # " --cov-file covar.txt",
@@ -51,19 +52,18 @@ system.time(
                     " --binary-target T"))
 )
 
-
-cor.pval0 <- data.table::fread("PRSice.prsice", select = "P")[["P"]] 
+file.prsice <- paste0(tmp, ".prsice")
+cor.pval0 <- data.table::fread(file.prsice, select = "P")[["P"]]
 
 library(dplyr)
-thrs <- -log10(data.table::fread("PRSice.prsice", select = "Threshold")[["Threshold"]])
+thrs <- -log10(data.table::fread(file.prsice, select = "Threshold")[["Threshold"]])
 
 system.time(
   ind.keep <- snp_clumping(G, infos.chr = CHR, S = lpS, thr.r2 = 0.1,
-                           ind.row = which(y01 == 0),
                            size = 250, is.size.in.bp = TRUE, infos.pos = POS,
                            exclude = which(is.na(same) | (lpS < min(thrs))), 
                            ncores = NCORES)
-)
+) # 2 -> 19, 1 -> 29
 
 length(ind.keep)  # PRSice: 52946
 system.time(
@@ -79,9 +79,10 @@ y01 <- celiac$fam$affection - 1
 # cor.pval <- apply(prs, 2, function(scores) {
 #   summary(glm(y01 ~ scores, family = "binomial"))$coefficients[2, 4]
 # })
+library(magrittr)
 cor.pval2 <- prs %>%
   big_copy() %>%
-  big_univLogReg(y01, covar.train = obj.svd$u) %>%
+  big_univLogReg(y01) %>%
   predict(log10 = FALSE)
 # plot(cor.pval, cor.pval2)
 # all.equal(cor.pval, cor.pval2)
@@ -102,4 +103,4 @@ plot(10^(-thrs), -log10(cor.pval2))
 #   predict(log10 = FALSE)
 # plot(10^(-thrs), -log10(cor.pval2))
 
-summary(glm(y01 ~ prs[, 1] + obj.svd$u, family = "binomial"))
+# summary(glm(y01 ~ prs[, 1] + obj.svd$u, family = "binomial"))

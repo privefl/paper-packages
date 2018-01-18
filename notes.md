@@ -1,6 +1,5 @@
-- Donner un exemple que le clumping est meilleur que le pruning (pe moins dense? pas des humains?)
 - rajouter dans le texte comment on compare l'erreur d'imputation (results)
 - ajouter un r2
 - tester l'imputation par dosage (et regarder le threshold ensuite)
-- PLINK 2.0 alpha -> rouge
 - Make an big_apply vignette
+- changer PLINK 1.9 un peu partout

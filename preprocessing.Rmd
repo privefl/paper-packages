@@ -4,7 +4,9 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
+                      fig.width = 16, fig.asp = 0.7)
+options(width = 90)
 ```
 
 ## Quality Control
@@ -12,10 +14,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(bigsnpr)
 
+plink <- download_plink()
 NCORES <- nb_cores()
 
 popresQC.bed <- snp_plinkQC(
-  prefix.in = "../POPRES_data/POPRES_allchr",
+  prefix.in = "data/POPRES_allchr",
+  plink.path = plink,
   file.type = "--file", # ped/map
   geno = 0.05,
   mind = 0.05,
@@ -24,12 +28,17 @@ popresQC.bed <- snp_plinkQC(
   autosome.only = TRUE
 )
 
-popresQC2.bed <- snp_plinkIBDQC(popresQC.bed, ncores = NCORES)
+popresQC2.bed <- snp_plinkIBDQC(
+  bedfile.in = popresQC.bed, 
+  plink.path = plink, 
+  ncores = NCORES
+)
 ```
 
 ```{r}
 celiacQC.bed <- snp_plinkQC(
-  prefix.in = "../thesis-celiac/Dubois2010_data/FinnuncorrNLITUK1UK3hap300",
+  prefix.in = "data/FinnuncorrNLITUK1UK3hap300",
+  plink.path = plink,
   geno = 0.05,
   mind = 0.05,
   maf = 0.05,
@@ -37,13 +46,19 @@ celiacQC.bed <- snp_plinkQC(
   autosome.only = TRUE
 )
 
-celiacQC2.bed <- snp_plinkIBDQC(celiacQC.bed, ncores = NCORES)
+celiacQC2.bed <- snp_plinkIBDQC(
+  celiacQC.bed, 
+  plink.path = plink,
+  ncores = NCORES
+)
 ```
 
 ## Transform PLINK files in bigSNP format
 
 ```{r}
-popresQC.rds <- snp_readBed(popresQC2.bed, "backingfiles/popresQC")
+system.time(
+  popresQC.rds <- snp_readBed(popresQC2.bed, "backingfiles/popresQC")
+)
 
 system.time(
   celiacQC.rds <- snp_readBed(celiacQC2.bed, "backingfiles/celiacQC")
@@ -53,9 +68,7 @@ system.time(
 ## Imputation of Celiac dataset
 
 ```{r}
-system.time(
-  celiac <- snp_attach(celiacQC.rds)
-)
+celiac <- snp_attach(celiacQC.rds)
 str(celiac, max.level = 2)
 ```
 
@@ -81,6 +94,9 @@ idc <- lapply(seq_along(pvals), function(i) {
 legend("topright", legend = pvals, title = "p(NA & Error)",
        col = colvals, lty = 1, lwd = 2)
 ```
+
+The above plot is useful for post-processing the imputation.
+No SNP (point) is above the red line. This means that no SNP has more than 1% of error. 
 
 ```{r}
 big_counts(G, ind.col = 1:10)

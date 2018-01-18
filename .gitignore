@@ -49,3 +49,5 @@ cabios-template2/*.log
 cabios-template2/*.synctex.gz
 lib
 sumstats-height.txt
+EIG-6.1.4*
+data

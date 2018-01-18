@@ -44,7 +44,10 @@ Genome-wide datasets produced for association studies have dramatically increase
 
 Consider first the basic tools necessary to perform a standard genome-wide analysis. Conversions between standard file formats has become a field by itself with several tools such as VCFtools, BCFtools and PLINK, available either independently or incorporated within large framework \cite[]{Danecek2011,Li2011,Purcell2007}. Similarly, quality control software for genome-wide analysis have been developed such as PLINK and the Bioconductor package GWASTools \cite[]{Gogarten2012}.
 There are also several software for the computation of principal components (PCs) of genotypes, commonly performed to account for population stratification in association studies, including EIGENSOFT (SmartPCA and FastPCA) and FlashPCA \cite[]{Abraham2014a,Abraham2016a,Galinsky2016,Price2006}.
-Then, implementation of GWAS analyses also depends on the data format and model analyzed. For example, the software ProbABEL \cite[]{Aulchenko2010} or SNPTEST \cite[]{Marchini2010} can handle dosage data, while PLINK version 1.9 is limited to best guess genotypes because of its input file format. Note that PLINK 2.0 will completely handle this type of data, but is still in the alpha stage of development. 
+Then, implementation of GWAS analyses also depends on the data format and model analyzed. For example, the software ProbABEL \cite[]{Aulchenko2010} or SNPTEST \cite[]{Marchini2010} can handle dosage data, 
+{\color{red}
+while PLINK version 1.9 is limited to best guess genotypes because of its input file format. Note that PLINK 2.0 will completely handle this type of data, but is still in the alpha stage of development. 
+}
 Finally, there exists a range of tools for Polygenic Risk Scores (PRSs) such as LDpred \cite[]{Vilhjalmsson2015} and PRSice \cite[]{Euesden2015}, which provide prediction for quantitative traits or disease risks based on multiple genetic variants. As a result, one has to make extensive bash/perl/R/python scripts to link these software together and convert between multiple file formats, involving many file manipulations and conversions. Overall, this might be a barrier to data exploration. 
 %Overall, this means that researchers are usually restricted on how they can manipulate and analyse the data they have access to.
 
@@ -112,7 +115,7 @@ SNP thinning improves ascertainment of population structure with PCA \cite[]{Abd
 First, pruning, the most naive approach, is an algorithm that sequentially scan the genome for nearby SNPs in LD, performing pairwise thinning based on a given threshold of correlation.
 A variant of pruning is clumping. 
 {\color{red}
-Clumping is useful if a statistic is available to sort the SNPs by importance. Clumping is usually used to post-process results of a GWAS in order to keep only the most significant SNP per region of the genome. For PCA, the thinning procedure should remain unsupervised (one must not use any phenotype) and we therefore propose to use the minor allele frequency (MAF) as the statistic of importance. Note that this choice does not come out of nowhere because in the pruning algorithm of PLINK, when two nearby SNPs are correlated, only the one with the higher MAF is kept. Yet, in some worst-case scenario, the pruning algorithm can leave regions of the genome without any representative SNP at all so we advise to always use clumping instead of pruning, using the MAF as the statistic of importance, which is the default in function snp\_clumping ([SUPMAT]).
+Clumping is useful if a statistic is available to sort the SNPs by importance. Clumping is usually used to post-process results of a GWAS in order to keep only the most significant SNP per region of the genome. For PCA, the thinning procedure should remain unsupervised (one must not use any phenotype) and we therefore propose to use the minor allele frequency (MAF) as the statistic of importance. Note that this choice does not come out of nowhere because in the pruning algorithm of PLINK, when two nearby SNPs are correlated, only the one with the higher MAF is kept. Yet, in some worst-case scenario, the pruning algorithm can leave regions of the genome without any representative SNP at all ([SUPMAT]). So, we suggest to always use clumping instead of pruning, using the MAF as the statistic of importance, which is the default in function snp\_clumping . In practice, we tested the effect of using clumping instead of pruning for the thinning step before PCA and the results were very similar.
 }
 
 As mentioned above, the third approach that is generally combined with pruning or clumping consists of removing SNPs in long-range LD regions \cite[]{Price2008}. Long-range LD regions for the human genome are available as an online table that our packages can use to discard SNPs in long-range LD regions while computing PCs\footnote{https://goo.gl/8TngVE}. 
@@ -139,11 +142,14 @@ The second approach does not use univariate summary statistics but instead train
 \subsection{Data analyzed}
 
 In this paper, two datasets are analyzed: the celiac disease cohort and the POPRES datasets \cite[]{Dubois2010,Nelson2008}. The Celiac dataset is composed of 15,283 individuals of European ancestry genotyped on 295,453 SNPs. The POPRES dataset is composed of 1385 individuals of European ancestry genotyped on 447,245 SNPs.
-For computation times comparison, we replicated individuals in the Celiac dataset 5 and 10 times in order to increase sample size while keeping the same {\color{red} eigen decomposition (up to a constant) and pairwise SNP correlation} as the original dataset. To assess scalibility of our algorithms for a biobank-scale genotype dataset, we formed another dataset of 500,000 individuals and 1 million SNPs, also through replication of the Celiac dataset. \label{sec:rep}
+For computation times comparison, we replicated individuals in the Celiac dataset 5 and 10 times in order to increase sample size while keeping the same {\color{red} eigen decomposition (up to a constant) and pairwise SNP correlations} as the original dataset. To assess scalibility of our algorithms for a biobank-scale genotype dataset, we formed another dataset of 500,000 individuals and 1 million SNPs, also through replication of the Celiac dataset. \label{sec:rep}
 
 \subsection{Reproducibility}
 
-All the code used in this paper along with results, such as execution times and figures, are available as HTML R notebooks in the Supplementary Data.
+All the code used in this paper along with results, such as execution times and figures, are available as HTML R notebooks in the Supplementary Data. 
+{\color{red}
+We now provide some open-access data of domestic dogs so that users can test our code and functions on a moderate size dataset with 4342 samples and 145,596 SNPs ([SUPMAT]) \cite[]{hayward2016complex}.
+}
 
 \end{methods}
 

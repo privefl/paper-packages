@@ -1,0 +1,185 @@
+---
+title: "Genome-Wide Association Study"
+subtitle: "Comparing bigstatsr and bigsnpr with PLINK and EIGENSOFT"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
+                      fig.width = 16, fig.asp = 0.7)
+options(width = 90)
+```
+
+## Prerequisites
+
+Here, we suppose that the data have been pre-processed (quality control and imputation), and is available as a bk/rds (format of packages bigstatsr and bigsnpr). See the notebook "preprocessing".
+
+```{r}
+suppressMessages({
+  # devtools::install_github("privefl/bigsnpr")
+  library(bigsnpr)   
+  # install.packages("glue")
+  library(glue)      
+  # install.packages("ggplot2")
+  library(tidyverse)
+})
+# download.file("https://data.broadinstitute.org/alkesgroup/EIGENSOFT/EIG-6.1.4.tar.gz",
+#               destfile = "EIG-6.1.4.tar.gz")
+# untar("EIG-6.1.4.tar.gz")
+smartpca <- "EIG-6.1.4/bin/smartpca"
+plink <- download_plink()
+
+write.table2 <- bigsnpr:::write.table2
+fread2 <- function(...) data.table::fread(data.table = FALSE, ...)
+
+NCORES <- nb_cores()
+```
+
+
+## Example of GWAS
+
+We will show how to perform a GWAS with or without our packages. For the sake of reproducibility and simplicity, everything will be done inside R (via possible system calls to command-line software).
+
+
+### With bigstastr and bigsnpr
+
+```{r}
+system.time(
+  celiac <- snp_attach("backingfiles/celiacQC.rds")
+)
+G <- celiac$genotypes
+CHR <- celiac$map$chromosome
+POS <- celiac$map$physical.pos
+
+# Pruning
+system.time(
+  ind.keep <- snp_pruning(G, infos.chr = CHR, 
+                          exclude = snp_indLRLDR(CHR, POS),
+                          ncores = NCORES)
+)
+```
+
+```{r}
+# PCA
+system.time(
+  obj.svd <- big_randomSVD(G, snp_scaleBinom(), 
+                           ind.col = ind.keep,
+                           ncores = NCORES)
+)
+
+# Get population from external files
+pop.files <- list.files(path = "../thesis-celiac/Dubois2010_data/",
+                        pattern = "cluster_*",
+                        full.names = TRUE)
+pop <- snp_getSampleInfos(celiac, pop.files)[[1]]
+pop.names <- c("Netherlands", "Italy", "UK1", "UK2", "Finland")
+# Plot PC1 & PC2
+plot(obj.svd, type = "scores", coeff = 2) +
+  aes(color = pop.names[pop]) +
+  labs(color = "Population", title = NULL) +
+  theme(legend.position = c(0.2, 0.75)) + 
+  guides(colour = guide_legend(override.aes = list(size = 4)))
+
+ggsave("figures/celiac-pca.png", width = 1124, height = 945, scale = 1/90)
+```
+
+```{r}
+# GWAS
+system.time(
+  gwas <- big_univLogReg(G, y01.train = celiac$fam$affection - 1,
+                         covar.train = obj.svd$u, ncores = NCORES)
+)
+
+labels <- 1:22; labels[c(15, 17, 19, 21)] <- ""
+snp_manhattan(snp_gc(gwas), CHR, POS, 
+              coeff = 2, labels = labels) + 
+  geom_hline(yintercept = -log10(5e-8), col = "red") +
+  labs(title = NULL) +
+  coord_cartesian(ylim = c(0, 30))
+
+ggsave("figures/celiac-gwas-cut.png", width = 1475, height = 788, scale = 1/90)
+```
+
+
+### With PLINK and EIGENSOFT (and R)
+
+```{r}
+# Pruning
+prefix_bed <- tempfile()
+snp_writeBed(celiac, bedfile = paste0(prefix_bed, ".bed"))
+write.table2(LD.wiki34, "LRLDR.txt")
+system.time(
+  system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}",
+              " --exclude LRLDR.txt --range",
+              " --indep-pairwise 50 1 0.2",
+              " --threads {NCORES}"))
+)
+
+ind.keep2 <- match(scan(paste0(prefix_bed, ".prune.in"), what = ""), celiac$map$marker.ID)
+length(intersect(ind.keep, ind.keep2)) / length(union(ind.keep, ind.keep2))
+
+# Make a pruned dataset
+write.table2(as.data.frame(celiac$map[ind.keep, "marker.ID"]), "keep.in")
+system.time(
+  system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}",
+              " --extract keep.in --make-bed",
+              " --threads {NCORES}"))
+)
+
+# PCA with EIGENSOFT
+fastpca <- function(prefix, fast = TRUE) {
+  
+  parfile <- glue("{prefix}.pca.par")
+  
+  ## Renaming so that Eigensoft can recognize file type
+  system(glue("cp {prefix}.bim {prefix}.pedsnp"))  
+  ## Renaming so that Eigensoft can recognize file type
+  system(glue("cp {prefix}.fam {prefix}.pedind"))  
+  writeLines(glue(
+    "genotypename: {prefix}.bed
+    snpname: {prefix}.pedsnp
+    indivname: {prefix}.pedind
+    evecoutname: {prefix}.pca.evec
+    evaloutname: {prefix}.eval
+    altnormstyle: NO
+    numoutevec: 10
+    numoutlieriter: 0
+    numoutlierevec: 10
+    outliersigmathresh: 6
+    qtmode: 0
+    fastmode: {as.integer(fast)}"
+  ), con = parfile)
+  ## PCA
+  system(glue("{smartpca} -p {parfile}"), ignore.stdout = TRUE)
+  ## removing temp files
+  system(glue("rm {prefix}.pedsnp")) 
+  system(glue("rm {prefix}.pedind"))
+  system(glue("rm {parfile}"))
+  
+  evec <- data.table::fread(glue("{prefix}.pca.evec"), 
+                            data.table = FALSE, skip = 1)
+  
+  as.matrix(evec[, 2:11])
+}
+
+system.time(
+  obj.svd2 <- fastpca(tmp)
+)
+
+# FastPCA is not accurate enough (see Notebook "benchmark-pca")
+round(100 * cor(obj.svd2, obj.svd$u), 1)
+```
+
+```{r}
+# GWAS
+write.table2(cbind(celiac$fam[, 1:2], obj.svd$u), "covar.txt")
+system.time(
+  system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}",
+              " --logistic hide-covar",
+              " --covar covar.txt",
+              " --threads {NCORES}"))
+)
+
+gwas2 <- fread2(paste0(prefix_bed, ".assoc.logistic"))
+all.equal(gwas2$P, predict(gwas, log10 = FALSE)) 
+```

@@ -35,7 +35,7 @@ system.time(
   rds <- snp_readBed("backingfiles/cornell_canine_QC.bed", "backingfiles/dogs")
 )
 system.time(
-  bigsnp <- snp_attach(rds)
+  bigsnp <- snp_attach("backingfiles/dogs.rds")
 )
 ```
 
@@ -44,7 +44,4 @@ G <- bigsnp$genotypes
 sum(big_counts(G)[4, ])
 ```
 
-```{r}
-
-```
 

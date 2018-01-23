@@ -142,6 +142,13 @@ PC1 & 100.0 & -0.1 & -0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
 \caption{Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost \cite[]{Chen2016}.}\label{fig:error-impute}
 \end{figure}
 
+\begin{figure}[htpb]
+\centerline{\includegraphics[width=\textwidth]{post-imputation}}
+\caption{For each SNP (point), the estimated proportion of imputation errors ($\hat{p}(error~|~NA)$) vs the proportion of missing values ($p(NA) > 0.001$).
+These results come from the imputation of the Celiac dataset with function snp\_fastImpute (Supplementary notebook ``preprocessing''). 
+Colored curves are representing the estimated proportion of wrong genotypes per SNP ($\hat{p}(error~\&~NA) = \hat{p}(error~|~NA) \cdot p(NA)$). This particularly shows that no SNP has more than 1\% of wrong genotypes, allowing for no post-processing.}\label{fig:post-imputation}
+\end{figure}
+
 \vspace*{-12pt}
 
 \bibliographystyle{natbib}

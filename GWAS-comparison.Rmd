@@ -7,7 +7,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
                       fig.width = 16, fig.asp = 0.7)
-options(width = 90)
+options(width = 110)
 ```
 
 ## Prerequisites
@@ -84,15 +84,16 @@ ggsave("figures/celiac-pca.png", width = 1124, height = 945, scale = 1/90)
 ```
 
 ```{r}
-# GWAS
+# GWAS (logistic)
+y01 <- celiac$fam$affection - 1
 system.time(
-  gwas <- big_univLogReg(G, y01.train = celiac$fam$affection - 1,
-                         covar.train = obj.svd$u, ncores = NCORES)
+  gwas <- big_univLogReg(G, y01.train = y01, covar.train = obj.svd$u, 
+                         ncores = NCORES)
 )
+gwas.pval <- predict(gwas, log10 = FALSE)
 
 labels <- 1:22; labels[c(15, 17, 19, 21)] <- ""
-snp_manhattan(snp_gc(gwas), CHR, POS, 
-              coeff = 2, labels = labels) + 
+snp_manhattan(snp_gc(gwas), CHR, POS, coeff = 2, labels = labels) + 
   geom_hline(yintercept = -log10(5e-8), col = "red") +
   labs(title = NULL) +
   coord_cartesian(ylim = c(0, 30))
@@ -100,14 +101,30 @@ snp_manhattan(snp_gc(gwas), CHR, POS,
 ggsave("figures/celiac-gwas-cut.png", width = 1475, height = 788, scale = 1/90)
 ```
 
+```{r}
+# GWAS (linear)
+y <- rnorm(nrow(G))
+system.time(
+  gwas.lin <- big_univLinReg(G, y.train = y, covar.train = obj.svd$u, 
+                             ncores = NCORES)
+)
+gwas.lin.pval <- predict(gwas.lin, log10 = FALSE) 
+```
+
 
 ### With PLINK and EIGENSOFT (and R)
 
 ```{r}
-# Pruning
+# Write temporary PLINK files
 prefix_bed <- tempfile()
-snp_writeBed(celiac, bedfile = paste0(prefix_bed, ".bed"))
+bed <- snp_writeBed(snp_attach("backingfiles/celiacQC.rds"), 
+                    bedfile = paste0(prefix_bed, ".bed"))
+```
+
+```{r}
+# Long-range LD regions
 write.table2(LD.wiki34, "LRLDR.txt")
+# Pruning
 system.time(
   system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}",
               " --exclude LRLDR.txt --range",
@@ -116,16 +133,21 @@ system.time(
 )
 
 ind.keep2 <- match(scan(paste0(prefix_bed, ".prune.in"), what = ""), celiac$map$marker.ID)
+# Same sets of SNPs
 length(intersect(ind.keep, ind.keep2)) / length(union(ind.keep, ind.keep2))
+```
 
+```{r}
 # Make a pruned dataset
 write.table2(as.data.frame(celiac$map[ind.keep, "marker.ID"]), "keep.in")
 system.time(
-  system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}",
+  system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}_sub",
               " --extract keep.in --make-bed",
               " --threads {NCORES}"))
 )
+```
 
+```{r}
 # PCA with EIGENSOFT
 fastpca <- function(prefix, fast = TRUE) {
   
@@ -163,10 +185,10 @@ fastpca <- function(prefix, fast = TRUE) {
 }
 
 system.time(
-  obj.svd2 <- fastpca(tmp)
+  obj.svd2 <- fastpca(paste0(prefix_bed, "_sub"))
 )
 
-# FastPCA is not accurate enough (see Notebook "benchmark-pca")
+# FastPCA is not accurate enough (see notebook "benchmark-pca")
 round(100 * cor(obj.svd2, obj.svd$u), 1)
 ```
 
@@ -181,5 +203,122 @@ system.time(
 )
 
 gwas2 <- fread2(paste0(prefix_bed, ".assoc.logistic"))
-all.equal(gwas2$P, predict(gwas, log10 = FALSE)) 
+all.equal(gwas2$P, gwas.pval) 
+```
+
+```{r}
+# GWAS (linear)
+write.table2(cbind(celiac$fam[, 1:2], y), "qt.phe")
+system.time(
+  system(glue("{plink} --bfile {prefix_bed} --out {prefix_bed}",
+              " --linear hide-covar --pheno qt.phe",
+              " --covar covar.txt",
+              " --threads {NCORES}"))
+)
+
+gwas2.lin <- fread2(paste0(prefix_bed, ".assoc.linear"))
+all.equal(gwas2.lin$P, gwas.lin.pval) 
+```
+
+### With R packages SNPRelate and GWASTools
+
+```{r}
+library(SNPRelate)
+
+# Transform files in our format and attach them
+system.time(
+  gds <- snpgdsBED2GDS(bed.fn = bed, 
+                       fam.fn = sub("\\.bed$", ".fam", bed),
+                       bim.fn = sub("\\.bed$", ".bim", bed),
+                       out.gdsfn = paste0(prefix_bed, ".gds"),
+                       cvt.snpid = "int")
+)
+```
+
+```{r}
+system.time(
+  genofile <- snpgdsOpen(gds)
+)
+```
+
+```{r}
+# Pruning
+system.time(
+  snpset <- snpgdsLDpruning(genofile, method = "corr", ld.threshold = 0.2,
+                            num.thread = NCORES)
+) # 38 sec
+ind.keep3 <- unlist(snpset, use.names = FALSE)
+# Not the same set of SNPs (because not the same algo)
+length(intersect(ind.keep3, ind.keep2)) / length(union(ind.keep3, ind.keep2))
+```
+
+```{r}
+snpgdsClose(genofile)
+# Need sudo yum install netcdf-devel.x86_64
+library(GWASTools)
+(genofile <- GdsGenotypeReader(gds, YchromCode=24L, XYchromCode=25L))
+scanID <- getScanID(genofile)
+# sex <- getVariable(genofile, "sample.annot/sex")
+phenotype <- getVariable(genofile, "sample.annot/phenotype")
+covar <- obj.svd$u
+colnames(covar) <- paste0("PC", 1:10)
+scanAnnot <- ScanAnnotationDataFrame(
+  cbind.data.frame(scanID, pheno = phenotype - 1, covar)
+)
+snpID <- getSnpID(genofile)
+chromosome <- getChromosome(genofile)
+position <- getPosition(genofile)
+alleleA <- getAlleleA(genofile)
+alleleB <- getAlleleB(genofile)
+snpAnnot <- SnpAnnotationDataFrame(data.frame(
+  snpID = seq_along(snpID), chromosome, position, rsID = snpID,
+  alleleA, alleleB, stringsAsFactors=FALSE),
+  YchromCode=24L, XYchromCode=25L)
+
+genoData <- GenotypeData(genofile, scanAnnot = scanAnnot, snpAnnot = snpAnnot)
+
+# Logistic regression
+system.time(
+  gwas3 <- assocRegression(genoData, "pheno", 
+                           model.type = "logistic",
+                           covar = colnames(covar),
+                           snpEnd = 10e3)
+) * ncol(G) / 10e3
+all.equal(gwas3$Wald.pval, gwas.pval[rows_along(gwas3)]) 
+# assocRegression uses glm() so that it is the most precise
+# We are very precise and PLINK is the least precise
+true.pval <- sapply(1:9, function(j) {
+  summary(glm(y01 ~ G[, j] + covar, family = "binomial"))$coefficients[2, 4]
+})
+rbind(`true (glm)` = true.pval, bigstatsr = gwas.pval[1:9], 
+      plink = gwas2$P[1:9], gwastools = gwas3$Wald.pval[1:9])
+```
+
+```{r}
+scanAnnot <- ScanAnnotationDataFrame(
+  cbind.data.frame(scanID, pheno = y, covar)
+)
+
+genoData <- GenotypeData(genofile, scanAnnot = scanAnnot, snpAnnot = snpAnnot)
+
+# Linear regression
+system.time(
+  gwas3.lin <- assocRegression(genoData, "pheno", 
+                               model.type = "linear",
+                               covar = colnames(covar),
+                               snpEnd = 10e3)
+) * ncol(G) / 10e3
+all.equal(gwas3.lin$Wald.pval, gwas.lin.pval[rows_along(gwas3)]) 
+
+# Again, we are very precise
+true.lin.pval <- sapply(1:9, function(j) {
+  summary(lm(y ~ G[, j] + covar))$coefficients[2, 4]
+})
+rbind(`true (lm)` = true.lin.pval, bigstatsr = gwas.lin.pval[1:9], 
+      plink = gwas2.lin$P[1:9], gwastools = gwas3.lin$Wald.pval[1:9])
+```
+
+```{r}
+# Cleaning
+file.remove(c("LRLDR.txt", "covar.txt", "keep.in", "qt.phe"))
 ```

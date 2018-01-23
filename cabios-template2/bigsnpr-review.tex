@@ -88,14 +88,14 @@ Of course, if the memory size of the computer is larger than the size of the dat
 {\color{red}
 We developed a special FBM object, called ``FBM.code256'', that can be used to seamlessly store up to 256 arbitrary different values, while having a relatively efficient storage. Indeed, each element is stored on one byte which requires 8 times less disk storage than double-precision numbers but 4 times more space than the binary PLINK format ``.bed'' which can store only genotype calls. With these 256 values, the matrix can store genotype calls and missing values (4 values), best guess genotypes (3 values) and genotype dosages (likelihoods) rounded to two decimal places (201 values). So, we use a single data format that can store both genotype calls and dosages.
 
-For preprocessing steps, we think the user should use PLINK, which is an invaluable tool for this. For the sake of reproducibility, one could use PLINK directly from R via systems calls. For the sake of simplicity, we provide wrappers as R functions that use system calls to PLINK for the conversion and quality control steps with as input a variety of formats (e.g. vcf, bed/bim/fam, ped/map) and bed/bim/fam files as output (Figure~\ref{fig:qc}).
+For preprocessing steps, we think the user should use PLINK, which is an invaluable tool for this. For the sake of reproducibility, one could use PLINK directly from R via systems calls. For the sake of simplicity, we provide wrappers as R functions that use system calls to PLINK for the conversion and quality control steps with as input a variety of formats (e.g.\ vcf, bed/bim/fam, ped/map) and bed/bim/fam files as output (Figure~\ref{fig:qc}).
 Package bigsnpr provides fast conversions between bed/bim/fam PLINK files and the ``bigSNP'' object, which contains the genotype Filebacked Big Matrix (FBM.code256), a data frame with information on samples and another data frame with information on SNPs. We also provide another function which could be used to read from tabular-like text files in order to create a genotype in the format ``FBM''. Finally, we provide two methods for reading-in dosages as proof of concept and will provide a more final solution when we get access to the UK Biobank dataset ([SUPPMAT]).
 
 Most modern SNP chips provide genotype data with large call-rates. For example, the Celiac data we use in this paper presents only a proportion of 0.0004 of missing values for the genotyped SNPs after quality control. Yet, most of the functions in bigstatsr and bigsnpr do not handle missing values.
-So, we provide two functions for imputing missing values of genotyped SNPs. Note that we do not impute completely missing SNPs which would require the use of reference panels and could be performed via e.g. imputation servers for human data \cite[]{mccarthy2016reference}. The first function is a wrapper to PLINK and Beagle \cite[]{Browning2009} which takes bed files as input and return bed files without missing values, and should therefore be used before reading the data in R (Figure~\ref{fig:impute}). Beagle uses phasing before imputing, which could take several weeks even when there are only a tiny amount of missing values to be imputed. The second function is a new algorithm we developed in order to have a fast imputation method without losing much of imputation accuracy. We also provide an accurate estimation of the number of errors of imputation by SNP for post quality control.
+So, we provide two functions for imputing missing values of genotyped SNPs. Note that we do not impute completely missing SNPs which would require the use of reference panels and could be performed via e.g.\ imputation servers for human data \cite[]{mccarthy2016reference}. The first function is a wrapper to PLINK and Beagle \cite[]{Browning2009} which takes bed files as input and return bed files without missing values, and should therefore be used before reading the data in R (Figure~\ref{fig:impute}). Beagle uses phasing before imputing, which could take several weeks even when there are only a tiny amount of missing values to be imputed. The second function is a new algorithm we developed in order to have a fast imputation method without losing much of imputation accuracy. We also provide an accurate estimation of the number of errors of imputation by SNP for post quality control.
 This algorithm is based on Machine Learning approaches for genetic imputation \cite[]{Wang2012} and does not use phasing, thus allowing for a dramatic decrease in computation time. It only relies on some local XGBoost models. XGBoost is an optimized distributed gradient boosting library that can be used in R and provides some of the best results in machine learning competitions \cite[]{Chen2016}.
 XGBoost builds decision trees that can detect nonlinear interactions, partially reconstructing phase, making it well suited for imputing genotype matrices. 
-Our algorithm is the following: for each SNP, we divide the individuals in the ones which have a missing genotype (test set) and the ones which have a non-missing genotype for this particular SNP. Those latter individuals are further separated in a training set and a validation set (e.g. 80\% training and 20\% validation). The training set is used to build the XGBoost model for predicting missing data. The prediction model is then evaluated on the validation set for which we know the true genotype values, which gives an unbiased estimator of the number of genotypes that have been wrongly imputed for that particular SNP. The prediction model is also projected on the test set (missing values) in order to impute them.
+Our algorithm is the following: for each SNP, we divide the individuals in the ones which have a missing genotype (test set) and the ones which have a non-missing genotype for this particular SNP. Those latter individuals are further separated in a training set and a validation set (e.g.\ 80\% training and 20\% validation). The training set is used to build the XGBoost model for predicting missing data. The prediction model is then evaluated on the validation set for which we know the true genotype values, which gives an unbiased estimator of the number of genotypes that have been wrongly imputed for that particular SNP. The prediction model is also projected on the test set (missing values) in order to impute them.
 }
 
 
@@ -137,7 +137,7 @@ and $\hat{p} = \mathbb{P}(Y = 1)$ and $Y$ denotes the binary phenotype.
 
 The R packages also implement functions to compute Polygenic Risk Scores using two approaches. 
 The first method is the widely-used Clumping + Thresholding (C+T, also called ``Pruning + Thresholding'' in the literature) model based on univariate GWAS summary statistics as described in previous equations. Under the C+T model, a coefficient of regression is learned independently for each SNP along with a corresponding p-value. The SNPs are first clumped (C) so that there remains only SNPs that are weakly correlated with each other. Thresholding (T) consists in removing SNPs that are under a certain level of significance (P-value threshold to be determined). A polygenic risk score is defined as the sum of allele counts of the remaining SNPs weighted by the corresponding regression coefficients \cite[]{Chatterjee2013,Dudbridge2013,Golan2014}. 
-The second approach does not use univariate summary statistics but instead train a multivariate model on all the SNPs and covariables at once, optimally accounting for correlation between predictors \cite[]{Abraham2012}. The currently available models are linear and logistic regressions and Support Vector Machine (SVM). These models include lasso and elastic-net regularizations, which reduce the number of  predictors (SNPs) included in the predictive models \cite[]{Friedman2010,Tibshirani1996,Zou2005}. Package bigstatsr provides a fast implementation of these models by using efficient rules to discard most of the predictors \cite[]{Tibshirani2012}. The implementation of these algorithms is based on modified versions of functions available in the R packages sparseSVM and biglasso \cite[]{Zeng2017}. These modifications allow to include covariates in the models and to use these algorithms on the special type of FBM called ``FBM.code256'' used in bigsnpr.
+The second approach does not use univariate summary statistics but instead train a multivariate model on all the SNPs and covariables at once, optimally accounting for correlation between predictors \cite[]{Abraham2012}. The currently available models are very fast sparse linear and logistic regressions. These models include lasso and elastic-net regularizations, which reduce the number of  predictors (SNPs) included in the predictive models \cite[]{Friedman2010,Tibshirani1996,Zou2005}. Package bigstatsr provides a fast implementation of these models by using efficient rules to discard most of the predictors \cite[]{Tibshirani2012}. The implementation of these algorithms is based on modified versions of functions available in the R package biglasso \cite[]{Zeng2017}. These modifications allow to include covariates in the models, to use these algorithms on the special type of FBM called ``FBM.code256'' used in bigsnpr, to remove the need of the choice of the regularization parameter and to fasten the overall algorithms.
 
 \subsection{Data analyzed}
 
@@ -148,7 +148,7 @@ For computation times comparison, we replicated individuals in the Celiac datase
 
 All the code used in this paper along with results, such as execution times and figures, are available as HTML R notebooks in the Supplementary Data. 
 {\color{red}
-We now provide some open-access data of domestic dogs so that users can test our code and functions on a moderate size dataset with 4342 samples and 145,596 SNPs ([SUPMAT]) \cite[]{hayward2016complex}.
+In supplementary notebook ``public-data'', we provide some open-access data of domestic dogs so that users can test our code and functions on a moderate size dataset with 4342 samples and 145,596 SNPs \cite[]{hayward2016complex}.
 }
 
 \end{methods}
@@ -186,7 +186,7 @@ Then, we removed SNPs in long-range LD regions and used SNP clumping, leaving 93
 \subsection{Method Comparison}
 
 We first compared the GWAS and PRS computations obtained with the R packages to the ones obtained with PLINK 1.9 and EIGENSOFT 6.1.4.
-For most functions, multithreading is not available yet in PLINK, nevertheless, PLINK-specific algorithms that use bitwise parallelism (e.g. pruning) are still faster than the parallel algorithms reimplemented in package bigsnpr (Table~\ref{tab:bench-gwas}). Overall, the computations with our two R packages for an association study and a polygenic risk score are of the same order of magnitude as when using PLINK and EIGENSOFT (Tables~\ref{tab:bench-gwas} and~\ref{tab:bench-prs}). However, the whole analysis pipeline makes use of R calls only; there is no need to write temporary files and functions have parameters which enable subsetting of the genotype matrix without having to copy it. 
+For most functions, multithreading is not available yet in PLINK, nevertheless, PLINK-specific algorithms that use bitwise parallelism (e.g.\ pruning) are still faster than the parallel algorithms reimplemented in package bigsnpr (Table~\ref{tab:bench-gwas}). Overall, the computations with our two R packages for an association study and a polygenic risk score are of the same order of magnitude as when using PLINK and EIGENSOFT (Tables~\ref{tab:bench-gwas} and~\ref{tab:bench-prs}). However, the whole analysis pipeline makes use of R calls only; there is no need to write temporary files and functions have parameters which enable subsetting of the genotype matrix without having to copy it. 
 
 \begin{table}[!tpb]
 \begin{center}
@@ -195,7 +195,7 @@ For most functions, multithreading is not available yet in PLINK, nevertheless, 
 \hline
 \multirow{2}{*}{Operation} &   \multicolumn{2}{c|}{Execution times (in seconds)} \\
  \cline{2-3}
- & PLINK and FastPCA & bigstatsr and bigsnpr \\
+ & PLINK 1.9 and FastPCA & bigstatsr and bigsnpr \\
 \hline
 Reading PLINK files & n/a & 5 / 20 \\
 Pruning & 4 / 4 & 14 / 52 \\
@@ -207,7 +207,7 @@ Total & 649 / 612 & 378 / 1113 \\
 \end{tabular} 
 \end{adjustbox}
 \end{center}
-\caption{Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a GWAS for the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop computer (2 cores used and 8GB of RAM).} 
+\caption{Execution times with bigstatsr and bigsnpr compared to PLINK 1.9 and FastPCA (EIGENSOFT) for making a GWAS for the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop (2 cores used and 8GB of RAM).} 
 \label{tab:bench-gwas}
 \end{table}
 
@@ -218,18 +218,20 @@ Total & 649 / 612 & 378 / 1113 \\
 \hline
 \multirow{2}{*}{Operation} &   \multicolumn{2}{c|}{Execution times (in seconds)} \\
  \cline{2-3}
- & PLINK & bigstatsr and bigsnpr \\
+ & PRSice & bigstatsr and bigsnpr \\
 \hline
-GWAS (binary phenotype) & 232 / 239 & 178 / 650  \\
-Clumping & 49 / 58 & 10 / 35 \\
-PRS & 9 / 10 & 2 / 3 \\
+Reading PLINK files &  & 6 / 20 \\
+Reading summary stats &  & 4 /   \\
+Clumping &  & 9 /  \\
+PRS &  & 2 /  \\
+Compute pvalues &  & 1 /  \\
 \hline
-Total & 290 / 307 & 190 / 688 \\
+Total & 22 /  & 22 /  \\
 \hline
 \end{tabular} 
 \end{adjustbox}
 \end{center}
-\caption{Execution times with bigstatsr and bigsnpr compared to PLINK and FastPCA for making a PRS for a training set of 80\% of the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop computer (2 cores used and 8GB of RAM).}
+\caption{Execution times with bigstatsr and bigsnpr compared to PRSice for making a PRS on the Celiac dataset based on summary statistics for Height. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop (2 cores used and 8GB of RAM).}
 \label{tab:bench-prs}
 \end{table}
 
@@ -257,9 +259,18 @@ This is confirmed by Gini coefficients (measure of dispersion) of each squared l
 
 \subsection{Imputation of missing values for genotyped SNPs}\label{sec:impute}
 
-For the imputation method based on XGBoost, we compared  the imputation accuracy and computation times with Beagle on the POPRES dataset. The histogram of the minor allele frequencies (MAFs) of this dataset is provided in figure~\ref{fig:maf} and there is no missing value. 
-We used a Beta-binomial distribution to simulate the number of missing values by SNP and then randomly introduced missing values according to these numbers, resulting in approximately 3\% of missing values overall (Figure~\ref{fig:NA}). Imputation was compared between function snp\_fastImpute of package bigsnpr and Beagle 4.1 (version of January 21, 2017). Overall, snp\_fastImpute made 4.7\% of imputation errors whereas Beagle made only 3.1\% of errors but it took Beagle 14.6 hours to complete while our method only took 42 minutes (20 times less). 
-We also show that the estimation of the number of imputation errors is accurate (Figure~\ref{fig:error-impute}).
+For the imputation method based on XGBoost, we compared  the imputation accuracy and computation times with Beagle on the POPRES dataset (with no missing value). 
+The histogram of the minor allele frequencies (MAFs) of this dataset is provided in figure~\ref{fig:maf} and there is no missing value. 
+We used a Beta-binomial distribution to simulate the number of missing values by SNP and then randomly introduced missing values according to these numbers, resulting in approximately 3\% of missing values overall (Figure~\ref{fig:NA}).
+Imputation was compared between function snp\_fastImpute of package bigsnpr and Beagle 4.1 (version of January 21, 2017) 
+{\color{red}
+by counting the percentage of imputation errors (when the imputed genotype is different from the true genotype)
+}.
+Overall, in 3 runs, snp\_fastImpute made only 4.7\% of imputation errors and Beagle made only 3.1\% of errors. Yet, it took Beagle 14.6 hours to complete while our method only took 42 minutes (20 times less). 
+{\color{red}
+We also note that snp\_fastImpute makes less 0/2 switching errors, i.e.\ imputing with a 0 where it is in fact a 2 or the contrary (Supplementary ..notebook.. ``imputation'').
+We also show that the estimation of the number of imputation errors provided by function snp\_fastImpute is accurate (Figure~\ref{fig:error-impute}), which can be useful for post-processing of the imputation (Figure~\ref{fig:post-imputation}).
+}
 For the Celiac dataset in which there was already missing values, in order to further compare computation times, we report that snp\_fastImpute took less than 10 hours to complete for the whole genome whereas Beagle did not finish imputing chromosome 1 in 48 hours. 
 
 

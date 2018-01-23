@@ -1,0 +1,166 @@
+---
+title: "Polygenic Risk Scores (PRS)"
+subtitle: "Comparing bigstatsr and bigsnpr with PRSice"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align = "center", out.width = "70%", 
+                      fig.width = 8, fig.asp = 0.7)
+options(width = 110)
+```
+
+## Prerequisites
+
+Here, we suppose that the data have been pre-processed (quality control and imputation), and is available as a bk/rds (format of packages bigstatsr and bigsnpr). See the notebook "preprocessing".
+
+```{r}
+suppressMessages({
+  # devtools::install_github("privefl/bigsnpr")
+  library(bigsnpr)   
+  # install.packages("glue")
+  library(glue)      
+  # install.packages("ggplot2")
+  library(tidyverse)
+})
+# install.packages("data.table")
+fread2 <- function(...) data.table::fread(data.table = FALSE, ...)
+NCORES <- nb_cores()
+```
+
+We also need some summary statistics. Let's use ones for the height.
+
+```{r, eval=FALSE}
+download.file("http://portals.broadinstitute.org/collaboration/giant/images/0/01/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.txt.gz",
+              destfile = "sumstats-height.txt.gz")
+R.utils::gunzip("sumstats-height.txt.gz")
+```
+
+
+
+## Example of Polygenic Risk Scores (PRS)
+
+We will show how to perform a GWAS with or without our packages. For the sake of reproducibility and simplicity, everything will be done inside R (via possible system calls to command-line software).
+
+
+### With PRSice v2.1.0.beta
+
+```{r}
+# Write temporary PLINK files
+prefix_bed <- tempfile()
+bed <- snp_writeBed(snp_attach("backingfiles/celiacQC.rds"), 
+                    bedfile = paste0(prefix_bed, ".bed"))
+```
+
+```{r}
+# download.file("https://github.com/choishingwan/PRSice/releases/download/2.1.0.beta/PRSice_linux.zip",
+#               destfile = "PRSice_linux.zip")
+# unzip("PRSice_linux.zip", files = c("PRSice.R", "PRSice_linux"))
+system("chmod +x PRSice_linux")
+# Use PRSice
+system.time(
+  system(glue("Rscript PRSice.R",
+              " --prsice PRSice_linux",
+              " --base sumstats-height.txt",
+              " --target {prefix_bed}",
+              " --out {prefix_bed}",
+              " --thread {NCORES}",
+              " --pvalue p",
+              " --stat b",
+              " --beta T",
+              " --snp MarkerName",
+              " --A1 Allele1 --A2 Allele2",
+              " --binary-target T"))
+)
+# Read results
+file.prsice <- paste0(prefix_bed, ".prsice")
+res.prsice <- fread2(file.prsice)
+```
+
+### With bigstastr and bigsnpr
+
+```{r}
+system.time(
+  celiac <- snp_attach("backingfiles/celiacQC.rds")
+)
+G <- celiac$genotypes
+CHR <- celiac$map$chromosome
+POS <- celiac$map$physical.pos
+```
+
+```{r}
+# Read the summary stats
+system.time(
+  sumstats <- fread2("sumstats-height.txt")
+)
+```
+
+```{r}
+system.time({
+  # Get the SNP indices that correspond in sumstats
+  indSNP <- match(celiac$map$marker.ID, sumstats$MarkerName)
+  betas <- sumstats$b[indSNP]
+  pval <- sumstats$p[indSNP]
+  lpS <- -log10(pval)
+  # And check if the reference alleles are switched
+  same <- same_ref(celiac$map$allele1, celiac$map$allele2, 
+                   sumstats$Allele1[indSNP], sumstats$Allele2[indSNP])
+})
+# Non-matching SNPs
+sum(is.na(indSNP))
+```
+
+```{r}
+# Use the same p-value thresholds
+thrs <- -log10(res.prsice$Threshold)
+# Clumping
+system.time(
+  ind.keep <- snp_clumping(G, infos.chr = CHR, S = lpS, thr.r2 = 0.1,
+                           size = 250, is.size.in.bp = TRUE, infos.pos = POS,
+                           exclude = which(is.na(same) | (lpS < min(thrs))), 
+                           ncores = NCORES)
+)
+```
+```{r}
+# PRS
+system.time(
+  prs <- snp_PRS(G, betas.keep = betas[ind.keep],
+                 ind.test = rows_along(G),
+                 same.keep = same[ind.keep], 
+                 lpS.keep = lpS[ind.keep], 
+                 ind.keep = ind.keep,
+                 thr.list = thrs)
+)
+```
+
+```{r}
+# p-values
+system.time(
+  pval.bigsnpr <- prs %>%
+    big_copy() %>%
+    big_univLogReg(celiac$fam$affection - 1) %>%
+    predict(log10 = FALSE)
+)
+```
+
+### Verification
+
+```{r}
+# p-values
+cor(log10(pval.bigsnpr), log10(res.prsice$P))
+bigstatsr:::MY_THEME(qplot(pval.bigsnpr, res.prsice$P, log = "xy")) +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  labs(x = "P-values returned with bigsnpr (log-scale)",
+       y = "P-values returned with PRSice (log-scale)")
+```
+
+```{r}
+# Number of SNPs for each threshold
+nb.pred <- sapply(thrs, function(thr) sum(lpS[ind.keep] > thr, na.rm = TRUE))
+bigstatsr:::MY_THEME(qplot(nb.pred, res.prsice$Num_SNP)) +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  labs(x = "Number of SNPs with bigsnpr",
+       y = "Number of SNPs with PRSice")
+```
+
+These small differences are due to the way LD is assessed in the clumping algorithm.

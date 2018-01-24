@@ -68,9 +68,7 @@ system.time(
 )
 
 # Get population from external files
-pop.files <- list.files(path = "../thesis-celiac/Dubois2010_data/",
-                        pattern = "cluster_*",
-                        full.names = TRUE)
+pop.files <- list.files(path = "data", pattern = "cluster_*", full.names = TRUE)
 pop <- snp_getSampleInfos(celiac, pop.files)[[1]]
 pop.names <- c("Netherlands", "Italy", "UK1", "UK2", "Finland")
 # Plot PC1 & PC2

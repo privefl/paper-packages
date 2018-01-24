@@ -251,6 +251,15 @@ length(intersect(ind.keep3, ind.keep2)) / length(union(ind.keep3, ind.keep2))
 ```
 
 ```{r}
+# PCA
+system.time(
+  pca <- snpgdsPCA(genofile, snp.id = ind.keep, eigen.cnt = 10,
+                   num.thread = NCORES, algorithm = "randomized")
+)
+```
+
+```{r}
+# Format objects
 snpgdsClose(genofile)
 # Need sudo yum install netcdf-devel.x86_64
 library(GWASTools)
@@ -274,7 +283,9 @@ snpAnnot <- SnpAnnotationDataFrame(data.frame(
   YchromCode=24L, XYchromCode=25L)
 
 genoData <- GenotypeData(genofile, scanAnnot = scanAnnot, snpAnnot = snpAnnot)
+```
 
+```{r}
 # Logistic regression
 system.time(
   gwas3 <- assocRegression(genoData, "pheno", 

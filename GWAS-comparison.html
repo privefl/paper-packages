@@ -154,7 +154,7 @@ NCORES &lt;- nb_cores()</code></pre>
   celiac &lt;- snp_attach(&quot;backingfiles/celiacQC.rds&quot;)
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.515   0.005   0.520</code></pre>
+##   0.544   0.007   0.551</code></pre>
 <pre class="r"><code>G &lt;- celiac$genotypes
 CHR &lt;- celiac$map$chromosome
 POS &lt;- celiac$map$physical.pos
@@ -166,7 +166,7 @@ system.time(
                           ncores = NCORES)
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.560   0.084  13.888</code></pre>
+##   0.658   0.093  14.387</code></pre>
 <pre class="r"><code># PCA
 system.time(
   obj.svd &lt;- big_randomSVD(G, snp_scaleBinom(), 
@@ -174,11 +174,9 @@ system.time(
                            ncores = NCORES)
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.267   0.121  59.036</code></pre>
+##   0.277   0.109  58.440</code></pre>
 <pre class="r"><code># Get population from external files
-pop.files &lt;- list.files(path = &quot;../thesis-celiac/Dubois2010_data/&quot;,
-                        pattern = &quot;cluster_*&quot;,
-                        full.names = TRUE)
+pop.files &lt;- list.files(path = &quot;data&quot;, pattern = &quot;cluster_*&quot;, full.names = TRUE)
 pop &lt;- snp_getSampleInfos(celiac, pop.files)[[1]]
 pop.names &lt;- c(&quot;Netherlands&quot;, &quot;Italy&quot;, &quot;UK1&quot;, &quot;UK2&quot;, &quot;Finland&quot;)
 # Plot PC1 &amp; PC2
@@ -196,7 +194,7 @@ system.time(
                          ncores = NCORES)
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.274   0.117 296.734</code></pre>
+##   0.291   0.114 290.830</code></pre>
 <pre class="r"><code>gwas.pval &lt;- predict(gwas, log10 = FALSE)
 
 labels &lt;- 1:22; labels[c(15, 17, 19, 21)] &lt;- &quot;&quot;
@@ -213,7 +211,7 @@ system.time(
                              ncores = NCORES)
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.138   0.143   9.137</code></pre>
+##   0.162   0.138  10.103</code></pre>
 <pre class="r"><code>gwas.lin.pval &lt;- predict(gwas.lin, log10 = FALSE) </code></pre>
 </div>
 <div id="with-plink-and-eigensoft-and-r" class="section level3">
@@ -232,7 +230,7 @@ system.time(
               &quot; --threads {NCORES}&quot;))
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   3.701   0.364   4.067</code></pre>
+##   3.717   0.359   4.089</code></pre>
 <pre class="r"><code>ind.keep2 &lt;- match(scan(paste0(prefix_bed, &quot;.prune.in&quot;), what = &quot;&quot;), celiac$map$marker.ID)
 # Same sets of SNPs
 length(intersect(ind.keep, ind.keep2)) / length(union(ind.keep, ind.keep2))</code></pre>
@@ -245,7 +243,7 @@ system.time(
               &quot; --threads {NCORES}&quot;))
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.264   0.305   0.569</code></pre>
+##   0.227   0.304   0.531</code></pre>
 <pre class="r"><code># PCA with EIGENSOFT
 fastpca &lt;- function(prefix, fast = TRUE) {
   
@@ -286,20 +284,20 @@ system.time(
   obj.svd2 &lt;- fastpca(paste0(prefix_bed, &quot;_sub&quot;))
 )</code></pre>
 <pre><code>##    user  system elapsed 
-## 417.760   2.988 303.393</code></pre>
+## 418.610   3.719 304.710</code></pre>
 <pre class="r"><code># FastPCA is not accurate enough (see notebook &quot;benchmark-pca&quot;)
 round(100 * cor(obj.svd2, obj.svd$u), 1)</code></pre>
-<pre><code>##     [,1] [,2] [,3] [,4]   [,5]   [,6]  [,7]  [,8]  [,9] [,10]
-## V2  -100    0    0    0    0.0    0.0   0.0   0.0   0.0   0.0
-## V3     0 -100    0    0    0.0    0.0   0.0   0.0   0.0   0.0
-## V4     0    0  100    0    0.0    0.0   0.0   0.0   0.0   0.0
-## V5     0    0    0 -100    0.0    0.0   0.0   0.0   0.0   0.0
-## V6     0    0    0    0 -100.0    0.0  -0.3   0.2   0.0   0.0
-## V7     0    0    0    0    0.0 -100.0   0.4  -0.4  -0.3   0.0
-## V8     0    0    0    0    0.1   -0.2 -93.8 -13.9  -4.0   6.9
-## V9     0    0    0    0    0.1   -0.1  -7.5  71.1 -32.9   4.4
-## V10    0    0    0    0    0.0   -0.2  -6.5  28.0  70.2   2.5
-## V11    0    0    0    0    0.0    0.0   1.6  -5.1   3.2  48.0</code></pre>
+<pre><code>##     [,1] [,2] [,3] [,4]  [,5]   [,6]  [,7]  [,8]  [,9] [,10]
+## V2  -100    0    0    0   0.0    0.0   0.0   0.0   0.0   0.0
+## V3     0 -100    0    0   0.0    0.0   0.0   0.0   0.0   0.0
+## V4     0    0  100    0   0.0    0.0   0.0   0.0   0.0   0.0
+## V5     0    0    0 -100   0.0    0.0   0.0   0.0   0.0   0.0
+## V6     0    0    0    0 100.0   -0.1   0.3  -0.3   0.3  -0.2
+## V7     0    0    0    0  -0.1 -100.0  -0.2   0.0  -0.3   0.0
+## V8     0    0    0    0   0.1    0.1 -93.9  -5.5   2.7  -3.4
+## V9     0    0    0    0  -0.1    0.0   2.9 -84.5 -17.9  17.6
+## V10    0    0    0    0   0.1    0.1  -2.5  13.6 -84.4  -2.9
+## V11    0    0    0    0   0.0    0.0  -0.6  -1.3   5.8  16.7</code></pre>
 <pre class="r"><code># GWAS
 write.table2(cbind(celiac$fam[, 1:2], obj.svd$u), &quot;covar.txt&quot;)
 system.time(
@@ -309,7 +307,7 @@ system.time(
               &quot; --threads {NCORES}&quot;))
 )</code></pre>
 <pre><code>##    user  system elapsed 
-## 337.195   0.369 337.570</code></pre>
+## 336.225   0.357 336.747</code></pre>
 <pre class="r"><code>gwas2 &lt;- fread2(paste0(prefix_bed, &quot;.assoc.logistic&quot;))
 all.equal(gwas2$P, gwas.pval) </code></pre>
 <pre><code>## [1] &quot;Mean relative difference: 4.646286e-05&quot;</code></pre>
@@ -322,10 +320,10 @@ system.time(
               &quot; --threads {NCORES}&quot;))
 )</code></pre>
 <pre><code>##     user   system  elapsed 
-## 1352.376    0.422 1353.027</code></pre>
+## 1347.376    0.437 1348.077</code></pre>
 <pre class="r"><code>gwas2.lin &lt;- fread2(paste0(prefix_bed, &quot;.assoc.linear&quot;))
 all.equal(gwas2.lin$P, gwas.lin.pval) </code></pre>
-<pre><code>## [1] &quot;Mean relative difference: 4.543431e-05&quot;</code></pre>
+<pre><code>## [1] &quot;Mean relative difference: 4.533623e-05&quot;</code></pre>
 </div>
 <div id="with-r-packages-snprelate-and-gwastools" class="section level3">
 <h3>With R packages SNPRelate and GWASTools</h3>
@@ -341,28 +339,28 @@ system.time(
                        cvt.snpid = &quot;int&quot;)
 )</code></pre>
 <pre><code>## Start snpgdsBED2GDS ...
-##  BED file: &quot;/tmp/RtmpeqMQ2L/file588ea837883.bed&quot; in the SNP-major mode (Sample X SNP)
-##  FAM file: &quot;/tmp/RtmpeqMQ2L/file588ea837883.fam&quot;, DONE.
-##  BIM file: &quot;/tmp/RtmpeqMQ2L/file588ea837883.bim&quot;, DONE.
-## Tue Jan 23 10:43:06 2018     store sample id, snp id, position, and chromosome.
+##  BED file: &quot;/tmp/Rtmp3vmxtE/file791d6cc86673.bed&quot; in the SNP-major mode (Sample X SNP)
+##  FAM file: &quot;/tmp/Rtmp3vmxtE/file791d6cc86673.fam&quot;, DONE.
+##  BIM file: &quot;/tmp/Rtmp3vmxtE/file791d6cc86673.bim&quot;, DONE.
+## Wed Jan 24 16:30:32 2018     store sample id, snp id, position, and chromosome.
 ##  start writing: 15155 samples, 281122 SNPs ...
-##      Tue Jan 23 10:43:06 2018    0%
-##      Tue Jan 23 10:43:14 2018    100%
-## Tue Jan 23 10:43:14 2018     Done.
+##      Wed Jan 24 16:30:32 2018    0%
+##      Wed Jan 24 16:30:41 2018    100%
+## Wed Jan 24 16:30:41 2018     Done.
 ## Optimize the access efficiency ...
 ## Clean up the fragments of GDS file:
-##     open the file '/tmp/RtmpeqMQ2L/file588ea837883.gds' (1018.3M)
+##     open the file '/tmp/Rtmp3vmxtE/file791d6cc86673.gds' (1018.3M)
 ##     # of fragments: 43
-##     save to '/tmp/RtmpeqMQ2L/file588ea837883.gds.tmp'
-##     rename '/tmp/RtmpeqMQ2L/file588ea837883.gds.tmp' (1018.3M, reduced: 276B)
+##     save to '/tmp/Rtmp3vmxtE/file791d6cc86673.gds.tmp'
+##     rename '/tmp/Rtmp3vmxtE/file791d6cc86673.gds.tmp' (1018.3M, reduced: 276B)
 ##     # of fragments: 20</code></pre>
 <pre><code>##    user  system elapsed 
-##   7.298   1.992  11.549</code></pre>
+##   8.117   2.294  12.710</code></pre>
 <pre class="r"><code>system.time(
   genofile &lt;- snpgdsOpen(gds)
 )</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.001</code></pre>
+##   0.002   0.000   0.002</code></pre>
 <pre class="r"><code># Pruning
 system.time(
   snpset &lt;- snpgdsLDpruning(genofile, method = &quot;corr&quot;, ld.threshold = 0.2,
@@ -378,36 +376,58 @@ system.time(
 <pre><code>##     sliding window: 500,000 basepairs, Inf SNPs
 ##     |LD| threshold: 0.2
 ##     method: correlation
-## Chromosome 1: 18.21%, 3,922/21,540
-## Chromosome 2: 16.53%, 3,822/23,119
-## Chromosome 3: 16.72%, 3,307/19,774
-## Chromosome 4: 17.60%, 3,039/17,264
-## Chromosome 5: 17.10%, 2,993/17,506
-## Chromosome 6: 15.71%, 2,976/18,941
-## Chromosome 7: 17.42%, 2,662/15,285
-## Chromosome 8: 15.19%, 2,499/16,455
-## Chromosome 9: 16.09%, 2,341/14,547
-## Chromosome 10: 17.57%, 2,496/14,210
-## Chromosome 11: 17.61%, 2,351/13,350
-## Chromosome 12: 17.55%, 2,412/13,741
-## Chromosome 13: 17.49%, 1,834/10,485
-## Chromosome 14: 18.23%, 1,657/9,089
-## Chromosome 15: 19.12%, 1,537/8,039
-## Chromosome 16: 20.06%, 1,651/8,230
-## Chromosome 17: 20.87%, 1,592/7,627
-## Chromosome 18: 17.43%, 1,660/9,524
-## Chromosome 19: 23.78%, 1,286/5,408
-## Chromosome 20: 20.29%, 1,422/7,007
-## Chromosome 21: 17.10%, 861/5,036
-## Chromosome 22: 18.48%, 914/4,945
-## 49,234 markers are selected in total.</code></pre>
+## Chromosome 1: 18.18%, 3,917/21,540
+## Chromosome 2: 16.61%, 3,840/23,119
+## Chromosome 3: 16.82%, 3,325/19,774
+## Chromosome 4: 17.60%, 3,038/17,264
+## Chromosome 5: 17.09%, 2,992/17,506
+## Chromosome 6: 15.64%, 2,963/18,941
+## Chromosome 7: 17.37%, 2,655/15,285
+## Chromosome 8: 15.39%, 2,533/16,455
+## Chromosome 9: 16.02%, 2,331/14,547
+## Chromosome 10: 17.43%, 2,477/14,210
+## Chromosome 11: 17.69%, 2,361/13,350
+## Chromosome 12: 17.71%, 2,433/13,741
+## Chromosome 13: 17.61%, 1,846/10,485
+## Chromosome 14: 18.19%, 1,653/9,089
+## Chromosome 15: 19.31%, 1,552/8,039
+## Chromosome 16: 19.98%, 1,644/8,230
+## Chromosome 17: 20.74%, 1,582/7,627
+## Chromosome 18: 17.31%, 1,649/9,524
+## Chromosome 19: 23.85%, 1,290/5,408
+## Chromosome 20: 20.02%, 1,403/7,007
+## Chromosome 21: 17.20%, 866/5,036
+## Chromosome 22: 18.79%, 929/4,945
+## 49,279 markers are selected in total.</code></pre>
 <pre><code>##    user  system elapsed 
-##  32.176   0.387  32.563</code></pre>
+##  32.853   0.349  33.233</code></pre>
 <pre class="r"><code>ind.keep3 &lt;- unlist(snpset, use.names = FALSE)
 # Not the same set of SNPs (because not the same algo)
 length(intersect(ind.keep3, ind.keep2)) / length(union(ind.keep3, ind.keep2))</code></pre>
-<pre><code>## [1] 0.2046983</code></pre>
-<pre class="r"><code>snpgdsClose(genofile)
+<pre><code>## [1] 0.2005605</code></pre>
+<pre class="r"><code># PCA
+system.time(
+  pca &lt;- snpgdsPCA(genofile, snp.id = ind.keep, eigen.cnt = 10,
+                   num.thread = NCORES, algorithm = &quot;randomized&quot;)
+)</code></pre>
+<pre><code>## Principal Component Analysis (PCA) on genotypes:
+## Excluding 201,882 SNPs (non-autosomes or non-selection)
+## Excluding 0 SNP (monomorphic: TRUE, MAF: NaN, missing rate: NaN)
+## Working space: 15,155 samples, 79,240 SNPs
+##     using 6 (CPU) cores
+## PCA:    the sum of all selected genotypes (0,1,2) = 678103012
+## CPU capabilities: Double-Precision SSE2
+## Wed Jan 24 16:31:17 2018
+## 
+[..................................................]  0%, ETC: ---    
+[==================================================] 100%, completed in 1.4m
+## Wed Jan 24 16:32:39 2018    Begin projecting genotypes and SVD
+## Wed Jan 24 16:36:38 2018    End
+## Wed Jan 24 16:36:38 2018    Done.</code></pre>
+<pre><code>##    user  system elapsed 
+## 663.652   3.874 322.758</code></pre>
+<pre class="r"><code># Format objects
+snpgdsClose(genofile)
 # Need sudo yum install netcdf-devel.x86_64
 library(GWASTools)</code></pre>
 <pre><code>## Loading required package: Biobase</code></pre>
@@ -437,7 +457,7 @@ library(GWASTools)</code></pre>
 ##     Vignettes contain introductory material; view with 'browseVignettes()'. To cite Bioconductor,
 ##     see 'citation(&quot;Biobase&quot;)', and for packages 'citation(&quot;pkgname&quot;)'.</code></pre>
 <pre class="r"><code>(genofile &lt;- GdsGenotypeReader(gds, YchromCode=24L, XYchromCode=25L))</code></pre>
-<pre><code>## File: /tmp/RtmpeqMQ2L/file588ea837883.gds (1018.3M)
+<pre><code>## File: /tmp/Rtmp3vmxtE/file791d6cc86673.gds (1018.3M)
 ## +    [  ] *
 ## |--+ sample.id   { Str8 15155 ZIP_ra(22.3%), 57.2K }
 ## |--+ snp.id   { Int32 281122 ZIP_ra(34.6%), 379.8K }
@@ -467,9 +487,8 @@ snpAnnot &lt;- SnpAnnotationDataFrame(data.frame(
   alleleA, alleleB, stringsAsFactors=FALSE),
   YchromCode=24L, XYchromCode=25L)
 
-genoData &lt;- GenotypeData(genofile, scanAnnot = scanAnnot, snpAnnot = snpAnnot)
-
-# Logistic regression
+genoData &lt;- GenotypeData(genofile, scanAnnot = scanAnnot, snpAnnot = snpAnnot)</code></pre>
+<pre class="r"><code># Logistic regression
 system.time(
   gwas3 &lt;- assocRegression(genoData, &quot;pheno&quot;, 
                            model.type = &quot;logistic&quot;,
@@ -479,10 +498,10 @@ system.time(
 <pre><code>## Reading in Phenotype and Covariate Data...</code></pre>
 <pre><code>## Running analysis with 15155 Samples</code></pre>
 <pre><code>## Beginning Calculations...</code></pre>
-<pre><code>## Block 1 of 2 Completed - 4.736 mins</code></pre>
-<pre><code>## Block 2 of 2 Completed - 4.738 mins</code></pre>
+<pre><code>## Block 1 of 2 Completed - 4.835 mins</code></pre>
+<pre><code>## Block 2 of 2 Completed - 4.781 mins</code></pre>
 <pre><code>##        user      system     elapsed 
-## 15927.64160    52.34492 15980.07086</code></pre>
+## 16147.28222    40.25667 16220.20527</code></pre>
 <pre class="r"><code>all.equal(gwas3$Wald.pval, gwas.pval[rows_along(gwas3)]) </code></pre>
 <pre><code>## [1] &quot;Mean relative difference: 1.661921e-07&quot;</code></pre>
 <pre class="r"><code># assocRegression uses glm() so that it is the most precise
@@ -513,23 +532,23 @@ system.time(
 <pre><code>## Reading in Phenotype and Covariate Data...</code></pre>
 <pre><code>## Running analysis with 15155 Samples</code></pre>
 <pre><code>## Beginning Calculations...</code></pre>
-<pre><code>## Block 1 of 2 Completed - 1.8 mins</code></pre>
-<pre><code>## Block 2 of 2 Completed - 1.775 mins</code></pre>
-<pre><code>##       user     system    elapsed 
-## 6023.99466    8.68667 6032.73756</code></pre>
+<pre><code>## Block 1 of 2 Completed - 1.823 mins</code></pre>
+<pre><code>## Block 2 of 2 Completed - 1.801 mins</code></pre>
+<pre><code>##        user      system     elapsed 
+## 6103.973874    8.911567 6114.740846</code></pre>
 <pre class="r"><code>all.equal(gwas3.lin$Wald.pval, gwas.lin.pval[rows_along(gwas3)]) </code></pre>
-<pre><code>## [1] &quot;Mean relative difference: 2.144659e-05&quot;</code></pre>
+<pre><code>## [1] &quot;Mean relative difference: 2.055438e-05&quot;</code></pre>
 <pre class="r"><code># Again, we are very precise
 true.lin.pval &lt;- sapply(1:9, function(j) {
   summary(lm(y ~ G[, j] + covar))$coefficients[2, 4]
 })
 rbind(`true (lm)` = true.lin.pval, bigstatsr = gwas.lin.pval[1:9], 
       plink = gwas2.lin$P[1:9], gwastools = gwas3.lin$Wald.pval[1:9])</code></pre>
-<pre><code>##                [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]      [,8]      [,9]
-## true (lm) 0.9094592 0.6012538 0.3191622 0.9244402 0.6543226 0.9692903 0.5563623 0.4045756 0.9429839
-## bigstatsr 0.9094592 0.6012538 0.3191622 0.9244402 0.6543226 0.9692903 0.5563623 0.4045756 0.9429839
-## plink     0.9095000 0.6013000 0.3192000 0.9244000 0.6543000 0.9693000 0.5564000 0.4046000 0.9430000
-## gwastools 0.9094577 0.6012462 0.3191463 0.9244389 0.6543162 0.9692898 0.5563536 0.4045625 0.9429829</code></pre>
+<pre><code>##                 [,1]      [,2]      [,3]      [,4]      [,5]      [,6]       [,7]      [,8]      [,9]
+## true (lm) 0.01672232 0.7743163 0.1619906 0.8070091 0.6945894 0.2336133 0.07610787 0.4270128 0.7370799
+## bigstatsr 0.01672232 0.7743163 0.1619906 0.8070091 0.6945894 0.2336133 0.07610787 0.4270128 0.7370799
+## plink     0.01672000 0.7743000 0.1620000 0.8070000 0.6946000 0.2336000 0.07611000 0.4270000 0.7371000
+## gwastools 0.01671021 0.7743123 0.1619701 0.8070058 0.6945839 0.2335946 0.07608778 0.4270003 0.7370753</code></pre>
 <pre class="r"><code># Cleaning
 file.remove(c(&quot;LRLDR.txt&quot;, &quot;covar.txt&quot;, &quot;keep.in&quot;, &quot;qt.phe&quot;))</code></pre>
 <pre><code>## [1] TRUE TRUE TRUE TRUE</code></pre>

@@ -191,23 +191,25 @@ For most functions, multithreading is not available yet in PLINK, nevertheless, 
 \begin{table}[!tpb]
 \begin{center}
 \begin{adjustbox}{max width=235pt}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-\multirow{2}{*}{Operation} &   \multicolumn{2}{c|}{Execution times (in seconds)} \\
- \cline{2-3}
- & PLINK 1.9 and FastPCA & bigstatsr and bigsnpr \\
+\multirow{3}{*}{Operation~~\textbackslash~~Software} &   \multicolumn{3}{c|}{Execution times (in seconds)} \\
+ \cline{2-4}
+ & FastPCA & bigstatsr  & SNPRelate \\
+ & PLINK 1.9 & bigsnpr & GWASTools \\
 \hline
-Reading PLINK files & n/a & 5 / 20 \\
-Pruning & 4 / 4 & 14 / 52 \\
-Computing 10 PCs & 306 / 315 & 58 / 180 \\
-GWAS (binary phenotype) & 339 / 293 & 301 / 861 \\
+Reading PLINK files & n/a & 6 / 20 & 12 /  \\
+Pruning & 4 / 4 & 14 / 52 & 33 / \\  
+Computing 10 PCs & 304 / 315 & 61 / 180 &  /  \\
+GWAS (binary phenotype) & 336 / 293 & 301 / 861 & 15806 /  \\
+GWAS (continuous phenotype) & 1339 /  & 9 /  & 5933 /  \\
 \hline
-Total & 649 / 612 & 378 / 1113 \\
+Total & 649 / 612 & 378 / 1113 &  /  \\
 \hline
 \end{tabular} 
 \end{adjustbox}
 \end{center}
-\caption{Execution times with bigstatsr and bigsnpr compared to PLINK 1.9 and FastPCA (EIGENSOFT) for making a GWAS for the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop (2 cores used and 8GB of RAM).} 
+\caption{Execution times with bigstatsr and bigsnpr compared to PLINK 1.9 and FastPCA (EIGENSOFT) and also to R packages SNPRelate and GWASTools for making a GWAS for the Celiac dataset. The first execution time is with a desktop computer (6 cores used and 64GB of RAM) and the second one is with a laptop (2 cores used and 8GB of RAM).} 
 \label{tab:bench-gwas}
 \end{table}
 
@@ -216,7 +218,7 @@ Total & 649 / 612 & 378 / 1113 \\
 \begin{adjustbox}{max width=235pt}
 \begin{tabular}{|c|c|c|}
 \hline
-\multirow{2}{*}{Operation} &   \multicolumn{2}{c|}{Execution times (in seconds)} \\
+\multirow{2}{*}{Operation~~\textbackslash~~Software} &   \multicolumn{2}{c|}{Execution times (in seconds)} \\
  \cline{2-3}
  & PRSice & bigstatsr and bigsnpr \\
 \hline

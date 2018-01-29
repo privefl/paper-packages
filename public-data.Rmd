@@ -9,7 +9,7 @@ knitr::opts_chunk$set(fig.align = "center", out.width = "70%",
 options(width = 85)
 ```
 
-```{r, eval=FALSE}
+```{r}
 bed <- "http://www.datadryad.com/bitstream/handle/10255/dryad.104774/cornell_canine.bed"
 bim <- "http://www.datadryad.com/bitstream/handle/10255/dryad.104773/cornell_canine.bim"
 fam <- "http://www.datadryad.com/bitstream/handle/10255/dryad.104772/cornell_canine.fam"
@@ -19,6 +19,7 @@ lapply(c(bed, bim, fam), function(url) {
 ```
 
 ```{r}
+library(bigsnpr)
 plink <- download_plink()
 snp_plinkQC("backingfiles/cornell_canine", 
             plink.path = plink,

@@ -226,23 +226,15 @@ title = {{Analysis of Genetic Association Studies}},
 url = {http://link.springer.com/10.1007/978-1-4614-2245-7},
 year = {2012}
 }
-@inproceedings{Luu2017,
-abstract = {We introduce the R package pcadapt that performs genome scans to detect genes under selection based on population genomic data. The statistical method implemented in pcadapt assumes that markers excessively related with population structure are candidates for local adaptation. Because population structure is ascertained with principal component analysis (PCA), the package is fast and can handle large-scale data generated with next-generation technologies. It can also handle missing data as well as data obtained from pooled sequencing. By contrast to population-based approaches, the package can handle admixed individuals and does not require to group individuals into predefined populations. Using data simulated under an island model, a divergence model and range expansion, we compare pcadapt to other software performing genome scans (BayeScan, hapflk, OutFLANK, sNMF). For the different software, the average proportion of false discoveries is around the nominal false discovery rate set at 10{\%} with the exception of BayeScan that generates 40{\%} of false discoveries. When comparing statistical power for a realized percentage of false discoveries, we find that the power of BayeScan can be severely impacted by the presence of admixed individuals whereas pcadapt is not impacted. Last, we show that pcadapt is the most powerful method in a model of range expansion where population structure is continuous. Because pcadapt can handle molecular data generated with next sequencing technologies, we anticipate that it will be a valuable tool for modern analysis in molecular ecology.},
-author = {Luu, Keurcien and Bazin, Eric and Blum, Michael G. B.},
-booktitle = {Molecular Ecology Resources},
-doi = {10.1111/1755-0998.12592},
-file = {:home/privef/Bureau/thesis/articles/Luu, Bazin, Blum - 2017 - pcadapt an R package to perform genome scans for selection based on principal component analysis.pdf:pdf},
-isbn = {1755-0998 (Electronic) 1755-098X (Linking)},
-issn = {17550998},
-keywords = {Mahalanobis distance,R package,outlier detection,population genetics,principal component analysis},
-month = {jan},
-number = {1},
-pages = {67--77},
-pmid = {27601374},
-title = {{pcadapt: an R package to perform genome scans for selection based on principal component analysis}},
-url = {http://doi.wiley.com/10.1111/1755-0998.12592},
-volume = {17},
-year = {2017}
+@article{Luu2017,
+  title={pcadapt: an R package to perform genome scans for selection based on principal component analysis},
+  author={Luu, Keurcien and Bazin, Eric and Blum, Michael GB},
+  journal={Molecular ecology resources},
+  volume={17},
+  number={1},
+  pages={67--77},
+  year={2017},
+  publisher={Wiley Online Library}
 }
 @article{Abdellaoui2013,
 abstract = {Genetic variation in a population can be summarized through principal component analysis (PCA) on genome-wide data. PCs derived from such analyses are valuable for genetic association studies, where they can correct for population stratification. We investigated how to capture the genetic population structure in a well-characterized sample from the Netherlands and in a worldwide data set and examined whether (1) removing long-range linkage disequilibrium (LD) regions and LD-based SNP pruning significantly improves correlations between PCs and geography and (2) whether genetic differentiation may have been influenced by migration and/or selection. In the Netherlands, three PCs showed significant correlations with geography, distinguishing between: (1) North and South; (2) East and West; and (3) the middle-band and the rest of the country. The third PC only emerged with minimized LD, which also significantly increased correlations with geography for the other two PCs. In addition to geography, the Dutch North–South PC showed correlations with genome-wide homozygosity (r ¼ 0.245), which may reflect a serial-founder effect due to northwards migration, and also with height ({\#}: r ¼ 0.142, {\~{}}: r ¼ 0.153). The divergence between subpopulations identified by PCs is partly driven by selection pressures. The first three PCs showed significant signals for diversifying selection (545 SNPs -the majority within 184 genes). The strongest signal was observed between North and South for the functional SNP in HERC2 that determines human blue/brown eye color. Thus, this study demonstrates how to increase ancestry signals in a relatively homogeneous population and how those signals can reveal evolutionary history.},
@@ -342,17 +334,12 @@ year = {2008}
     url = {https://CRAN.R-project.org/package=RSpectra},
   }
 @article{Zeng2017,
-abstract = {Penalized regression models such as the lasso have been extensively applied to analyzing high-dimensional data sets. However, due to memory limitations, existing R packages like glmnet and ncvreg are not capable of fitting lasso-type models for ultrahigh-dimensional, multi-gigabyte data sets that are increasingly seen in many areas such as genetics, genomics, biomedical imaging, and high-frequency finance. In this research, we implement an R package called biglasso that tackles this challenge. biglasso utilizes memory-mapped files to store the massive data on the disk, only reading data into memory when necessary during model fitting, and is thus able to handle out-of-core computation seamlessly. Moreover, it's equipped with newly proposed, more efficient feature screening rules, which substantially accelerate the computation. Benchmarking experiments show that our biglasso package, as compared to existing popular ones like glmnet, is much more memory- and computation-efficient. We further analyze a 31 GB real data set on a laptop with only 16 GB RAM to demonstrate the out-of-core computation capability of biglasso in analyzing massive data sets that cannot be accommodated by existing R packages.},
-archivePrefix = {arXiv},
-arxivId = {1701.05936},
-author = {Zeng, Yaohui and Breheny, Patrick},
-eprint = {1701.05936},
-file = {:home/privef/Bureau/thesis/articles/Zeng, Breheny - 2017 - The biglasso Package A Memory-and Computation-Efficient Solver for Lasso Model Fitting with Big Data in R.pdf:pdf},
-month = {jan},
-title = {{The biglasso Package: A Memory- and Computation-Efficient Solver for Lasso Model Fitting with Big Data in R}},
-url = {http://arxiv.org/abs/1701.05936},
-year = {2017}
+  title={The biglasso Package: A Memory-and Computation-Efficient Solver for Lasso Model Fitting with Big Data in R},
+  author={Zeng, Yaohui and Breheny, Patrick},
+  journal={arXiv preprint arXiv:1701.05936},
+  year={2017}
 }
+
 @Manual{R2017,
     title = {R: A Language and Environment for Statistical Computing},
     author = {{R Core Team}},

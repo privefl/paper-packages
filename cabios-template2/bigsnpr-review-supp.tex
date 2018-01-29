@@ -4,7 +4,7 @@
 
 \begin{document}
 
-\section{Supplementary Data}
+\section{Supplementary Materials}
 
 \renewcommand{\thefigure}{S\arabic{figure}}
 \setcounter{figure}{0}
@@ -13,21 +13,23 @@
 
 \subsection{Pre-processing}
 
-\begin{figure}[htpb]
-\centerline{\includegraphics[width=160pt]{conversion-QC.pdf}}
-\caption{Conversion and Quality Control preprocessing functions available in package bigsnpr via system calls to PLINK.}\label{fig:qc}
+\begin{figure}[!h]
+\centerline{\includegraphics[width=\linewidth]{conversion-QC.pdf}}
+\caption{Conversion and quality control preprocessing functions available in package bigsnpr via system calls to PLINK.}\label{fig:qc}
 \end{figure}
 
-\begin{figure}[htpb]
-\centerline{\includegraphics[width=235pt]{imputation.pdf}}
+\newpage
+
+\begin{figure}[!h]
+\centerline{\includegraphics[width=\linewidth]{imputation.pdf}}
 \caption{Imputation and reading functions available in package bigsnpr.}\label{fig:impute}
 \end{figure}
 
+\newpage
 
 \subsection{Long-range LD regions}
 
-
-\begin{table}[htpb]
+\begin{table}[!h]
 \centering
 \begin{tabular}{lccc}
   \hline
@@ -38,13 +40,14 @@
   3 &  8 & 6.6 (8) & 13.2 (12) \\ 
    \hline
 \end{tabular}
-\caption{Regions found by snp\_autoSVD for the POPRES dataset. Numbers in parentheses correspond to regions referenced in \cite{Price2008}.}
-\label{tab:lrldr-popres}
+\caption{\label{tab:lrldr-popres}Regions found by snp\_autoSVD for the POPRES dataset. Numbers in parentheses correspond to regions referenced in Price et al., 2008.}
 \end{table}
+
+\vspace{5em}
 
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jun 13 11:29:13 2017
-\begin{table}[htpb]
+\begin{table}[!h]
 \centering
 \begin{tabular}{l|cccccccccc}
   \hline
@@ -66,9 +69,11 @@ PC1 & 100.0 & -0.1 & -0.0 & 0.1 & -0.1 & 0.0 & 0.0 & 0.0 & -0.0 & -0.0 \\
 \label{tab:pc-popres}
 \end{table}
 
+\newpage
+
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jul 18 15:59:51 2017
-\begin{table}[htpb]
+\begin{table}[!h]
 \centering
 \begin{tabular}{lccc}
   \hline
@@ -81,13 +86,15 @@ PC1 & 100.0 & -0.1 & -0.0 & 0.1 & -0.1 & 0.0 & 0.0 & 0.0 & -0.0 & -0.0 \\
   5 & 14 & 46.6 (n/a) & 47.5 (n/a) \\ 
    \hline
 \end{tabular}
-\caption{Regions found by snp\_autoSVD for the celiac dataset. Numbers in parentheses correspond to regions referenced in \cite{Price2008}.}
+\caption{Regions found by snp\_autoSVD for the celiac dataset. Numbers in parentheses correspond to regions referenced in Price et al., 2008.}
 \label{tab:lrldr-celiac}
 \end{table}
 
+\vspace{5em}
+
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jun 13 11:25:56 2017
-\begin{table}[htpb]
+\begin{table}[!h]
 \centering
 \begin{tabular}{l|cccccccccc}
   \hline
@@ -109,49 +116,58 @@ PC1 & 100.0 & -0.1 & -0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
 \label{tab:pc-celiac}
 \end{table}
 
-\begin{figure}[htpb]
+\newpage
+
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{scores}}
-\caption{PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $R^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}\label{fig:scores}
+\caption{PC4 and PC5 of the celiac disease dataset. Left panel, PC scores obtained without removing any long range LD region (only clumping at $r^2 > 0.2$). Individuals are coloured according to their genotype at the SNP that has the highest loading for PC4. Right panel, PC scores obtained with the automatic detection and removal of long-range LD regions. Individuals are coloured according to their population of origin.}\label{fig:scores}
 \end{figure}
 
-\begin{figure}[htpb]
+\vspace{3em}
+
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{loadings}}
-\caption{Loadings of first 6 PCs of the celiac disease dataset plotted as hexbins (2-D histogram with hexagonal cells). On the left, without removing any long range LD region (only clumping at $R^2 > 0.2$). On the right, with the automatic detection and removal of long-range LD regions.}\label{fig:loadings}
+\caption{Loadings of first 6 PCs of the celiac disease dataset plotted as hexbins (2-D histogram with hexagonal cells). On the left, without removing any long range LD region (only clumping at $r^2 > 0.2$). On the right, with the automatic detection and removal of long-range LD regions.}\label{fig:loadings}
 \end{figure}
 
-\begin{figure}[htpb]
+\vspace{3em}
+
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{gini}}
-\caption{Boxplots of 1000 bootstrapped Gini coefficients (measure of statistical dispersion) of squared loadings without removing any long range LD region (only clumping at $R^2 > 0.2$) and with the automatic detection and removal of long-range LD regions. The dashed line corresponds to the theoretical value for gaussian loadings.}\label{fig:gini}
+\caption{Boxplots of 1000 bootstrapped Gini coefficients (measure of statistical dispersion) of squared loadings without removing any long range LD region (only clumping at $r^2 > 0.2$) and with the automatic detection and removal of long-range LD regions. The dashed line corresponds to the theoretical value for gaussian loadings.}\label{fig:gini}
 \end{figure}
 
 \newpage
+
 \subsection{Imputation}
 
-\begin{figure}[htpb]
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{hist-maf}}
 \caption{Histogram of the minor allele frequencies of the POPRES dataset used for comparing imputation methods.}\label{fig:maf}
 \end{figure}
 
-\begin{figure}[htpb]
+\vspace{3em}
+
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{hist-NA}}
 \caption{Histogram of the number of missing values by SNP. These numbers were generated using a Beta-binomial distribution.}\label{fig:NA}
 \end{figure}
 
-\begin{figure}[htpb]
+\vspace{3em}
+
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{error-impute}}
-\caption{Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute, which is based on XGBoost \cite[]{Chen2016}.}\label{fig:error-impute}
+\caption{Number of imputation errors vs the estimated number of imputation errors by SNP. For each SNP with missing data, the number of imputation errors corresponds to the number of individuals for which imputation is incorrect. The estimated number of errors is a quantity that is returned when imputing with snp\_fastimpute.}\label{fig:error-impute}
 \end{figure}
 
-\begin{figure}[htpb]
+\vspace{3em}
+
+\begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{post-imputation}}
 \caption{For each SNP (point), the estimated proportion of imputation errors ($\hat{p}(error~|~NA)$) vs the proportion of missing values ($p(NA) > 0.001$).
 These results come from the imputation of the Celiac dataset with function snp\_fastImpute (Supplementary notebook ``preprocessing''). 
 Colored curves are representing the estimated proportion of wrong genotypes per SNP ($\hat{p}(error~\&~NA) = \hat{p}(error~|~NA) \cdot p(NA)$). This particularly shows that no SNP has more than 1\% of wrong genotypes, allowing for no post-processing.}\label{fig:post-imputation}
 \end{figure}
 
-\vspace*{-12pt}
-
-\bibliographystyle{natbib}
-\bibliography{document}
 
 \end{document}

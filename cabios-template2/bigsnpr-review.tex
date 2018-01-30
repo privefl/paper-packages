@@ -18,7 +18,7 @@
 \subtitle{Subject Section}
 
 \title[R packages for analyzing genome-wide data]{Efficient analysis of large-scale genome-wide data with two R packages: bigstatsr and bigsnpr}
-\author[Sample \textit{et~al}.]{Florian Priv\'e\,$^{\text{\sfb 1,}*}$, Hugues Aschard\,$^{\text{\sfb 2,\sfb 3}}$ and Michael G.B. Blum\,$^{\text{\sfb 1,}*}$}
+\author[Sample \textit{et~al}.]{Florian Priv\'e\,$^{\text{\sfb 1,}*}$, Hugues Aschard\,$^{\text{\sfb 2,\sfb 3}}$, Andrey Ziyatdinov\,$^{\text{\sfb 3}}$ and Michael G.B. Blum\,$^{\text{\sfb 1,}*}$}
 \address{$^{\text{\sf 1}}$Universit\'e Grenoble Alpes, CNRS, Laboratoire TIMC-IMAG, UMR 5525, France, \\
 $^{\text{\sf 2}}$Centre de Bioinformatique, Biostatistique et Biologie Int\'egrative (C3BI), Institut Pasteur, Paris, France, \\
 $^{\text{\sf 3}}$Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.}
@@ -172,7 +172,7 @@ First, we illustrate the application of R packages bigstatsr and bigsnpr.
 Secondly, by performing two GWAS, we compare the performance of bigstatsr and bigsnpr to the performance obtained with FastPCA (EIGENSOFT 6.1.4) and PLINK 1.9, and also two R packages SNPRelate and GWASTools \cite[]{chang2015second,Galinsky2016,Gogarten2012,zheng2012high}. PCA is a computationally intensive step of the GWAS, so that we further compare PCA methods on larger datasets.
 Thirdly, by performing a standard PRS analysis, we compare the performance of bigstatsr and bigsnpr to the performance obtained with PRSice-2 \cite[]{Euesden2015}. 
 Finally, we present results of the two new methods implemented in bigsnpr, one method for the automatic detection and removal of long-range LD regions in PCA and another for the in-sample imputation of missing genotypes (i.e.\ for genotyped SNPs only). 
-We compare performance on two computers, a desktop computer with 64GB of RAM and 12 cores (6 physical cores), and a laptop with only 8GB of RAM and 4 cores (2 physical cores). For the functions that enable parallelism, we use half of the cores available on the corresponding computer.
+We compare performance on two computers, a desktop computer with 64GB of RAM and 12 cores (6 physical cores), and a laptop with only 8GB of RAM and 4 cores (2 physical cores). For the functions that enable parallelism, we use half of the cores available on the corresponding computer. We present a table summarizing the features of different software in table \ref{tab:andrey}.
 
 \subsection{Application}
  

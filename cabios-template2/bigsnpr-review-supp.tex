@@ -2,6 +2,11 @@
 \usepackage{graphicx}
 \graphicspath{{../figures/}}
 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage{multirow}
+
 \begin{document}
 
 \section{Supplementary Materials}
@@ -18,14 +23,14 @@
 \caption{Conversion and quality control preprocessing functions available in package bigsnpr via system calls to PLINK.}\label{fig:qc}
 \end{figure}
 
-\newpage
+\clearpage
 
 \begin{figure}[!h]
 \centerline{\includegraphics[width=\linewidth]{imputation.pdf}}
 \caption{Imputation and reading functions available in package bigsnpr.}\label{fig:impute}
 \end{figure}
 
-\newpage
+\clearpage
 
 \subsection{Long-range LD regions}
 
@@ -69,7 +74,7 @@ PC1 & 100.0 & -0.1 & -0.0 & 0.1 & -0.1 & 0.0 & 0.0 & 0.0 & -0.0 & -0.0 \\
 \label{tab:pc-popres}
 \end{table}
 
-\newpage
+\clearpage
 
 % latex table generated in R 3.3.3 by xtable 1.8-2 package
 % Tue Jul 18 15:59:51 2017
@@ -116,7 +121,7 @@ PC1 & 100.0 & -0.1 & -0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
 \label{tab:pc-celiac}
 \end{table}
 
-\newpage
+\clearpage
 
 \begin{figure}[!h]
 \centerline{\includegraphics[width=\textwidth]{scores}}
@@ -137,7 +142,7 @@ PC1 & 100.0 & -0.1 & -0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
 \caption{Boxplots of 1000 bootstrapped Gini coefficients (measure of statistical dispersion) of squared loadings without removing any long range LD region (only clumping at $r^2 > 0.2$) and with the automatic detection and removal of long-range LD regions. The dashed line corresponds to the theoretical value for gaussian loadings.}\label{fig:gini}
 \end{figure}
 
-\newpage
+\clearpage
 
 \subsection{Imputation}
 
@@ -168,6 +173,39 @@ PC1 & 100.0 & -0.1 & -0.1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\
 These results come from the imputation of the Celiac dataset with function snp\_fastImpute (Supplementary notebook ``preprocessing''). 
 Colored curves are representing the estimated proportion of wrong genotypes per SNP ($\hat{p}(error~\&~NA) = \hat{p}(error~|~NA) \cdot p(NA)$). This particularly shows that no SNP has more than 1\% of wrong genotypes, allowing for no post-processing.}\label{fig:post-imputation}
 \end{figure}
+
+\clearpage
+\subsection{Overview}
+
+\begin{table}[!h]
+\caption{Comparison of tools in low-level data management (first three rows) and high-level genetic analyses (the rest of rows). The bigstatsr and bigsnpr packages provide the most comprehensive and versatile infrastructure for data storage, processing and extensions; implement the main genetic analysis pipelines; and intrincically exploit memory-mapped files and parallel data processing.
+Notes:
+1: binary data format;
+2: multi-core and cluster parallel computation;
+3: support of imputed genotype data.
+When comparing tools in terms of parallel computation, we do not consider the case of jobs manually distributed, e.g.\ splitting genotypes into batches. We are aware of the bitwise parallelism in PLINK 1.9, but this feature is used internally for specific computations; instead, we follow the official documentaion (https://www.cog-genomics.org/PLINK/1.9/parallel). The official documentation for the GenABEL project is at http://www.genabel.org/packages/ParallABEL.
+GRM: Genetic Relationship Matrix; PCA: Principal Component Analysis; GWAS: Genome-Wide Association Study; PRS: Polygenic Risk Score.}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Toolkit/Feature} & bigstatsr~/ & \multirow{2}{*}{PLINK 1.9} & \multirow{2}{*}{GCTA} & SNPRelate~/ & \multirow{2}{*}{GenABEL} \\
+ & bigsnpr & & & GWASTools &  \\
+\hline
+\hline
+Proper genotype data format & FBM$^{2,3}$ & ped/bed$^2$ & - & GDS$^{2,3}$ & databel$^{2,3}$ \\ \hline
+Data format extension, e.g. -omics & $\checkmark$ & - & - & - & $\checkmark$ \\ \hline
+Vector/Matrix operations & $\checkmark^1$ & - & - & - & $\checkmark^1$ \\ \hline
+Quality Control & $\checkmark$ & $\checkmark$ & - & $\checkmark$ & $\checkmark$ \\ \hline
+GRM & $\checkmark^1$ & $\checkmark^1$ & $\checkmark^1$ & $\checkmark^1$ & $\checkmark^1$ \\ \hline
+PCA & $\checkmark^1$ & $\checkmark$ & $\checkmark^1$ & $\checkmark^1$ & - \\ \hline
+GWAS & $\checkmark^1$ & $\checkmark$ & $\checkmark^1$ & $\checkmark$ & $\checkmark^1$ \\ \hline
+PRS & $\checkmark$ & $\checkmark$ & - & - & - \\ \hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\label{tab:andrey}
+\end{table}
 
 
 \end{document}

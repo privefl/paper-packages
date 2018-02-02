@@ -7,9 +7,9 @@
 \usepackage{adjustbox}
 \usepackage{multirow}
 \usepackage{graphicx}
-\graphicspath{{../figures/}}
-\usepackage{xr}
-\externaldocument{bigsnpr-review-supp}
+%\graphicspath{{../figures/}}
+%\usepackage{xr}
+%\externaldocument{bigsnpr-review-supp}
 
 
 \begin{document}
@@ -81,12 +81,12 @@ Of course, if the memory size of the computer is larger than the size of the dat
 
 We developed a special FBM object, called ``FBM.code256'', that can be used to seamlessly store up to 256 arbitrary different values, while having a relatively efficient storage. Indeed, each element is stored in one byte which requires 8 times less disk storage than double-precision numbers but 4 times more space than the binary PLINK format ``.bed'' which can store only genotype calls. With these 256 values, the matrix can store genotype calls and missing values (4 values), best guess genotypes (3 values) and genotype dosages (likelihoods) rounded to two decimal places (201 values). So, we use a single data format that can store both genotype calls and dosages.
 
-For preprocessing steps, PLINK is a widely-used software. For the sake of reproducibility, one could use PLINK directly from R via systems calls. We therefore provide wrappers as R functions that use system calls to PLINK for conversion and quality control and a variety of formats can be used as input (e.g.\ vcf, bed/bim/fam, ped/map) and bed/bim/fam files as output (Figure~\ref{fig:qc}).
+For preprocessing steps, PLINK is a widely-used software. For the sake of reproducibility, one could use PLINK directly from R via systems calls. We therefore provide wrappers as R functions that use system calls to PLINK for conversion and quality control and a variety of formats can be used as input (e.g.\ vcf, bed/bim/fam, ped/map) and bed/bim/fam files as output (Figure~S1).
 Package bigsnpr provides fast conversions between bed/bim/fam PLINK files and the ``bigSNP'' object, which contains the genotype Filebacked Big Matrix (FBM.code256), a data frame with information on samples and another data frame with information on SNPs. We also provide another function which could be used to read from tabular-like text files in order to create a genotype in the format ``FBM''. Finally, we provide two methods for converting dosage data to the format ``bigSNP'' (Supplementary notebook ``dosage'').
 
 Most modern SNP chips provide genotype data with large call-rates. For example, the Celiac data we use in this paper presents only 0.04\% of missing values after quality control. Yet, most of the functions in bigstatsr and bigsnpr do not handle missing values.
 So, we provide two functions for imputing missing values of genotyped SNPs. Note that we do not impute completely missing SNPs which would require the use of reference panels and could be performed via e.g.\ imputation servers for human data \cite[]{mccarthy2016reference}. 
-The first function is a wrapper to PLINK and Beagle \cite[]{Browning2009} which takes bed files as input and return bed files without missing values, and should therefore be used before reading the data in R (Figure~\ref{fig:impute}). 
+The first function is a wrapper to PLINK and Beagle \cite[]{Browning2009} which takes bed files as input and return bed files without missing values, and should therefore be used before reading the data in R (Figure~S2). 
 The second function is a new algorithm we developed in order to have a fast imputation method without losing much of imputation accuracy. This function also provides an estimator of the imputation error rate by SNP for post quality control.
 This algorithm is based on Machine Learning approaches for genetic imputation \cite[]{Wang2012} and does not use phasing, thus allowing for a dramatic decrease in computation time. It only relies on some local XGBoost models \cite[]{Chen2016}. 
 XGBoost, which is available in R, builds decision trees that can detect nonlinear interactions, partially reconstructing phase, making it well suited for imputing genotype matrices. 
@@ -156,11 +156,11 @@ First, we illustrate the application of R packages bigstatsr and bigsnpr.
 Secondly, by performing two GWAS, we compare the performance of bigstatsr and bigsnpr to the performance obtained with FastPCA (EIGENSOFT 6.1.4) and PLINK 1.9, and also two R packages SNPRelate and GWASTools \cite[]{chang2015second,Galinsky2016,Gogarten2012,zheng2012high}. PCA is a computationally intensive step of the GWAS, so that we further compare PCA methods on larger datasets.
 Thirdly, by performing a PRS analysis with summary statistics, we compare the performance of bigstatsr and bigsnpr to the performance obtained with PRSice-2 \cite[]{Euesden2015}. 
 Finally, we present results of the two new methods implemented in bigsnpr, one method for the automatic detection and removal of long-range LD regions in PCA and another for the in-sample imputation of missing genotypes (i.e.\ for genotyped SNPs only). 
-We compare performance on two computers, a desktop computer with 64GB of RAM and 12 cores (6 physical cores), and a laptop with only 8GB of RAM and 4 cores (2 physical cores). For the functions that enable parallelism, we use half of the cores available on the corresponding computer. We present a table summarizing the features of different software in table \ref{tab:andrey}.
+We compare performance on two computers, a desktop computer with 64GB of RAM and 12 cores (6 physical cores), and a laptop with only 8GB of RAM and 4 cores (2 physical cores). For the functions that enable parallelism, we use half of the cores available on the corresponding computer. We present a table summarizing the features of different software in table S9.
 
 \subsection{Application}
  
-The data was preprocessed following steps from figure~\ref{fig:qc}, removing individuals and SNPs with more than 5\% of missing values, non-autosomal SNPs, SNPs with a minor allele frequency (MAF) lower than 0.05 or a p-value for the Hardy-Weinberg exact test lower than $10^{-10}$, and finally, removing the first individual in each pair of individuals with a proportion of alleles shared IBD greater than 0.08 \cite[]{Purcell2007}. 
+The data was preprocessed following steps from figure~S1, removing individuals and SNPs with more than 5\% of missing values, non-autosomal SNPs, SNPs with a minor allele frequency (MAF) lower than 0.05 or a p-value for the Hardy-Weinberg exact test lower than $10^{-10}$, and finally, removing the first individual in each pair of individuals with a proportion of alleles shared IBD greater than 0.08 \cite[]{Purcell2007}. 
 For the POPRES dataset, this resulted in 1382 individuals and 344,614 SNPs with no missing value.
 For the Celiac dataset, this resulted in 15,155 individuals and 281,122 SNPs with an overall genotyping rate of 99.96\%. The 0.04\% missing genotype values were imputed with the XGBoost method. If we would have used a standard R matrix to store the genotypes, this data would have required 32GB of memory. On the disk, the ``.bed'' file requires 1GB and the ``.bk'' file (storing the FBM) requires 4GB. 
 
@@ -257,24 +257,24 @@ Package bigstatsr and FlashPCA2 (that use the same algorithm) infer all PCs with
 
 \subsection{Automatic detection of long-range LD regions}
 
-For detecting long-range LD regions during the computation of PCA, we tested the function snp\_autoSVD on both the Celiac and POPRES datasets. For the POPRES dataset, the algorithm converged in two iterations. The first iterations found 3 long-range LD regions in chromosomes 2, 6 and 8 (Table~\ref{tab:lrldr-popres}). 
-We compared the PCs of genotypes obtained after applying snp\_autoSVD with the PCs obtained after removing pre-determined long-range LD regions\footnote{https://goo.gl/8TngVE} and found a mean correlation of 89.6\% between PCs, mainly due to a rotation of PC7 and PC8 (Table~\ref{tab:pc-popres}). 
-For the Celiac dataset, we found 5 long-range LD regions (Table~\ref{tab:lrldr-celiac}) and a mean correlation of 98.6\% between PCs obtained with snp\_autoSVD and the ones obtained by clumping and removing predetermined long-range LD regions (Table~\ref{tab:pc-celiac}).
+For detecting long-range LD regions during the computation of PCA, we tested the function snp\_autoSVD on both the Celiac and POPRES datasets. For the POPRES dataset, the algorithm converged in two iterations. The first iterations found 3 long-range LD regions in chromosomes 2, 6 and 8 (Table~S1). 
+We compared the PCs of genotypes obtained after applying snp\_autoSVD with the PCs obtained after removing pre-determined long-range LD regions\footnote{https://goo.gl/8TngVE} and found a mean correlation of 89.6\% between PCs, mainly due to a rotation of PC7 and PC8 (Table~S2). 
+For the Celiac dataset, we found 5 long-range LD regions (Table~S3) and a mean correlation of 98.6\% between PCs obtained with snp\_autoSVD and the ones obtained by clumping and removing predetermined long-range LD regions (Table~S4).
 
 For the Celiac dataset, we further compared results of PCA obtained when using snp\_autoSVD and when computing PCA without removing any long range LD region (only clumping at $R^2 > 0.2$). 
-When not removing any long range LD region, we show that PC4 and PC5 do not capture population structure and correspond to a long-range LD region in chromosome 8 (Figures~\ref{fig:scores} and~\ref{fig:loadings}). 
-When automatically removing some long-range LD regions with snp\_autoSVD, we show that PC4 and PC5 reflect population structure (Figure~\ref{fig:scores}). Moreover, loadings are more equally distributed among SNPs after removal of long-range LD regions (Figure~\ref{fig:loadings}). 
-This is confirmed by Gini coefficients (measure of dispersion) of each squared loadings that are significantly smaller when computing PCA with snp\_autoSVD than when no long-range LD region is removed (Figure~\ref{fig:gini}).
+When not removing any long range LD region, we show that PC4 and PC5 do not capture population structure and correspond to a long-range LD region in chromosome 8 (Figures~S3 and~S4). 
+When automatically removing some long-range LD regions with snp\_autoSVD, we show that PC4 and PC5 reflect population structure (Figure~S3). Moreover, loadings are more equally distributed among SNPs after removal of long-range LD regions (Figure~S4). 
+This is confirmed by Gini coefficients (measure of dispersion) of each squared loadings that are significantly smaller when computing PCA with snp\_autoSVD than when no long-range LD region is removed (Figure~S5).
 
 \subsection{Imputation of missing values for genotyped SNPs}\label{sec:impute}
 
 For the imputation method based on XGBoost, we compared  the imputation accuracy and computation times with Beagle on the POPRES dataset (with no missing value). 
-The histogram of the minor allele frequencies (MAFs) of this dataset is provided in figure~\ref{fig:maf}. 
-We used a Beta-binomial distribution to simulate the number of missing values by SNP and then randomly introduced missing values according to these numbers, resulting in approximately 3\% of missing values overall (Figure~\ref{fig:NA}).
+The histogram of the minor allele frequencies (MAFs) of this dataset is provided in figure~S6. 
+We used a Beta-binomial distribution to simulate the number of missing values by SNP and then randomly introduced missing values according to these numbers, resulting in approximately 3\% of missing values overall (Figure~S7).
 Imputation was compared between function snp\_fastImpute of package bigsnpr and Beagle 4.1 (version of January 21, 2017) by counting the percentage of imputation errors (when the imputed genotype is different from the true genotype).
 Overall, in 3 runs, snp\_fastImpute made only 4.7\% of imputation errors and Beagle made only 3.1\% of errors. Yet, it took Beagle 14.6 hours to complete while snp\_fastImpute only took 42 minutes (20 times less). 
 We also note that snp\_fastImpute made less 0/2 switching errors, i.e.\ imputing with a homozygous referent where the true genotype is a homozygous variant, or the contrary (Supplementary notebook ``imputation'').
-We also show that the estimation of the number of imputation errors provided by function snp\_fastImpute is accurate (Figure~\ref{fig:error-impute}), which can be useful for post-processing the imputation by removing SNPs with too many errors (Figure~\ref{fig:post-imputation}).
+We also show that the estimation of the number of imputation errors provided by function snp\_fastImpute is accurate (Figure~S8), which can be useful for post-processing the imputation by removing SNPs with too many errors (Figure~S9).
 For the Celiac dataset in which there were already missing values, in order to further compare computation times, we report that snp\_fastImpute took less than 10 hours to complete for the whole genome whereas Beagle did not finish imputing chromosome 1 in 48 hours. 
 
 

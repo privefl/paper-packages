@@ -2,11 +2,11 @@ library(glue)
 library(foreach)
 
 # http://mathgen.stats.ox.ac.uk/genetics_software/hapgen/hapgen2.html
-hapgen2 <- "hapgen2_x86_64/hapgen2"
+hapgen2 <- "~/Téléchargements/hapgen2_x86_64/hapgen2"
 # https://mathgen.stats.ox.ac.uk/wtccc-software/HM3.tgz
 path <- file.path(dirname(hapgen2), "CEU.0908.impute.files")
 # http://www.well.ox.ac.uk/~cfreeman/software/gwas/gtool.html
-gtool <- "gtool_v0.7.5_x86_64/gtool"
+gtool <- "~/Téléchargements/hapgen2_x86_64/gtool_v0.7.5_x86_64/gtool"
 # https://www.cog-genomics.org/plink2
 plink <- bigsnpr::download_plink()
 simus.path <- "simus_hapgen2"
@@ -47,6 +47,8 @@ get_simu <- function(i, n = 1000) {
                perl = TRUE, value = TRUE)
   file.remove(grep(basename(prefix), list, value = TRUE, fixed = TRUE))
 }
+
+get_simu(2, 200)
 
 doParallel::registerDoParallel(parallel::detectCores() / 2)
 foreach(ic = 67) %dopar% {
